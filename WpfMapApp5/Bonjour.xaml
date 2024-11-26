@@ -1,0 +1,33 @@
+﻿<Window x:Class="ArcGIS_App.Bonjour"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="TerrorSim" Height="400" Width="800" WindowStartupLocation="CenterScreen">
+    <Grid Background="White">
+        <Label Content="Welcome to TerrorSim" FontSize="24" FontWeight="Bold" Foreground="#333333" Margin="62,34,-22,0" VerticalAlignment="Top"/>
+        <Label Content="The interactive real-time collision simulator" FontSize="12" Foreground="#666666" Margin="62,74,-22,0" VerticalAlignment="Top"/>
+
+        <Label Content="Username" Margin="40,140,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBox1" Height="30" Margin="100,140,380,0" VerticalAlignment="Top"
+                 Background="#F5F5F5"/>
+
+        <Label Content="Password" Margin="40,189,0,0" VerticalAlignment="Top"/>
+        <PasswordBox x:Name="textBox2" Height="30" Margin="100,187,380,0" VerticalAlignment="Top"
+                     Background="#F5F5F5"/>
+
+        <CheckBox x:Name="checkBox1" Content="Show password" Margin="95,230,55,0" VerticalAlignment="Top"
+                  Foreground="#666666"
+                  Checked="checkBox1_CheckedChanged" Unchecked="checkBox1_CheckedChanged"/>
+
+        <!-- Adjusted margins for buttons to prevent overlap -->
+        <Button x:Name="button1" Content="Log In"
+                Margin="100,270,550,62"
+                Background="#0078D4" Foreground="#FFFFFF"
+                Click="button1_Click"/>
+
+        <Button x:Name="button2" Content="Create Account"
+                Margin="270,270,380,62"
+                Background="#0078D4" Foreground="#FFFFFF"
+                Click="button2_Click"/>
+        <Button Content="jope" Margin="322,87,380,244" Click="Button_Click_1"/>
+    </Grid>
+</Window>

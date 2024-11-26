@@ -1,0 +1,46 @@
+﻿<Window x:Class="ArcGIS_App.WelcomeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Welcome" Height="214" Width="319"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True"
+        Background="#80FFFFFF" MouseDown="Window_MouseDown">
+
+    <Window.Resources>
+        <!-- Define a custom font if needed -->
+        <FontFamily x:Key="RobotoFont">Roboto</FontFamily>
+    </Window.Resources>
+
+    <!-- Border with rounded corners -->
+    <Border Background="White" BorderBrush="Transparent" BorderThickness="0" 
+            CornerRadius="15">
+        <Grid Height="240" VerticalAlignment="Top" Margin="0,-11,0,0">
+            <!-- Main Window Content -->
+            <Grid VerticalAlignment="Top" HorizontalAlignment="Center" Margin="0,37,0,0">
+                <!-- Welcome Message -->
+                <TextBlock FontStyle="Italic" HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="20" FontWeight="Bold" Foreground="DarkSlateGray"
+                           FontFamily="Roboto" Margin="0,-10,0,0">
+                    Welcome to ArcGIS TerrorSim
+                </TextBlock>
+
+                <!-- Instructions -->
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Foreground="Gray"
+                           FontFamily="Roboto" Margin="15,28,0,0" Text="-Load a waypoint file (.txt/.csv)"/>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="14" Foreground="Gray"
+                           FontFamily="Roboto" Margin="0,50,0,0" Text="-Load a flight plan file (.txt/.csv)" Width="229"/>
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Foreground="Gray"
+                           FontFamily="Roboto" Margin="15,72,0,0" Text="-Add parameters for the simulation"/>
+
+                <!-- Close Button -->
+                <Button Content="Close" HorizontalAlignment="Center" VerticalAlignment="Top" Width="100" Height="40" Margin="0,131,0,0"
+                        Click="CloseButton_Click" Background="#61A9FF" Foreground="White" FontFamily="Roboto"/>
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Foreground="Gray"
+                    FontFamily="Roboto" Margin="17,94,0,0" Text="-Simulate"/>
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="14" Foreground="Gray"
+                    FontFamily="Roboto" Margin="17,114,0,0" Text="-Explore"/>
+                <TextBlock FontWeight="Bold" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="10"
+                    Foreground="Gray"
+                    FontFamily="Roboto" Margin="94,102,0,0" Text="(There are WASD camera controls)"/>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

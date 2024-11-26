@@ -1,0 +1,2226 @@
+{
+  "version": 3,
+  "targets": {
+    "net8.0-windows10.0.26100": {
+      "Esri.ArcGISRuntime/200.6.0": {
+        "type": "package",
+        "dependencies": {
+          "Esri.ArcGISRuntime.runtimes.win": "200.6.0"
+        },
+        "compile": {
+          "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net8.0-windows10.0.19041/ar/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ar"
+          },
+          "lib/net8.0-windows10.0.19041/bg/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "bg"
+          },
+          "lib/net8.0-windows10.0.19041/bs/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "bs"
+          },
+          "lib/net8.0-windows10.0.19041/ca/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ca"
+          },
+          "lib/net8.0-windows10.0.19041/cs/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "cs"
+          },
+          "lib/net8.0-windows10.0.19041/da/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "da"
+          },
+          "lib/net8.0-windows10.0.19041/de/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "de"
+          },
+          "lib/net8.0-windows10.0.19041/el/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "el"
+          },
+          "lib/net8.0-windows10.0.19041/es/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "es"
+          },
+          "lib/net8.0-windows10.0.19041/et/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "et"
+          },
+          "lib/net8.0-windows10.0.19041/fi/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "fi"
+          },
+          "lib/net8.0-windows10.0.19041/fr/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "fr"
+          },
+          "lib/net8.0-windows10.0.19041/he/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "he"
+          },
+          "lib/net8.0-windows10.0.19041/hr/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "hr"
+          },
+          "lib/net8.0-windows10.0.19041/hu/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "hu"
+          },
+          "lib/net8.0-windows10.0.19041/id/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "id"
+          },
+          "lib/net8.0-windows10.0.19041/it/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "it"
+          },
+          "lib/net8.0-windows10.0.19041/ja/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ja"
+          },
+          "lib/net8.0-windows10.0.19041/ko/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ko"
+          },
+          "lib/net8.0-windows10.0.19041/lt/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "lt"
+          },
+          "lib/net8.0-windows10.0.19041/lv/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "lv"
+          },
+          "lib/net8.0-windows10.0.19041/nb-NO/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "nb-NO"
+          },
+          "lib/net8.0-windows10.0.19041/nl/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "nl"
+          },
+          "lib/net8.0-windows10.0.19041/no/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "no"
+          },
+          "lib/net8.0-windows10.0.19041/pl/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "pl"
+          },
+          "lib/net8.0-windows10.0.19041/pt-BR/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "pt-BR"
+          },
+          "lib/net8.0-windows10.0.19041/pt-PT/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "pt-PT"
+          },
+          "lib/net8.0-windows10.0.19041/ro/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ro"
+          },
+          "lib/net8.0-windows10.0.19041/ru/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ru"
+          },
+          "lib/net8.0-windows10.0.19041/sk/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "sk"
+          },
+          "lib/net8.0-windows10.0.19041/sl/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "sl"
+          },
+          "lib/net8.0-windows10.0.19041/sr/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "sr"
+          },
+          "lib/net8.0-windows10.0.19041/sv/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "sv"
+          },
+          "lib/net8.0-windows10.0.19041/th/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "th"
+          },
+          "lib/net8.0-windows10.0.19041/tr/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "tr"
+          },
+          "lib/net8.0-windows10.0.19041/uk/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "uk"
+          },
+          "lib/net8.0-windows10.0.19041/vi/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "vi"
+          },
+          "lib/net8.0-windows10.0.19041/zh-CN/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "zh-CN"
+          },
+          "lib/net8.0-windows10.0.19041/zh-HK/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "zh-HK"
+          },
+          "lib/net8.0-windows10.0.19041/zh-Hans/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "zh-Hans"
+          },
+          "lib/net8.0-windows10.0.19041/zh-TW/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "zh-TW"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0-windows10.0.19041.0/Esri.ArcGISRuntime.targets": {}
+        }
+      },
+      "Esri.ArcGISRuntime.runtimes.win/200.6.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0-windows10.0.19041.0/_._": {}
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.19041.0/_._": {}
+        },
+        "build": {
+          "buildTransitive/netstandard1.0/_._": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win-arm64/native/RuntimeCoreNet200_6.dll": {
+            "assetType": "native",
+            "rid": "win-arm64"
+          },
+          "runtimes/win-arm64/native/runtimecore.dll": {
+            "assetType": "native",
+            "rid": "win-arm64"
+          },
+          "runtimes/win-arm64/native/runtimecoreAssembly.manifest": {
+            "assetType": "native",
+            "rid": "win-arm64"
+          },
+          "runtimes/win-x64/native/RuntimeCoreNet200_6.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/runtimecore.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x64/native/runtimecoreAssembly.manifest": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x86/native/RuntimeCoreNet200_6.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          },
+          "runtimes/win-x86/native/runtimecore.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          },
+          "runtimes/win-x86/native/runtimecoreAssembly.manifest": {
+            "assetType": "native",
+            "rid": "win-x86"
+          }
+        }
+      },
+      "Esri.ArcGISRuntime.WPF/200.6.0": {
+        "type": "package",
+        "dependencies": {
+          "Esri.ArcGISRuntime": "200.6.0"
+        },
+        "compile": {
+          "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.WPF.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.WPF.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ],
+        "build": {
+          "buildTransitive/net8.0-windows10.0.19041.0/Esri.ArcGISRuntime.WPF.targets": {}
+        },
+        "runtimeTargets": {
+          "runtimes/win-arm64/native/RuntimeCoreNet200_6.WPF.dll": {
+            "assetType": "native",
+            "rid": "win-arm64"
+          },
+          "runtimes/win-x64/native/RuntimeCoreNet200_6.WPF.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x86/native/RuntimeCoreNet200_6.WPF.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          }
+        }
+      },
+      "Microsoft.Data.Sqlite/9.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Data.Sqlite.Core": "9.0.0",
+          "SQLitePCLRaw.bundle_e_sqlite3": "2.1.10",
+          "SQLitePCLRaw.core": "2.1.10"
+        },
+        "compile": {
+          "lib/netstandard2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/_._": {}
+        }
+      },
+      "Microsoft.Data.Sqlite.Core/9.0.0": {
+        "type": "package",
+        "dependencies": {
+          "SQLitePCLRaw.core": "2.1.10"
+        },
+        "compile": {
+          "lib/net8.0/Microsoft.Data.Sqlite.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Data.Sqlite.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SQLitePCLRaw.bundle_e_sqlite3/2.1.10": {
+        "type": "package",
+        "dependencies": {
+          "SQLitePCLRaw.lib.e_sqlite3": "2.1.10",
+          "SQLitePCLRaw.provider.e_sqlite3": "2.1.10"
+        },
+        "compile": {
+          "lib/netstandard2.0/SQLitePCLRaw.batteries_v2.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SQLitePCLRaw.batteries_v2.dll": {}
+        }
+      },
+      "SQLitePCLRaw.core/2.1.10": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/SQLitePCLRaw.core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SQLitePCLRaw.core.dll": {}
+        }
+      },
+      "SQLitePCLRaw.lib.e_sqlite3/2.1.10": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/_._": {}
+        },
+        "build": {
+          "buildTransitive/net8.0/SQLitePCLRaw.lib.e_sqlite3.targets": {}
+        },
+        "runtimeTargets": {
+          "runtimes/browser-wasm/nativeassets/net8.0/e_sqlite3.a": {
+            "assetType": "native",
+            "rid": "browser-wasm"
+          },
+          "runtimes/linux-arm/native/libe_sqlite3.so": {
+            "assetType": "native",
+            "rid": "linux-arm"
+          },
+          "runtimes/linux-arm64/native/libe_sqlite3.so": {
+            "assetType": "native",
+            "rid": "linux-arm64"
+          },
+          "runtimes/linux-armel/native/libe_sqlite3.so": {
+            "assetType": "native",
+            "rid": "linux-armel"
+          },
+          "runtimes/linux-mips64/native/libe_sqlite3.so": {
+            "assetType": "native",
+            "rid": "linux-mips64"
+          },
+          "runtimes/linux-musl-arm/native/libe_sqlite3.so": {
+            "assetType": "native",
+            "rid": "linux-musl-arm"
+          },
+          "runtimes/linux-musl-arm64/native/libe_sqlite3.so": {
+            "assetType": "native",
+            "rid": "linux-musl-arm64"
+          },
+          "runtimes/linux-musl-s390x/native/libe_sqlite3.so": {
+            "assetType": "native",
+            "rid": "linux-musl-s390x"
+          },
+          "runtimes/linux-musl-x64/native/libe_sqlite3.so": {
+            "assetType": "native",
+            "rid": "linux-musl-x64"
+          },
+          "runtimes/linux-ppc64le/native/libe_sqlite3.so": {
+            "assetType": "native",
+            "rid": "linux-ppc64le"
+          },
+          "runtimes/linux-s390x/native/libe_sqlite3.so": {
+            "assetType": "native",
+            "rid": "linux-s390x"
+          },
+          "runtimes/linux-x64/native/libe_sqlite3.so": {
+            "assetType": "native",
+            "rid": "linux-x64"
+          },
+          "runtimes/linux-x86/native/libe_sqlite3.so": {
+            "assetType": "native",
+            "rid": "linux-x86"
+          },
+          "runtimes/maccatalyst-arm64/native/libe_sqlite3.dylib": {
+            "assetType": "native",
+            "rid": "maccatalyst-arm64"
+          },
+          "runtimes/maccatalyst-x64/native/libe_sqlite3.dylib": {
+            "assetType": "native",
+            "rid": "maccatalyst-x64"
+          },
+          "runtimes/osx-arm64/native/libe_sqlite3.dylib": {
+            "assetType": "native",
+            "rid": "osx-arm64"
+          },
+          "runtimes/osx-x64/native/libe_sqlite3.dylib": {
+            "assetType": "native",
+            "rid": "osx-x64"
+          },
+          "runtimes/win-arm/native/e_sqlite3.dll": {
+            "assetType": "native",
+            "rid": "win-arm"
+          },
+          "runtimes/win-arm64/native/e_sqlite3.dll": {
+            "assetType": "native",
+            "rid": "win-arm64"
+          },
+          "runtimes/win-x64/native/e_sqlite3.dll": {
+            "assetType": "native",
+            "rid": "win-x64"
+          },
+          "runtimes/win-x86/native/e_sqlite3.dll": {
+            "assetType": "native",
+            "rid": "win-x86"
+          }
+        }
+      },
+      "SQLitePCLRaw.provider.e_sqlite3/2.1.10": {
+        "type": "package",
+        "dependencies": {
+          "SQLitePCLRaw.core": "2.1.10"
+        },
+        "compile": {
+          "lib/net6.0-windows7.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+        }
+      },
+      "System.Memory/4.5.3": {
+        "type": "package",
+        "compile": {
+          "ref/netcoreapp2.1/_._": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.1/_._": {}
+        }
+      },
+      "Class/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Microsoft.Data.Sqlite": "9.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Class.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Class.dll": {}
+        }
+      }
+    },
+    "net8.0-windows10.0.26100/win-arm64": {
+      "Esri.ArcGISRuntime/200.6.0": {
+        "type": "package",
+        "dependencies": {
+          "Esri.ArcGISRuntime.runtimes.win": "200.6.0"
+        },
+        "compile": {
+          "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net8.0-windows10.0.19041/ar/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ar"
+          },
+          "lib/net8.0-windows10.0.19041/bg/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "bg"
+          },
+          "lib/net8.0-windows10.0.19041/bs/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "bs"
+          },
+          "lib/net8.0-windows10.0.19041/ca/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ca"
+          },
+          "lib/net8.0-windows10.0.19041/cs/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "cs"
+          },
+          "lib/net8.0-windows10.0.19041/da/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "da"
+          },
+          "lib/net8.0-windows10.0.19041/de/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "de"
+          },
+          "lib/net8.0-windows10.0.19041/el/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "el"
+          },
+          "lib/net8.0-windows10.0.19041/es/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "es"
+          },
+          "lib/net8.0-windows10.0.19041/et/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "et"
+          },
+          "lib/net8.0-windows10.0.19041/fi/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "fi"
+          },
+          "lib/net8.0-windows10.0.19041/fr/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "fr"
+          },
+          "lib/net8.0-windows10.0.19041/he/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "he"
+          },
+          "lib/net8.0-windows10.0.19041/hr/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "hr"
+          },
+          "lib/net8.0-windows10.0.19041/hu/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "hu"
+          },
+          "lib/net8.0-windows10.0.19041/id/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "id"
+          },
+          "lib/net8.0-windows10.0.19041/it/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "it"
+          },
+          "lib/net8.0-windows10.0.19041/ja/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ja"
+          },
+          "lib/net8.0-windows10.0.19041/ko/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ko"
+          },
+          "lib/net8.0-windows10.0.19041/lt/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "lt"
+          },
+          "lib/net8.0-windows10.0.19041/lv/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "lv"
+          },
+          "lib/net8.0-windows10.0.19041/nb-NO/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "nb-NO"
+          },
+          "lib/net8.0-windows10.0.19041/nl/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "nl"
+          },
+          "lib/net8.0-windows10.0.19041/no/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "no"
+          },
+          "lib/net8.0-windows10.0.19041/pl/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "pl"
+          },
+          "lib/net8.0-windows10.0.19041/pt-BR/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "pt-BR"
+          },
+          "lib/net8.0-windows10.0.19041/pt-PT/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "pt-PT"
+          },
+          "lib/net8.0-windows10.0.19041/ro/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ro"
+          },
+          "lib/net8.0-windows10.0.19041/ru/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ru"
+          },
+          "lib/net8.0-windows10.0.19041/sk/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "sk"
+          },
+          "lib/net8.0-windows10.0.19041/sl/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "sl"
+          },
+          "lib/net8.0-windows10.0.19041/sr/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "sr"
+          },
+          "lib/net8.0-windows10.0.19041/sv/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "sv"
+          },
+          "lib/net8.0-windows10.0.19041/th/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "th"
+          },
+          "lib/net8.0-windows10.0.19041/tr/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "tr"
+          },
+          "lib/net8.0-windows10.0.19041/uk/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "uk"
+          },
+          "lib/net8.0-windows10.0.19041/vi/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "vi"
+          },
+          "lib/net8.0-windows10.0.19041/zh-CN/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "zh-CN"
+          },
+          "lib/net8.0-windows10.0.19041/zh-HK/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "zh-HK"
+          },
+          "lib/net8.0-windows10.0.19041/zh-Hans/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "zh-Hans"
+          },
+          "lib/net8.0-windows10.0.19041/zh-TW/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "zh-TW"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0-windows10.0.19041.0/Esri.ArcGISRuntime.targets": {}
+        }
+      },
+      "Esri.ArcGISRuntime.runtimes.win/200.6.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0-windows10.0.19041.0/_._": {}
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.19041.0/_._": {}
+        },
+        "native": {
+          "runtimes/win-arm64/native/RuntimeCoreNet200_6.dll": {},
+          "runtimes/win-arm64/native/runtimecore.dll": {},
+          "runtimes/win-arm64/native/runtimecoreAssembly.manifest": {}
+        },
+        "build": {
+          "buildTransitive/netstandard1.0/_._": {}
+        }
+      },
+      "Esri.ArcGISRuntime.WPF/200.6.0": {
+        "type": "package",
+        "dependencies": {
+          "Esri.ArcGISRuntime": "200.6.0"
+        },
+        "compile": {
+          "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.WPF.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.WPF.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ],
+        "native": {
+          "runtimes/win-arm64/native/RuntimeCoreNet200_6.WPF.dll": {}
+        },
+        "build": {
+          "buildTransitive/net8.0-windows10.0.19041.0/Esri.ArcGISRuntime.WPF.targets": {}
+        }
+      },
+      "Microsoft.Data.Sqlite/9.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Data.Sqlite.Core": "9.0.0",
+          "SQLitePCLRaw.bundle_e_sqlite3": "2.1.10",
+          "SQLitePCLRaw.core": "2.1.10"
+        },
+        "compile": {
+          "lib/netstandard2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/_._": {}
+        }
+      },
+      "Microsoft.Data.Sqlite.Core/9.0.0": {
+        "type": "package",
+        "dependencies": {
+          "SQLitePCLRaw.core": "2.1.10"
+        },
+        "compile": {
+          "lib/net8.0/Microsoft.Data.Sqlite.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Data.Sqlite.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SQLitePCLRaw.bundle_e_sqlite3/2.1.10": {
+        "type": "package",
+        "dependencies": {
+          "SQLitePCLRaw.lib.e_sqlite3": "2.1.10",
+          "SQLitePCLRaw.provider.e_sqlite3": "2.1.10"
+        },
+        "compile": {
+          "lib/netstandard2.0/SQLitePCLRaw.batteries_v2.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SQLitePCLRaw.batteries_v2.dll": {}
+        }
+      },
+      "SQLitePCLRaw.core/2.1.10": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/SQLitePCLRaw.core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SQLitePCLRaw.core.dll": {}
+        }
+      },
+      "SQLitePCLRaw.lib.e_sqlite3/2.1.10": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/_._": {}
+        },
+        "native": {
+          "runtimes/win-arm64/native/e_sqlite3.dll": {}
+        },
+        "build": {
+          "buildTransitive/net8.0/SQLitePCLRaw.lib.e_sqlite3.targets": {}
+        }
+      },
+      "SQLitePCLRaw.provider.e_sqlite3/2.1.10": {
+        "type": "package",
+        "dependencies": {
+          "SQLitePCLRaw.core": "2.1.10"
+        },
+        "compile": {
+          "lib/net6.0-windows7.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+        }
+      },
+      "System.Memory/4.5.3": {
+        "type": "package",
+        "compile": {
+          "ref/netcoreapp2.1/_._": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.1/_._": {}
+        }
+      },
+      "Class/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Microsoft.Data.Sqlite": "9.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Class.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Class.dll": {}
+        }
+      }
+    },
+    "net8.0-windows10.0.26100/win-x64": {
+      "Esri.ArcGISRuntime/200.6.0": {
+        "type": "package",
+        "dependencies": {
+          "Esri.ArcGISRuntime.runtimes.win": "200.6.0"
+        },
+        "compile": {
+          "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net8.0-windows10.0.19041/ar/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ar"
+          },
+          "lib/net8.0-windows10.0.19041/bg/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "bg"
+          },
+          "lib/net8.0-windows10.0.19041/bs/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "bs"
+          },
+          "lib/net8.0-windows10.0.19041/ca/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ca"
+          },
+          "lib/net8.0-windows10.0.19041/cs/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "cs"
+          },
+          "lib/net8.0-windows10.0.19041/da/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "da"
+          },
+          "lib/net8.0-windows10.0.19041/de/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "de"
+          },
+          "lib/net8.0-windows10.0.19041/el/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "el"
+          },
+          "lib/net8.0-windows10.0.19041/es/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "es"
+          },
+          "lib/net8.0-windows10.0.19041/et/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "et"
+          },
+          "lib/net8.0-windows10.0.19041/fi/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "fi"
+          },
+          "lib/net8.0-windows10.0.19041/fr/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "fr"
+          },
+          "lib/net8.0-windows10.0.19041/he/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "he"
+          },
+          "lib/net8.0-windows10.0.19041/hr/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "hr"
+          },
+          "lib/net8.0-windows10.0.19041/hu/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "hu"
+          },
+          "lib/net8.0-windows10.0.19041/id/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "id"
+          },
+          "lib/net8.0-windows10.0.19041/it/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "it"
+          },
+          "lib/net8.0-windows10.0.19041/ja/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ja"
+          },
+          "lib/net8.0-windows10.0.19041/ko/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ko"
+          },
+          "lib/net8.0-windows10.0.19041/lt/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "lt"
+          },
+          "lib/net8.0-windows10.0.19041/lv/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "lv"
+          },
+          "lib/net8.0-windows10.0.19041/nb-NO/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "nb-NO"
+          },
+          "lib/net8.0-windows10.0.19041/nl/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "nl"
+          },
+          "lib/net8.0-windows10.0.19041/no/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "no"
+          },
+          "lib/net8.0-windows10.0.19041/pl/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "pl"
+          },
+          "lib/net8.0-windows10.0.19041/pt-BR/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "pt-BR"
+          },
+          "lib/net8.0-windows10.0.19041/pt-PT/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "pt-PT"
+          },
+          "lib/net8.0-windows10.0.19041/ro/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ro"
+          },
+          "lib/net8.0-windows10.0.19041/ru/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ru"
+          },
+          "lib/net8.0-windows10.0.19041/sk/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "sk"
+          },
+          "lib/net8.0-windows10.0.19041/sl/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "sl"
+          },
+          "lib/net8.0-windows10.0.19041/sr/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "sr"
+          },
+          "lib/net8.0-windows10.0.19041/sv/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "sv"
+          },
+          "lib/net8.0-windows10.0.19041/th/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "th"
+          },
+          "lib/net8.0-windows10.0.19041/tr/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "tr"
+          },
+          "lib/net8.0-windows10.0.19041/uk/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "uk"
+          },
+          "lib/net8.0-windows10.0.19041/vi/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "vi"
+          },
+          "lib/net8.0-windows10.0.19041/zh-CN/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "zh-CN"
+          },
+          "lib/net8.0-windows10.0.19041/zh-HK/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "zh-HK"
+          },
+          "lib/net8.0-windows10.0.19041/zh-Hans/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "zh-Hans"
+          },
+          "lib/net8.0-windows10.0.19041/zh-TW/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "zh-TW"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0-windows10.0.19041.0/Esri.ArcGISRuntime.targets": {}
+        }
+      },
+      "Esri.ArcGISRuntime.runtimes.win/200.6.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0-windows10.0.19041.0/_._": {}
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.19041.0/_._": {}
+        },
+        "native": {
+          "runtimes/win-x64/native/RuntimeCoreNet200_6.dll": {},
+          "runtimes/win-x64/native/runtimecore.dll": {},
+          "runtimes/win-x64/native/runtimecoreAssembly.manifest": {}
+        },
+        "build": {
+          "buildTransitive/netstandard1.0/_._": {}
+        }
+      },
+      "Esri.ArcGISRuntime.WPF/200.6.0": {
+        "type": "package",
+        "dependencies": {
+          "Esri.ArcGISRuntime": "200.6.0"
+        },
+        "compile": {
+          "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.WPF.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.WPF.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ],
+        "native": {
+          "runtimes/win-x64/native/RuntimeCoreNet200_6.WPF.dll": {}
+        },
+        "build": {
+          "buildTransitive/net8.0-windows10.0.19041.0/Esri.ArcGISRuntime.WPF.targets": {}
+        }
+      },
+      "Microsoft.Data.Sqlite/9.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Data.Sqlite.Core": "9.0.0",
+          "SQLitePCLRaw.bundle_e_sqlite3": "2.1.10",
+          "SQLitePCLRaw.core": "2.1.10"
+        },
+        "compile": {
+          "lib/netstandard2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/_._": {}
+        }
+      },
+      "Microsoft.Data.Sqlite.Core/9.0.0": {
+        "type": "package",
+        "dependencies": {
+          "SQLitePCLRaw.core": "2.1.10"
+        },
+        "compile": {
+          "lib/net8.0/Microsoft.Data.Sqlite.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Data.Sqlite.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SQLitePCLRaw.bundle_e_sqlite3/2.1.10": {
+        "type": "package",
+        "dependencies": {
+          "SQLitePCLRaw.lib.e_sqlite3": "2.1.10",
+          "SQLitePCLRaw.provider.e_sqlite3": "2.1.10"
+        },
+        "compile": {
+          "lib/netstandard2.0/SQLitePCLRaw.batteries_v2.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SQLitePCLRaw.batteries_v2.dll": {}
+        }
+      },
+      "SQLitePCLRaw.core/2.1.10": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/SQLitePCLRaw.core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SQLitePCLRaw.core.dll": {}
+        }
+      },
+      "SQLitePCLRaw.lib.e_sqlite3/2.1.10": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/_._": {}
+        },
+        "native": {
+          "runtimes/win-x64/native/e_sqlite3.dll": {}
+        },
+        "build": {
+          "buildTransitive/net8.0/SQLitePCLRaw.lib.e_sqlite3.targets": {}
+        }
+      },
+      "SQLitePCLRaw.provider.e_sqlite3/2.1.10": {
+        "type": "package",
+        "dependencies": {
+          "SQLitePCLRaw.core": "2.1.10"
+        },
+        "compile": {
+          "lib/net6.0-windows7.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+        }
+      },
+      "System.Memory/4.5.3": {
+        "type": "package",
+        "compile": {
+          "ref/netcoreapp2.1/_._": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.1/_._": {}
+        }
+      },
+      "Class/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Microsoft.Data.Sqlite": "9.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Class.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Class.dll": {}
+        }
+      }
+    },
+    "net8.0-windows10.0.26100/win-x86": {
+      "Esri.ArcGISRuntime/200.6.0": {
+        "type": "package",
+        "dependencies": {
+          "Esri.ArcGISRuntime.runtimes.win": "200.6.0"
+        },
+        "compile": {
+          "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.dll": {
+            "related": ".xml"
+          }
+        },
+        "resource": {
+          "lib/net8.0-windows10.0.19041/ar/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ar"
+          },
+          "lib/net8.0-windows10.0.19041/bg/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "bg"
+          },
+          "lib/net8.0-windows10.0.19041/bs/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "bs"
+          },
+          "lib/net8.0-windows10.0.19041/ca/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ca"
+          },
+          "lib/net8.0-windows10.0.19041/cs/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "cs"
+          },
+          "lib/net8.0-windows10.0.19041/da/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "da"
+          },
+          "lib/net8.0-windows10.0.19041/de/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "de"
+          },
+          "lib/net8.0-windows10.0.19041/el/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "el"
+          },
+          "lib/net8.0-windows10.0.19041/es/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "es"
+          },
+          "lib/net8.0-windows10.0.19041/et/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "et"
+          },
+          "lib/net8.0-windows10.0.19041/fi/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "fi"
+          },
+          "lib/net8.0-windows10.0.19041/fr/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "fr"
+          },
+          "lib/net8.0-windows10.0.19041/he/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "he"
+          },
+          "lib/net8.0-windows10.0.19041/hr/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "hr"
+          },
+          "lib/net8.0-windows10.0.19041/hu/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "hu"
+          },
+          "lib/net8.0-windows10.0.19041/id/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "id"
+          },
+          "lib/net8.0-windows10.0.19041/it/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "it"
+          },
+          "lib/net8.0-windows10.0.19041/ja/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ja"
+          },
+          "lib/net8.0-windows10.0.19041/ko/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ko"
+          },
+          "lib/net8.0-windows10.0.19041/lt/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "lt"
+          },
+          "lib/net8.0-windows10.0.19041/lv/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "lv"
+          },
+          "lib/net8.0-windows10.0.19041/nb-NO/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "nb-NO"
+          },
+          "lib/net8.0-windows10.0.19041/nl/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "nl"
+          },
+          "lib/net8.0-windows10.0.19041/no/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "no"
+          },
+          "lib/net8.0-windows10.0.19041/pl/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "pl"
+          },
+          "lib/net8.0-windows10.0.19041/pt-BR/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "pt-BR"
+          },
+          "lib/net8.0-windows10.0.19041/pt-PT/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "pt-PT"
+          },
+          "lib/net8.0-windows10.0.19041/ro/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ro"
+          },
+          "lib/net8.0-windows10.0.19041/ru/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "ru"
+          },
+          "lib/net8.0-windows10.0.19041/sk/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "sk"
+          },
+          "lib/net8.0-windows10.0.19041/sl/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "sl"
+          },
+          "lib/net8.0-windows10.0.19041/sr/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "sr"
+          },
+          "lib/net8.0-windows10.0.19041/sv/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "sv"
+          },
+          "lib/net8.0-windows10.0.19041/th/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "th"
+          },
+          "lib/net8.0-windows10.0.19041/tr/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "tr"
+          },
+          "lib/net8.0-windows10.0.19041/uk/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "uk"
+          },
+          "lib/net8.0-windows10.0.19041/vi/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "vi"
+          },
+          "lib/net8.0-windows10.0.19041/zh-CN/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "zh-CN"
+          },
+          "lib/net8.0-windows10.0.19041/zh-HK/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "zh-HK"
+          },
+          "lib/net8.0-windows10.0.19041/zh-Hans/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "zh-Hans"
+          },
+          "lib/net8.0-windows10.0.19041/zh-TW/Esri.ArcGISRuntime.resources.dll": {
+            "locale": "zh-TW"
+          }
+        },
+        "build": {
+          "buildTransitive/net8.0-windows10.0.19041.0/Esri.ArcGISRuntime.targets": {}
+        }
+      },
+      "Esri.ArcGISRuntime.runtimes.win/200.6.0": {
+        "type": "package",
+        "compile": {
+          "lib/net8.0-windows10.0.19041.0/_._": {}
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.19041.0/_._": {}
+        },
+        "native": {
+          "runtimes/win-x86/native/RuntimeCoreNet200_6.dll": {},
+          "runtimes/win-x86/native/runtimecore.dll": {},
+          "runtimes/win-x86/native/runtimecoreAssembly.manifest": {}
+        },
+        "build": {
+          "buildTransitive/netstandard1.0/_._": {}
+        }
+      },
+      "Esri.ArcGISRuntime.WPF/200.6.0": {
+        "type": "package",
+        "dependencies": {
+          "Esri.ArcGISRuntime": "200.6.0"
+        },
+        "compile": {
+          "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.WPF.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.WPF.dll": {
+            "related": ".xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ],
+        "native": {
+          "runtimes/win-x86/native/RuntimeCoreNet200_6.WPF.dll": {}
+        },
+        "build": {
+          "buildTransitive/net8.0-windows10.0.19041.0/Esri.ArcGISRuntime.WPF.targets": {}
+        }
+      },
+      "Microsoft.Data.Sqlite/9.0.0": {
+        "type": "package",
+        "dependencies": {
+          "Microsoft.Data.Sqlite.Core": "9.0.0",
+          "SQLitePCLRaw.bundle_e_sqlite3": "2.1.10",
+          "SQLitePCLRaw.core": "2.1.10"
+        },
+        "compile": {
+          "lib/netstandard2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/_._": {}
+        }
+      },
+      "Microsoft.Data.Sqlite.Core/9.0.0": {
+        "type": "package",
+        "dependencies": {
+          "SQLitePCLRaw.core": "2.1.10"
+        },
+        "compile": {
+          "lib/net8.0/Microsoft.Data.Sqlite.dll": {
+            "related": ".xml"
+          }
+        },
+        "runtime": {
+          "lib/net8.0/Microsoft.Data.Sqlite.dll": {
+            "related": ".xml"
+          }
+        }
+      },
+      "SQLitePCLRaw.bundle_e_sqlite3/2.1.10": {
+        "type": "package",
+        "dependencies": {
+          "SQLitePCLRaw.lib.e_sqlite3": "2.1.10",
+          "SQLitePCLRaw.provider.e_sqlite3": "2.1.10"
+        },
+        "compile": {
+          "lib/netstandard2.0/SQLitePCLRaw.batteries_v2.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SQLitePCLRaw.batteries_v2.dll": {}
+        }
+      },
+      "SQLitePCLRaw.core/2.1.10": {
+        "type": "package",
+        "dependencies": {
+          "System.Memory": "4.5.3"
+        },
+        "compile": {
+          "lib/netstandard2.0/SQLitePCLRaw.core.dll": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/SQLitePCLRaw.core.dll": {}
+        }
+      },
+      "SQLitePCLRaw.lib.e_sqlite3/2.1.10": {
+        "type": "package",
+        "compile": {
+          "lib/netstandard2.0/_._": {}
+        },
+        "runtime": {
+          "lib/netstandard2.0/_._": {}
+        },
+        "native": {
+          "runtimes/win-x86/native/e_sqlite3.dll": {}
+        },
+        "build": {
+          "buildTransitive/net8.0/SQLitePCLRaw.lib.e_sqlite3.targets": {}
+        }
+      },
+      "SQLitePCLRaw.provider.e_sqlite3/2.1.10": {
+        "type": "package",
+        "dependencies": {
+          "SQLitePCLRaw.core": "2.1.10"
+        },
+        "compile": {
+          "lib/net6.0-windows7.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+        },
+        "runtime": {
+          "lib/net6.0-windows7.0/SQLitePCLRaw.provider.e_sqlite3.dll": {}
+        }
+      },
+      "System.Memory/4.5.3": {
+        "type": "package",
+        "compile": {
+          "ref/netcoreapp2.1/_._": {}
+        },
+        "runtime": {
+          "lib/netcoreapp2.1/_._": {}
+        }
+      },
+      "Class/1.0.0": {
+        "type": "project",
+        "framework": ".NETCoreApp,Version=v8.0",
+        "dependencies": {
+          "Microsoft.Data.Sqlite": "9.0.0"
+        },
+        "compile": {
+          "bin/placeholder/Class.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/Class.dll": {}
+        }
+      }
+    }
+  },
+  "libraries": {
+    "Esri.ArcGISRuntime/200.6.0": {
+      "sha512": "5HdnM9oDpp2d2j4jP8WXMOIDgaTSoTIygKc0y1vYqzrn9tVZq8xoJqDKuGcHbbzhr4Sjx1qnngfVK02QqIfYaQ==",
+      "type": "package",
+      "path": "esri.arcgisruntime/200.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/MonoAndroid10/Esri.ArcGISRuntime.targets",
+        "build/Xamarin.iOS10/Esri.ArcGISRuntime.targets",
+        "build/net472/Esri.ArcGISRuntime.targets",
+        "build/net6.0-android1.0/Esri.ArcGISRuntime.targets",
+        "build/net6.0-ios1.0/Esri.ArcGISRuntime.targets",
+        "build/net6.0-maccatalyst1.0/Esri.ArcGISRuntime.targets",
+        "build/net6.0-windows7.0/Esri.ArcGISRuntime.targets",
+        "build/net8.0-android34.0/Esri.ArcGISRuntime.targets",
+        "build/net8.0-ios17.0/Esri.ArcGISRuntime.targets",
+        "build/net8.0-maccatalyst17.0/Esri.ArcGISRuntime.targets",
+        "build/net8.0-windows10.0.19041.0/Esri.ArcGISRuntime.targets",
+        "build/net8.0/_._",
+        "build/netcoreapp/Esri.ArcGISRuntime.targets",
+        "build/uap10.0/Esri.ArcGISRuntime.targets",
+        "buildTransitive/MonoAndroid10/Esri.ArcGISRuntime.targets",
+        "buildTransitive/Xamarin.iOS10/Esri.ArcGISRuntime.targets",
+        "buildTransitive/net472/Esri.ArcGISRuntime.targets",
+        "buildTransitive/net6.0-android1.0/Esri.ArcGISRuntime.targets",
+        "buildTransitive/net6.0-ios1.0/Esri.ArcGISRuntime.targets",
+        "buildTransitive/net6.0-maccatalyst1.0/Esri.ArcGISRuntime.targets",
+        "buildTransitive/net6.0-windows7.0/Esri.ArcGISRuntime.targets",
+        "buildTransitive/net8.0-android34.0/Esri.ArcGISRuntime.targets",
+        "buildTransitive/net8.0-ios17.0/Esri.ArcGISRuntime.targets",
+        "buildTransitive/net8.0-maccatalyst17.0/Esri.ArcGISRuntime.targets",
+        "buildTransitive/net8.0-windows10.0.19041.0/Esri.ArcGISRuntime.targets",
+        "buildTransitive/net8.0/_._",
+        "buildTransitive/netcoreapp/Esri.ArcGISRuntime.targets",
+        "buildTransitive/uap10.0/Esri.ArcGISRuntime.targets",
+        "esri.arcgisruntime.200.6.0.nupkg.sha512",
+        "esri.arcgisruntime.nuspec",
+        "icon.png",
+        "legal/Copyright_and_Trademarks.pdf",
+        "legal/eula.txt",
+        "lib/net472/Esri.ArcGISRuntime.dll",
+        "lib/net472/Esri.ArcGISRuntime.xml",
+        "lib/net472/ar/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/bg/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/bs/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/ca/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/cs/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/da/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/de/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/el/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/es/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/et/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/fi/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/fr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/he/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/hr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/hu/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/id/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/it/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/ja/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/ko/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/lt/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/lv/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/nb-NO/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/nl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/no/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/pl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/pt-BR/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/pt-PT/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/ro/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/ru/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/sk/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/sl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/sr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/sv/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/th/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/tr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/uk/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/vi/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/zh-CN/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/zh-HK/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/zh-Hans/Esri.ArcGISRuntime.resources.dll",
+        "lib/net472/zh-TW/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/Esri.ArcGISRuntime.dll",
+        "lib/net8.0-android34.0/Esri.ArcGISRuntime.xml",
+        "lib/net8.0-android34.0/ar/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/bg/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/bs/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/ca/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/cs/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/da/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/de/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/el/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/es/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/et/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/fi/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/fr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/he/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/hr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/hu/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/id/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/it/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/ja/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/ko/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/lt/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/lv/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/nb-NO/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/nl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/no/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/pl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/pt-BR/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/pt-PT/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/ro/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/ru/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/sk/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/sl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/sr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/sv/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/th/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/tr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/uk/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/vi/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/zh-CN/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/zh-HK/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/zh-Hans/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-android34.0/zh-TW/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/Esri.ArcGISRuntime.dll",
+        "lib/net8.0-ios17.0/Esri.ArcGISRuntime.xml",
+        "lib/net8.0-ios17.0/ar/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/bg/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/bs/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/ca/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/cs/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/da/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/de/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/el/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/es/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/et/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/fi/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/fr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/he/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/hr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/hu/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/id/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/it/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/ja/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/ko/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/lt/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/lv/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/nb-NO/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/nl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/no/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/pl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/pt-BR/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/pt-PT/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/ro/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/ru/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/sk/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/sl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/sr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/sv/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/th/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/tr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/uk/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/vi/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/zh-CN/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/zh-HK/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/zh-Hans/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-ios17.0/zh-TW/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/Esri.ArcGISRuntime.dll",
+        "lib/net8.0-maccatalyst17.0/Esri.ArcGISRuntime.xml",
+        "lib/net8.0-maccatalyst17.0/ar/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/bg/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/bs/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/ca/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/cs/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/da/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/de/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/el/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/es/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/et/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/fi/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/fr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/he/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/hr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/hu/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/id/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/it/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/ja/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/ko/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/lt/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/lv/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/nb-NO/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/nl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/no/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/pl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/pt-BR/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/pt-PT/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/ro/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/ru/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/sk/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/sl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/sr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/sv/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/th/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/tr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/uk/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/vi/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/zh-CN/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/zh-HK/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/zh-Hans/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-maccatalyst17.0/zh-TW/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.dll",
+        "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.xml",
+        "lib/net8.0-windows10.0.19041/ar/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/bg/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/bs/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/ca/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/cs/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/da/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/de/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/el/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/es/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/et/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/fi/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/fr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/he/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/hr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/hu/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/id/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/it/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/ja/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/ko/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/lt/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/lv/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/nb-NO/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/nl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/no/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/pl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/pt-BR/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/pt-PT/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/ro/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/ru/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/sk/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/sl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/sr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/sv/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/th/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/tr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/uk/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/vi/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/zh-CN/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/zh-HK/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/zh-Hans/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0-windows10.0.19041/zh-TW/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/Esri.ArcGISRuntime.dll",
+        "lib/net8.0/Esri.ArcGISRuntime.xml",
+        "lib/net8.0/ar/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/bg/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/bs/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/ca/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/cs/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/da/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/de/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/el/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/es/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/et/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/fi/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/fr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/he/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/hr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/hu/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/id/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/it/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/ja/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/ko/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/lt/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/lv/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/nb-NO/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/nl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/no/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/pl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/pt-BR/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/pt-PT/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/ro/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/ru/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/sk/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/sl/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/sr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/sv/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/th/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/tr/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/uk/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/vi/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/zh-CN/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/zh-HK/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/zh-Hans/Esri.ArcGISRuntime.resources.dll",
+        "lib/net8.0/zh-TW/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/Esri.ArcGISRuntime.dll",
+        "lib/netstandard2.0/Esri.ArcGISRuntime.xml",
+        "lib/netstandard2.0/ar/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/bg/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/bs/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/ca/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/cs/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/da/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/de/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/el/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/es/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/et/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/fi/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/fr/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/he/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/hr/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/hu/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/id/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/it/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/ja/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/ko/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/lt/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/lv/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/nb-NO/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/nl/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/no/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/pl/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/pt-BR/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/pt-PT/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/ro/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/ru/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/sk/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/sl/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/sr/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/sv/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/th/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/tr/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/uk/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/vi/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/zh-CN/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/zh-HK/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/zh-Hans/Esri.ArcGISRuntime.resources.dll",
+        "lib/netstandard2.0/zh-TW/Esri.ArcGISRuntime.resources.dll",
+        "lib/uap10.0.19041/Esri.ArcGISRuntime.dll",
+        "lib/uap10.0.19041/Esri.ArcGISRuntime.pri",
+        "lib/uap10.0.19041/Esri.ArcGISRuntime.xml",
+        "resources/network_analyst/strings.bin"
+      ]
+    },
+    "Esri.ArcGISRuntime.runtimes.win/200.6.0": {
+      "sha512": "LKAyPN85+1sWBjHf/KPrsTpZMgsXKWSYXD+aM/ufr3L1xFAs54oQOe0aEkXWldlyyeOUQrAGbztdX69Veh8Unw==",
+      "type": "package",
+      "path": "esri.arcgisruntime.runtimes.win/200.6.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/net472/Esri.ArcGISRuntime.runtimes.win.targets",
+        "build/netstandard1.0/_._",
+        "buildTransitive/net472/Esri.ArcGISRuntime.runtimes.win.targets",
+        "buildTransitive/netstandard1.0/_._",
+        "esri.arcgisruntime.runtimes.win.200.6.0.nupkg.sha512",
+        "esri.arcgisruntime.runtimes.win.nuspec",
+        "icon.png",
+        "legal/Copyright_and_Trademarks.pdf",
+        "legal/eula.txt",
+        "legal/open-source-acknowledgements.pdf",
+        "lib/net472/_._",
+        "lib/net8.0-windows10.0.19041.0/_._",
+        "lib/uap10.0.19041/_._",
+        "runtimes/win-arm64/native/RuntimeCoreNet200_6.dll",
+        "runtimes/win-arm64/native/runtimecore.dll",
+        "runtimes/win-arm64/native/runtimecoreAssembly.manifest",
+        "runtimes/win-x64/native/RuntimeCoreNet200_6.dll",
+        "runtimes/win-x64/native/runtimecore.dll",
+        "runtimes/win-x64/native/runtimecoreAssembly.manifest",
+        "runtimes/win-x86/native/RuntimeCoreNet200_6.dll",
+        "runtimes/win-x86/native/runtimecore.dll",
+        "runtimes/win-x86/native/runtimecoreAssembly.manifest"
+      ]
+    },
+    "Esri.ArcGISRuntime.WPF/200.6.0": {
+      "sha512": "Dyzu7PEDPhTw45K0Z0OZ/UiFO8uQfmc2VzYQDJ082tsTzVatmOsRjoopJXEPkIycB/ZBJv15aWy0SgCwrc8BeA==",
+      "type": "package",
+      "path": "esri.arcgisruntime.wpf/200.6.0",
+      "hasTools": true,
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "build/net472/Esri.ArcGISRuntime.WPF.targets",
+        "build/net8.0-windows10.0.19041.0/Esri.ArcGISRuntime.WPF.targets",
+        "build/netcoreapp/Esri.ArcGISRuntime.WPF.targets",
+        "buildTransitive/net472/Esri.ArcGISRuntime.WPF.targets",
+        "buildTransitive/net8.0-windows10.0.19041.0/Esri.ArcGISRuntime.WPF.targets",
+        "buildTransitive/netcoreapp/Esri.ArcGISRuntime.WPF.targets",
+        "esri.arcgisruntime.wpf.200.6.0.nupkg.sha512",
+        "esri.arcgisruntime.wpf.nuspec",
+        "icon.png",
+        "legal/Copyright_and_Trademarks.pdf",
+        "legal/eula.txt",
+        "lib/net472/Esri.ArcGISRuntime.WPF.dll",
+        "lib/net472/Esri.ArcGISRuntime.WPF.xml",
+        "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.WPF.dll",
+        "lib/net8.0-windows10.0.19041/Esri.ArcGISRuntime.WPF.xml",
+        "lib/netcoreapp/_._",
+        "resources/ArcGISRuntime200.6/resources/egm96_grid/egm96_compressed.bin",
+        "resources/ArcGISRuntime200.6/resources/shaders/atmosphere_accurate_3d_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/atmosphere_accurate_3d_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/atmosphere_textured_3d_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/atmosphere_textured_3d_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/basic_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/basic_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/basic_usage_3d_depth_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/cloud_3d_composition_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/cloud_3d_composition_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/cloud_3d_noise_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/cloud_3d_noise_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/cloud_3d_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/cloud_3d_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/color_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/color_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/full_screen_quad_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/magnifier_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/magnifier_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/measure_line_depth_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/measure_line_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/measure_line_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/modelline_3d_depth_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/modelline_3d_normal_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/point_3d_billboard_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/point_3d_billboard_sdf_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/point_3d_billboard_sdf_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/point_3d_billboard_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/point_3d_depth_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/point_3d_overlay_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/point_3d_overlay_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/point_cloud_3d_depth_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/point_cloud_3d_depth_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/point_cloud_3d_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/point_cloud_3d_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/polygon_3d_depth_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/polygon_3d_normal_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/polygon_3d_overlay_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/polygon_3d_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/polygon_outline_3d_overlay_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/polygon_outline_3d_overlay_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/polyline_3d_depth_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/polyline_3d_depth_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/polyline_3d_normal_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/polyline_3d_overlay_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/polyline_3d_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_basic_texture_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_dilate_reduce_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_gauss_blur_13x13_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_gauss_blur_17x17_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_gauss_blur_5x5_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_gauss_blur_9x9_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_multi_texture_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_multi_ubo_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_selection_finalize_mask_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_selection_finalize_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_tex_image_modify_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_texture_3d_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_texture_3d_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_texture_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_texture_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_texture_scaled_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/re_vertex_texture_scaled_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_atmosphere_horizon_global_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_atmosphere_horizon_local_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_background_surface_global_depth_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_background_surface_global_draw_v_solid_color_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_background_surface_global_draw_v_square_grid_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_background_surface_local_depth_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_background_surface_local_draw_v_solid_color_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_background_surface_local_draw_v_square_grid_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_basic_depth_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_bilateral_upsampling_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_billboard_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_billboard_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_clear_depth_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_clear_depth_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_compute_cascade_ortho_matrix_from_depth_cs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_compute_velocity_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_debug_march_spheres_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_debug_mesh_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_debug_mesh_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_directional_image_convolution_bilateral_v_horizontal_cs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_directional_image_convolution_bilateral_v_vertical_cs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_directional_image_convolution_v_horizontal_cs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_directional_image_convolution_v_vertical_cs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_draw_texture_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_full_screen_quad_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_hbao_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_atlas_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_atlas_oit_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_basic_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_basic_oit_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_depth_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_depth_v_instanced_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_depth_v_pyramid_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_draw_v_instanced_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_draw_v_pyramid_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_im_depth_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_im_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_im_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_im_oit_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_im_shadows_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_instanced_pick_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_pbr_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_pbr_oit_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_pick_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_pick_v_instanced_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_pick_v_pyramid_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_selected_feature_highlight_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_selected_feature_highlight_v_instanced_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_selected_feature_highlight_v_pyramid_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_shadows_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_shadows_v_instanced_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_mesh_shadows_v_pyramid_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_min_max_depth_cs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_obb_depth_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_oit_compose_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_outlined_feature_edges_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_outlined_feature_edges_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_rcr_imgui_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_rcr_imgui_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_screen_overlay_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_screen_overlay_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_screen_quad_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_selected_feature_highlight_compose_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_simple_storage_buffer_write_cs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_store_cascade_ortho_matrix_from_cpu_cs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_taa_resolve_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_texture_subsampling_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_texture_subsampling_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_tile_depth_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_tile_draw_v_solid_color_background_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_tile_draw_v_square_grid_background_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_tile_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_tile_oit_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_tile_shadows_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/rt_tile_shadows_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/sequence_area_line_normal_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/sequence_area_line_normal_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/sequence_area_line_pick_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/sequence_area_line_pick_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/sequence_dynamic_marker_normal_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/sequence_dynamic_marker_normal_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/sequence_dynamic_marker_pick_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/sequence_dynamic_marker_pick_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/sequence_marker_normal_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/sequence_marker_normal_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/sequence_marker_pick_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/sequence_marker_pick_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/star_3d_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/star_3d_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/test_compute_shader_cs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/text_3d_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/text_3d_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/tile_3d_depth_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/tile_3d_draped_graphics_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/tile_3d_draped_graphics_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/tile_3d_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/tile_3d_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/tile_3d_ground_overlay_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/tile_3d_ground_overlay_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/tile_imagery_composer_cs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/tile_imagery_composer_single_batch_cs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/tile_normal_generator_global_cs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/tile_normal_generator_global_quarter_size_cs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/tile_normal_generator_local_cs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/tile_normal_generator_local_quarter_size_cs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/trianglemesh_3d_depth_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/trianglemesh_3d_depth_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/trianglemesh_3d_draw_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/trianglemesh_3d_draw_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/trianglemesh_3d_edge_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/trianglemesh_3d_edge_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/trianglemesh_3d_gbuf_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/trianglemesh_3d_gbuf_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/trianglemesh_non_instanced_3d_depth_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/trianglemesh_non_instanced_3d_normal_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/viewshed_post_process_3d_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_background_pattern_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_background_pattern_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_background_solid_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_background_solid_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_circle_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_circle_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_fill_outline_dd_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_fill_outline_dd_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_fill_outline_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_fill_outline_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_fill_pattern_dd_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_fill_pattern_dd_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_fill_pattern_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_fill_pattern_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_fill_solid_dd_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_fill_solid_dd_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_fill_solid_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_fill_solid_tile_translate_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_fill_solid_v2_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_fill_solid_view_translate_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_fill_solid_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_icon_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_icon_tile_translate_dd_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_icon_tile_translate_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_icon_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_line_dd_v2_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_line_pattern_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_line_pattern_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_line_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_line_v2_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_line_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_sdf_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_sdf_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_stencil_write_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/vt_stencil_write_vs.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/water_3d_ps.cso",
+        "resources/ArcGISRuntime200.6/resources/shaders/water_3d_vs.cso",
+        "runtimes/win-arm64/native/RuntimeCoreNet200_6.WPF.dll",
+        "runtimes/win-x64/native/RuntimeCoreNet200_6.WPF.dll",
+        "runtimes/win-x86/native/RuntimeCoreNet200_6.WPF.dll",
+        "tools/VisualStudioToolsManifest.xml"
+      ]
+    },
+    "Microsoft.Data.Sqlite/9.0.0": {
+      "sha512": "lw6wthgXGx3r/U775k1UkUAWIn0kAT0wj4ZRq0WlhPx4WAOiBsIjgDKgWkXcNTGT0KfHiClkM+tyPVFDvxeObw==",
+      "type": "package",
+      "path": "microsoft.data.sqlite/9.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "PACKAGE.md",
+        "lib/netstandard2.0/_._",
+        "microsoft.data.sqlite.9.0.0.nupkg.sha512",
+        "microsoft.data.sqlite.nuspec"
+      ]
+    },
+    "Microsoft.Data.Sqlite.Core/9.0.0": {
+      "sha512": "cFfZjFL+tqzGYw9lB31EkV1IWF5xRQNk2k+MQd+Cf86Gl6zTeAoiZIFw5sRB1Z8OxpEC7nu+nTDsLSjieBAPTw==",
+      "type": "package",
+      "path": "microsoft.data.sqlite.core/9.0.0",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "Icon.png",
+        "PACKAGE.md",
+        "lib/net6.0/Microsoft.Data.Sqlite.dll",
+        "lib/net6.0/Microsoft.Data.Sqlite.xml",
+        "lib/net8.0/Microsoft.Data.Sqlite.dll",
+        "lib/net8.0/Microsoft.Data.Sqlite.xml",
+        "lib/netstandard2.0/Microsoft.Data.Sqlite.dll",
+        "lib/netstandard2.0/Microsoft.Data.Sqlite.xml",
+        "microsoft.data.sqlite.core.9.0.0.nupkg.sha512",
+        "microsoft.data.sqlite.core.nuspec"
+      ]
+    },
+    "SQLitePCLRaw.bundle_e_sqlite3/2.1.10": {
+      "sha512": "UxWuisvZ3uVcVOLJQv7urM/JiQH+v3TmaJc1BLKl5Dxfm/nTzTUrqswCqg/INiYLi61AXnHo1M1JPmPqqLnAdg==",
+      "type": "package",
+      "path": "sqlitepclraw.bundle_e_sqlite3/2.1.10",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/monoandroid90/SQLitePCLRaw.batteries_v2.dll",
+        "lib/net461/SQLitePCLRaw.batteries_v2.dll",
+        "lib/net6.0-android31.0/SQLitePCLRaw.batteries_v2.dll",
+        "lib/net6.0-android31.0/SQLitePCLRaw.batteries_v2.xml",
+        "lib/net6.0-ios14.0/SQLitePCLRaw.batteries_v2.dll",
+        "lib/net6.0-ios14.2/SQLitePCLRaw.batteries_v2.dll",
+        "lib/net6.0-tvos10.0/SQLitePCLRaw.batteries_v2.dll",
+        "lib/netstandard2.0/SQLitePCLRaw.batteries_v2.dll",
+        "lib/xamarinios10/SQLitePCLRaw.batteries_v2.dll",
+        "sqlitepclraw.bundle_e_sqlite3.2.1.10.nupkg.sha512",
+        "sqlitepclraw.bundle_e_sqlite3.nuspec"
+      ]
+    },
+    "SQLitePCLRaw.core/2.1.10": {
+      "sha512": "Ii8JCbC7oiVclaE/mbDEK000EFIJ+ShRPwAvvV89GOZhQ+ZLtlnSWl6ksCNMKu/VGXA4Nfi2B7LhN/QFN9oBcw==",
+      "type": "package",
+      "path": "sqlitepclraw.core/2.1.10",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/netstandard2.0/SQLitePCLRaw.core.dll",
+        "sqlitepclraw.core.2.1.10.nupkg.sha512",
+        "sqlitepclraw.core.nuspec"
+      ]
+    },
+    "SQLitePCLRaw.lib.e_sqlite3/2.1.10": {
+      "sha512": "mAr69tDbnf3QJpRy2nJz8Qdpebdil00fvycyByR58Cn9eARvR+UiG2Vzsp+4q1tV3ikwiYIjlXCQFc12GfebbA==",
+      "type": "package",
+      "path": "sqlitepclraw.lib.e_sqlite3/2.1.10",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "buildTransitive/net461/SQLitePCLRaw.lib.e_sqlite3.targets",
+        "buildTransitive/net6.0/SQLitePCLRaw.lib.e_sqlite3.targets",
+        "buildTransitive/net7.0/SQLitePCLRaw.lib.e_sqlite3.targets",
+        "buildTransitive/net8.0/SQLitePCLRaw.lib.e_sqlite3.targets",
+        "buildTransitive/net9.0/SQLitePCLRaw.lib.e_sqlite3.targets",
+        "lib/net461/_._",
+        "lib/netstandard2.0/_._",
+        "runtimes/browser-wasm/nativeassets/net6.0/e_sqlite3.a",
+        "runtimes/browser-wasm/nativeassets/net7.0/e_sqlite3.a",
+        "runtimes/browser-wasm/nativeassets/net8.0/e_sqlite3.a",
+        "runtimes/browser-wasm/nativeassets/net9.0/e_sqlite3.a",
+        "runtimes/linux-arm/native/libe_sqlite3.so",
+        "runtimes/linux-arm64/native/libe_sqlite3.so",
+        "runtimes/linux-armel/native/libe_sqlite3.so",
+        "runtimes/linux-mips64/native/libe_sqlite3.so",
+        "runtimes/linux-musl-arm/native/libe_sqlite3.so",
+        "runtimes/linux-musl-arm64/native/libe_sqlite3.so",
+        "runtimes/linux-musl-s390x/native/libe_sqlite3.so",
+        "runtimes/linux-musl-x64/native/libe_sqlite3.so",
+        "runtimes/linux-ppc64le/native/libe_sqlite3.so",
+        "runtimes/linux-s390x/native/libe_sqlite3.so",
+        "runtimes/linux-x64/native/libe_sqlite3.so",
+        "runtimes/linux-x86/native/libe_sqlite3.so",
+        "runtimes/maccatalyst-arm64/native/libe_sqlite3.dylib",
+        "runtimes/maccatalyst-x64/native/libe_sqlite3.dylib",
+        "runtimes/osx-arm64/native/libe_sqlite3.dylib",
+        "runtimes/osx-x64/native/libe_sqlite3.dylib",
+        "runtimes/win-arm/native/e_sqlite3.dll",
+        "runtimes/win-arm64/native/e_sqlite3.dll",
+        "runtimes/win-x64/native/e_sqlite3.dll",
+        "runtimes/win-x86/native/e_sqlite3.dll",
+        "runtimes/win10-arm/nativeassets/uap10.0/e_sqlite3.dll",
+        "runtimes/win10-arm64/nativeassets/uap10.0/e_sqlite3.dll",
+        "runtimes/win10-x64/nativeassets/uap10.0/e_sqlite3.dll",
+        "runtimes/win10-x86/nativeassets/uap10.0/e_sqlite3.dll",
+        "sqlitepclraw.lib.e_sqlite3.2.1.10.nupkg.sha512",
+        "sqlitepclraw.lib.e_sqlite3.nuspec"
+      ]
+    },
+    "SQLitePCLRaw.provider.e_sqlite3/2.1.10": {
+      "sha512": "uZVTi02C1SxqzgT0HqTWatIbWGb40iIkfc3FpFCpE/r7g6K0PqzDUeefL6P6HPhDtc6BacN3yQysfzP7ks+wSQ==",
+      "type": "package",
+      "path": "sqlitepclraw.provider.e_sqlite3/2.1.10",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net6.0-windows7.0/SQLitePCLRaw.provider.e_sqlite3.dll",
+        "lib/net6.0/SQLitePCLRaw.provider.e_sqlite3.dll",
+        "lib/netstandard2.0/SQLitePCLRaw.provider.e_sqlite3.dll",
+        "sqlitepclraw.provider.e_sqlite3.2.1.10.nupkg.sha512",
+        "sqlitepclraw.provider.e_sqlite3.nuspec"
+      ]
+    },
+    "System.Memory/4.5.3": {
+      "sha512": "3oDzvc/zzetpTKWMShs1AADwZjQ/36HnsufHRPcOjyRAAMLDlu2iD33MBI2opxnezcVUtXyqDXXjoFMOU9c7SA==",
+      "type": "package",
+      "path": "system.memory/4.5.3",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "LICENSE.TXT",
+        "THIRD-PARTY-NOTICES.TXT",
+        "lib/netcoreapp2.1/_._",
+        "lib/netstandard1.1/System.Memory.dll",
+        "lib/netstandard1.1/System.Memory.xml",
+        "lib/netstandard2.0/System.Memory.dll",
+        "lib/netstandard2.0/System.Memory.xml",
+        "ref/netcoreapp2.1/_._",
+        "system.memory.4.5.3.nupkg.sha512",
+        "system.memory.nuspec",
+        "useSharedDesignerContext.txt",
+        "version.txt"
+      ]
+    },
+    "Class/1.0.0": {
+      "type": "project",
+      "path": "../Class/Class.csproj",
+      "msbuildProject": "../Class/Class.csproj"
+    }
+  },
+  "projectFileDependencyGroups": {
+    "net8.0-windows10.0.26100": [
+      "Class >= 1.0.0",
+      "Esri.ArcGISRuntime >= 200.6.0",
+      "Esri.ArcGISRuntime.WPF >= 200.6.0"
+    ]
+  },
+  "packageFolders": {
+    "C:\\Users\\bolty\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+  },
+  "project": {
+    "version": "1.0.0",
+    "restore": {
+      "projectUniqueName": "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\WpfMapApp5\\ArcGIS_App.csproj",
+      "projectName": "ArcGIS_App",
+      "projectPath": "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\WpfMapApp5\\ArcGIS_App.csproj",
+      "packagesPath": "C:\\Users\\bolty\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\WpfMapApp5\\obj\\",
+      "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
+      "configFilePaths": [
+        "C:\\Users\\bolty\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+      ],
+      "originalTargetFrameworks": [
+        "net8.0-windows10.0.26100.0"
+      ],
+      "sources": {
+        "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+        "https://api.nuget.org/v3/index.json": {}
+      },
+      "frameworks": {
+        "net8.0-windows10.0.26100": {
+          "targetAlias": "net8.0-windows10.0.26100.0",
+          "projectReferences": {
+            "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\Class\\Class.csproj": {
+              "projectPath": "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\Class\\Class.csproj"
+            }
+          }
+        }
+      },
+      "warningProperties": {
+        "warnAsError": [
+          "NU1605"
+        ]
+      },
+      "restoreAuditProperties": {
+        "enableAudit": "true",
+        "auditLevel": "low",
+        "auditMode": "all"
+      },
+      "SdkAnalysisLevel": "9.0.100"
+    },
+    "frameworks": {
+      "net8.0-windows10.0.26100": {
+        "targetAlias": "net8.0-windows10.0.26100.0",
+        "dependencies": {
+          "Esri.ArcGISRuntime": {
+            "target": "Package",
+            "version": "[200.6.0, )"
+          },
+          "Esri.ArcGISRuntime.WPF": {
+            "target": "Package",
+            "version": "[200.6.0, )"
+          }
+        },
+        "imports": [
+          "net461",
+          "net462",
+          "net47",
+          "net471",
+          "net472",
+          "net48",
+          "net481"
+        ],
+        "assetTargetFallback": true,
+        "warn": true,
+        "downloadDependencies": [
+          {
+            "name": "Microsoft.AspNetCore.App.Runtime.win-arm64",
+            "version": "[8.0.11, 8.0.11]"
+          },
+          {
+            "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
+            "version": "[8.0.11, 8.0.11]"
+          },
+          {
+            "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
+            "version": "[8.0.11, 8.0.11]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Runtime.win-arm64",
+            "version": "[8.0.11, 8.0.11]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Runtime.win-x64",
+            "version": "[8.0.11, 8.0.11]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Runtime.win-x86",
+            "version": "[8.0.11, 8.0.11]"
+          },
+          {
+            "name": "Microsoft.Windows.SDK.NET.Ref",
+            "version": "[10.0.26100.54, 10.0.26100.54]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Runtime.win-arm64",
+            "version": "[8.0.11, 8.0.11]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
+            "version": "[8.0.11, 8.0.11]"
+          },
+          {
+            "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
+            "version": "[8.0.11, 8.0.11]"
+          }
+        ],
+        "frameworkReferences": {
+          "Microsoft.NETCore.App": {
+            "privateAssets": "all"
+          },
+          "Microsoft.Windows.SDK.NET.Ref.Windows": {
+            "privateAssets": "all"
+          },
+          "Microsoft.WindowsDesktop.App.WPF": {
+            "privateAssets": "none"
+          }
+        },
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+      }
+    },
+    "runtimes": {
+      "win-arm64": {
+        "#import": []
+      },
+      "win-x64": {
+        "#import": []
+      },
+      "win-x86": {
+        "#import": []
+      }
+    }
+  }
+}

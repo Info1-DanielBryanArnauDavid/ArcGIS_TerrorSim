@@ -1,0 +1,38 @@
+﻿<Window x:Class="ArcGIS_App.Registro"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Register" Height="400" Width="500" WindowStartupLocation="CenterScreen">
+    <Grid Background="White">
+        <Label Content="Create Account" FontSize="24" FontWeight="Bold" Foreground="#333333" Margin="20,20,0,0" VerticalAlignment="Top"/>
+        <Label Content="Please fill in the details below to create an account." FontSize="12" Foreground="#666666" Margin="20,60,0,0" VerticalAlignment="Top"/>
+
+        <Label Content="Username" Margin="20,100,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="textBox1" Width="300" Height="30" Margin="150,100,0,0" VerticalAlignment="Top"
+                 Background="#F5F5F5"/>
+
+        <Label Content="Password" Margin="20,150,0,0" VerticalAlignment="Top"/>
+        <PasswordBox x:Name="textBox2" Width="300" Height="30" Margin="150,150,0,0" VerticalAlignment="Top"
+                     Background="#F5F5F5"/>
+
+        <Label Content="Confirm Password" Margin="20,200,0,0" VerticalAlignment="Top"/>
+        <PasswordBox x:Name="textBox3" Width="300" Height="30" Margin="150,200,0,0" VerticalAlignment="Top"
+                     Background="#F5F5F5"/>
+
+        <!-- Adjusted margin for buttons to prevent overlap -->
+        <Button x:Name="button1" Content="Sign Up" Width="150" Height="35"
+                Margin="100,250,25,10" HorizontalAlignment="Right"
+                Background="#0078D4" Foreground="#FFFFFF"
+                Click="button1_Click"/>
+
+        <Button x:Name="button2" Content="Cancel" Width="150" Height="35"
+                Margin="140,250,25,10"
+                Background="#FFFFFF"
+                BorderBrush="#0078D4"
+                BorderThickness="1"
+                HorizontalAlignment="Left"
+                Foreground="#0078D4"
+                Click="button2_Click"/>
+
+        <Label x:Name="label4" Foreground="#FF0000" Margin="0,231,360,-118"/>
+    </Grid>
+</Window>

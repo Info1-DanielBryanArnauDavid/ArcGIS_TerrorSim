@@ -1,0 +1,29 @@
+{
+  "version": 2,
+  "dgSpecHash": "KWpbYtxSGf4=",
+  "success": true,
+  "projectFilePath": "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\WpfMapApp5\\ArcGIS_App.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\bolty\\.nuget\\packages\\esri.arcgisruntime\\200.6.0\\esri.arcgisruntime.200.6.0.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\esri.arcgisruntime.runtimes.win\\200.6.0\\esri.arcgisruntime.runtimes.win.200.6.0.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\esri.arcgisruntime.wpf\\200.6.0\\esri.arcgisruntime.wpf.200.6.0.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\microsoft.data.sqlite\\9.0.0\\microsoft.data.sqlite.9.0.0.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\microsoft.data.sqlite.core\\9.0.0\\microsoft.data.sqlite.core.9.0.0.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.10\\sqlitepclraw.bundle_e_sqlite3.2.1.10.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\sqlitepclraw.core\\2.1.10\\sqlitepclraw.core.2.1.10.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.10\\sqlitepclraw.lib.e_sqlite3.2.1.10.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.10\\sqlitepclraw.provider.e_sqlite3.2.1.10.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x86\\8.0.11\\microsoft.netcore.app.runtime.win-x86.8.0.11.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.26100.54\\microsoft.windows.sdk.net.ref.10.0.26100.54.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x86\\8.0.11\\microsoft.aspnetcore.app.runtime.win-x86.8.0.11.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\microsoft.netcore.app.runtime.win-arm64\\8.0.11\\microsoft.netcore.app.runtime.win-arm64.8.0.11.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\8.0.11\\microsoft.aspnetcore.app.runtime.win-x64.8.0.11.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-arm64\\8.0.11\\microsoft.windowsdesktop.app.runtime.win-arm64.8.0.11.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\8.0.11\\microsoft.windowsdesktop.app.runtime.win-x64.8.0.11.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-arm64\\8.0.11\\microsoft.aspnetcore.app.runtime.win-arm64.8.0.11.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\8.0.11\\microsoft.netcore.app.runtime.win-x64.8.0.11.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x86\\8.0.11\\microsoft.windowsdesktop.app.runtime.win-x86.8.0.11.nupkg.sha512"
+  ],
+  "logs": []
+}
