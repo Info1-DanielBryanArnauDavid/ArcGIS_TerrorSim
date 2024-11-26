@@ -1,19 +1,46 @@
-# TerrorSim 
+# ArcGIS TerroSim Project
 
-A basic flight simulator with real-time collision detection.
+## Overview
+
+**ArcGIS TerroSim** is a simulation tool designed to load, manage, and visualize flight plans and waypoints. It integrates data from `.txt` or `.csv` files and uses ArcGIS for geographic visualization. The project includes classes for flight plan management, waypoints, and support for multiple flight plans. The aim is to create a simulation environment where users can explore flight paths, flight levels, and speeds based on a set of waypoints.
+
+---
 
 ## Features
-- **Flight Simulation**: Input the basic parameters
-- **Collision Detection**: Detects collisions with terrain and other objects in the environment.
-- **File Export and Import**: Treat files and store them in formats like: .csv .txt .xml
-- **Google Earth Visualization**: Animation in Google Earth
 
-## Usage
+- **Waypoint Management**: Load waypoints from `.txt` or `.csv` files that contain waypoint names and geographic coordinates (latitude and longitude).
+- **Flight Plan Management**: Load flight plans with associated waypoints, flight levels (FLXX), and speeds (KTXX) from `.csv` files.
+- **Data Parsing**: Automatically parse and load flight plans based on time, company, waypoint, and speed/flight level data.
+- **Simulation Control**: Simulate flights by defining the path using waypoints and displaying flight data in ArcGIS's scene view.
+- **Customizable UI**: The welcome window provides instructions and a clean, semi-transparent UI with a close button.
+- **Extensible**: The system is designed for future extensions to support additional simulation features.
 
-- **Simple**: WaypointCart.cs y FlightPlanCart.cs
-- **Complex**: Waypoint.cs y FlightPlan.cs
+---
 
-## To-Do
+## Installation
 
-- **OpenGL / DirectX **: 3D Renderer if possible.
-  
+To run this project locally, you need:
+
+- **Visual Studio** (or another C# development environment)
+- **.NET Core or .NET Framework** (depending on your setup)
+- **ArcGIS Runtime SDK for .NET** (for geographic visualization)
+
+### Steps to set up:
+
+1. Clone the repository:
+    ```bash
+    git clone https://github.com/yourusername/ArcGIS_TerroSim.git
+    ```
+
+2. Open the solution file (`ArcGIS_TerroSim.sln`) in **Visual Studio**.
+
+3. Ensure the **ArcGIS Runtime SDK for .NET** is installed:
+    - Download and install ArcGIS Runtime SDK from [ArcGIS for Developers](https://developers.arcgis.com/net/).
+
+4. Build and run the project in Visual Studio.
+
+---
+
+## Example Usage
+
+### 1. Waypoint Data File Example (waypoints.txt)
