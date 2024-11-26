@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "YJLZN1oLzhc=",
+  "dgSpecHash": "SlilyfmhjNM=",
   "success": true,
-  "projectFilePath": "C:\\Users\\bolty\\Source\\Repos\\ArcGIS_TerrorSim\\Class\\Class.csproj",
+  "projectFilePath": "C:\\Users\\bolty\\Desktop\\ArcGIS_TerrorSim\\Class\\Class.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\bolty\\.nuget\\packages\\microsoft.data.sqlite\\9.0.0\\microsoft.data.sqlite.9.0.0.nupkg.sha512",
     "C:\\Users\\bolty\\.nuget\\packages\\microsoft.data.sqlite.core\\9.0.0\\microsoft.data.sqlite.core.9.0.0.nupkg.sha512",

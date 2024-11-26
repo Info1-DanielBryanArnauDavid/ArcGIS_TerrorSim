@@ -19,8 +19,8 @@ namespace ArcGIS_App
             {
                 // Initialize ArcGIS Maps SDK
                 ArcGISRuntimeEnvironment.Initialize(config => config
-                    //.UseLicense() descomentar y añadir la licencia
-                    //.UseApiKey() descomentar y añadir la API y eso quehay en el .txt
+                    .UseLicense("runtimelite,1000,rud4181779618,none,KGE60RFLTHLK4P7EJ117")
+                    .UseApiKey("AAPTxy8BH1VEsoebNVZXo8HurCi114pfGLP0iELTnYVZjS-uxnIX0WlAXSNpuphVxu2cWDIySIgv7GXBrrOTo0iTQ-LT2O8z-qXfYEZ5sDtn8OHJRE-waw9KrCJDnsxwdYvtUo2OnxQ3kiFUo9gn-eWCvSoR-flhQYABsRHKivlVQGiNczspWnZW_jMQ-mD0uGRQjw_pVuvZdhhLQ7DvRoNsJ4gAnfnzoNYfud9WcSm-qcE.AT1_sYuiSXs7")
                     .ConfigureAuthentication(auth => auth.UseDefaultChallengeHandler())
                 );
 
