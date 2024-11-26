@@ -356,9 +356,9 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\testingClass\\testingClass.csproj",
+      "projectUniqueName": "C:\\Users\\bolty\\Source\\Repos\\ArcGIS_TerrorSim\\testingClass\\testingClass.csproj",
       "projectName": "testingClass",
-      "projectPath": "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\testingClass\\testingClass.csproj",
+      "projectPath": "C:\\Users\\bolty\\Source\\Repos\\ArcGIS_TerrorSim\\testingClass\\testingClass.csproj",
       "packagesPath": "C:\\Users\\bolty\\.nuget\\packages\\",
       "outputPath": "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\testingClass\\obj\\",
       "projectStyle": "PackageReference",
@@ -381,8 +381,8 @@
         "net8.0-windows10.0.26100": {
           "targetAlias": "net8.0-windows10.0.26100.0",
           "projectReferences": {
-            "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\Class\\Class.csproj": {
-              "projectPath": "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\Class\\Class.csproj"
+            "C:\\Users\\bolty\\Source\\Repos\\ArcGIS_TerrorSim\\Class\\Class.csproj": {
+              "projectPath": "C:\\Users\\bolty\\Source\\Repos\\ArcGIS_TerrorSim\\Class\\Class.csproj"
             }
           }
         }

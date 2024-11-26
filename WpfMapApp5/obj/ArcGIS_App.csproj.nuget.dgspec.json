@@ -1,15 +1,15 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\WpfMapApp5\\ArcGIS_App.csproj": {}
+    "C:\\Users\\bolty\\Source\\Repos\\ArcGIS_TerrorSim\\WpfMapApp5\\ArcGIS_App.csproj": {}
   },
   "projects": {
-    "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\Class\\Class.csproj": {
+    "C:\\Users\\bolty\\Source\\Repos\\ArcGIS_TerrorSim\\Class\\Class.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\Class\\Class.csproj",
+        "projectUniqueName": "C:\\Users\\bolty\\Source\\Repos\\ArcGIS_TerrorSim\\Class\\Class.csproj",
         "projectName": "Class",
-        "projectPath": "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\Class\\Class.csproj",
+        "projectPath": "C:\\Users\\bolty\\Source\\Repos\\ArcGIS_TerrorSim\\Class\\Class.csproj",
         "packagesPath": "C:\\Users\\bolty\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\Class\\obj\\",
         "projectStyle": "PackageReference",
@@ -84,12 +84,12 @@
         }
       }
     },
-    "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\WpfMapApp5\\ArcGIS_App.csproj": {
+    "C:\\Users\\bolty\\Source\\Repos\\ArcGIS_TerrorSim\\WpfMapApp5\\ArcGIS_App.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\WpfMapApp5\\ArcGIS_App.csproj",
+        "projectUniqueName": "C:\\Users\\bolty\\Source\\Repos\\ArcGIS_TerrorSim\\WpfMapApp5\\ArcGIS_App.csproj",
         "projectName": "ArcGIS_App",
-        "projectPath": "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\WpfMapApp5\\ArcGIS_App.csproj",
+        "projectPath": "C:\\Users\\bolty\\Source\\Repos\\ArcGIS_TerrorSim\\WpfMapApp5\\ArcGIS_App.csproj",
         "packagesPath": "C:\\Users\\bolty\\.nuget\\packages\\",
         "outputPath": "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\WpfMapApp5\\obj\\",
         "projectStyle": "PackageReference",
@@ -112,8 +112,8 @@
           "net8.0-windows10.0.26100": {
             "targetAlias": "net8.0-windows10.0.26100.0",
             "projectReferences": {
-              "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\Class\\Class.csproj": {
-                "projectPath": "C:\\Users\\bolty\\source\\repos\\ArcGIS_TerrorSim\\Class\\Class.csproj"
+              "C:\\Users\\bolty\\Source\\Repos\\ArcGIS_TerrorSim\\Class\\Class.csproj": {
+                "projectPath": "C:\\Users\\bolty\\Source\\Repos\\ArcGIS_TerrorSim\\Class\\Class.csproj"
               }
             }
           }

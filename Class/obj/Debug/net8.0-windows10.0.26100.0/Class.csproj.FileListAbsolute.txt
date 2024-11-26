@@ -24,3 +24,16 @@ C:\Users\bolty\Desktop\TerrorSim\Class\obj\Debug\net8.0-windows10.0.26100.0\Clas
 C:\Users\bolty\Desktop\TerrorSim\Class\obj\Debug\net8.0-windows10.0.26100.0\refint\Class.dll
 C:\Users\bolty\Desktop\TerrorSim\Class\obj\Debug\net8.0-windows10.0.26100.0\Class.pdb
 C:\Users\bolty\Desktop\TerrorSim\Class\obj\Debug\net8.0-windows10.0.26100.0\ref\Class.dll
+C:\Users\bolty\source\repos\ArcGIS_TerrorSim\Class\bin\Debug\net8.0-windows10.0.26100.0\Class.deps.json
+C:\Users\bolty\source\repos\ArcGIS_TerrorSim\Class\bin\Debug\net8.0-windows10.0.26100.0\Class.dll
+C:\Users\bolty\source\repos\ArcGIS_TerrorSim\Class\bin\Debug\net8.0-windows10.0.26100.0\Class.pdb
+C:\Users\bolty\source\repos\ArcGIS_TerrorSim\Class\obj\Debug\net8.0-windows10.0.26100.0\Class.csproj.AssemblyReference.cache
+C:\Users\bolty\source\repos\ArcGIS_TerrorSim\Class\obj\Debug\net8.0-windows10.0.26100.0\Class.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\bolty\source\repos\ArcGIS_TerrorSim\Class\obj\Debug\net8.0-windows10.0.26100.0\Class.AssemblyInfoInputs.cache
+C:\Users\bolty\source\repos\ArcGIS_TerrorSim\Class\obj\Debug\net8.0-windows10.0.26100.0\Class.AssemblyInfo.cs
+C:\Users\bolty\source\repos\ArcGIS_TerrorSim\Class\obj\Debug\net8.0-windows10.0.26100.0\Class.csproj.CoreCompileInputs.cache
+C:\Users\bolty\source\repos\ArcGIS_TerrorSim\Class\obj\Debug\net8.0-windows10.0.26100.0\Class.sourcelink.json
+C:\Users\bolty\source\repos\ArcGIS_TerrorSim\Class\obj\Debug\net8.0-windows10.0.26100.0\Class.dll
+C:\Users\bolty\source\repos\ArcGIS_TerrorSim\Class\obj\Debug\net8.0-windows10.0.26100.0\refint\Class.dll
+C:\Users\bolty\source\repos\ArcGIS_TerrorSim\Class\obj\Debug\net8.0-windows10.0.26100.0\Class.pdb
+C:\Users\bolty\source\repos\ArcGIS_TerrorSim\Class\obj\Debug\net8.0-windows10.0.26100.0\ref\Class.dll
