@@ -5,54 +5,85 @@
         Title="ArcGIS TerroSim" WindowState="Maximized" WindowStyle="SingleBorderWindow">
 
     <Window.Resources>
-        <!-- Style for Menu -->
-        <Style TargetType="Menu">
-            <Setter Property="FontSize" Value="10"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="Background" Value="#B0F4F4F4"/>
-            <Setter Property="Height" Value="23"/>
-        </Style>
+        <!-- Style for the Slider -->
+        <Style TargetType="Slider">
+            <Setter Property="Height" Value="8"/>
+            <!-- Thinner slider -->
+            <Setter Property="Width" Value="Auto"/>
+            <Setter Property="Minimum" Value="0"/>
+            <Setter Property="Maximum" Value="100"/>
+            <Setter Property="TickFrequency" Value="1"/>
+            <Setter Property="TickPlacement" Value="BottomRight"/>
+            <Setter Property="Foreground" Value="Red"/>
+            <Setter Property="Background" Value="#E0E0E0"/>
+            <Setter Property="AutoToolTipPlacement" Value="BottomRight"/>
+            <Setter Property="IsSnapToTickEnabled" Value="True"/>
+            <Setter Property="SmallChange" Value="1"/>
+            <Setter Property="LargeChange" Value="10"/>
+            <Setter Property="Orientation" Value="Horizontal"/>
 
-        <!-- Style for Menu Items -->
-        <Style TargetType="MenuItem">
-            <Setter Property="Padding" Value="10,5"/>
-            <Setter Property="FontSize" Value="10"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="Foreground" Value="#333333"/>
-            <Setter Property="BorderBrush" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Margin" Value="0,0,5,0"/>
+            <!-- Thumb Style -->
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Slider">
+                        <Grid Background="{TemplateBinding Background}">
+                            <Track Name="PART_Track" IsDirectionReversed="False" 
+                                   VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
+                                <Track.Thumb>
+                                    <Thumb Background="Red" Width="12" Height="12" />
+                                    <!-- Smaller thumb -->
+                                </Track.Thumb>
+                            </Track>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
 
     <DockPanel>
         <!-- Menu Bar -->
         <Menu DockPanel.Dock="Top" Name="MainMenu">
-            <MenuItem Header="File" Padding="11,5">
-                <MenuItem Header="New" Click="FileNew_Click" />
-                <MenuItem Header="Open" Click="FileOpen_Click" />
-                <MenuItem Header="Exit" Click="FileExit_Click" />
-            </MenuItem>
-            <MenuItem Header="Add" Padding="11,5">
-                <MenuItem Header="Add Terrain" Click="AddTerrain_Click" />
-                <MenuItem Header="Add Polyline" Click="AddPolyline_Click" />
-            </MenuItem>
-            <MenuItem Header="View" Padding="11,5">
-                <MenuItem Header="Reset View" Click="ResetView_Click" />
-                <MenuItem Header="Zoom In" Click="ZoomIn_Click" />
-                <MenuItem Header="Zoom Out" Click="ZoomOut_Click" />
-            </MenuItem>
+            <!-- Menu items here -->
         </Menu>
 
         <!-- Main Content (SceneView) -->
         <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*" />
+                <!-- Main content area takes up remaining space -->
+            </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="223*"/>
-                <ColumnDefinition Width="98*"/>
-                <ColumnDefinition Width="320*"/>
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <esri:SceneView x:Name="MySceneView" Grid.ColumnSpan="3" />
+
+            <esri:SceneView x:Name="MySceneView" Grid.Row="0" />
+            <!-- SceneView is now docked to fill remaining space -->
+
+            <!-- Bottom Bar for controls -->
+            <Border Background="#F0F0F0" Padding="5" Height="50" DockPanel.Dock="Bottom" Opacity="0.85" Margin="0,757,0,-167">
+                <!-- Added Opacity for transparency -->
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0">
+                    <!-- Timeline Slider -->
+                    <Slider x:Name="TimelineSlider" Width="Auto" VerticalAlignment="Center" Minimum="0" Maximum="100" Value="0" TickFrequency="1" 
+                            ValueChanged="TimelineSlider_ValueChanged" 
+                            Height="8" />
+                    <!-- Reduced height -->
+
+                    <!-- Play/Pause Button and Time Label -->
+                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0">
+                        <!-- Play/Pause Button -->
+                        <Button x:Name="PlayPauseButton" Width="35" Height="30" HorizontalAlignment="Center" Click="PlayPauseButton_Click" Margin="5,0">
+                            <Button.Content>
+                                <TextBlock x:Name="PlayPauseText" FontSize="18" Text=">" />
+                            </Button.Content>
+                        </Button>
+
+                        <!-- Time Label (aligned to the right of the button) -->
+                        <Label x:Name="TimeLabel" Content="Time: 00:00:00" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Center" Width="80" Margin="5,0"/>
+                    </StackPanel>
+                </StackPanel>
+            </Border>
         </Grid>
     </DockPanel>
 </Window>

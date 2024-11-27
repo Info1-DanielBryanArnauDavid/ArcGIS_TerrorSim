@@ -28,6 +28,6 @@
                 Margin="270,270,380,62"
                 Background="#0078D4" Foreground="#FFFFFF"
                 Click="button2_Click"/>
-        <Button Content="jope" Margin="322,87,380,244" Click="Button_Click_1"/>
+        <Button Content="jope" Margin="322,81,380,250" Click="Button_Click_1"/>
     </Grid>
 </Window>

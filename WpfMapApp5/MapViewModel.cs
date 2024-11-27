@@ -6,27 +6,38 @@ using Esri.ArcGISRuntime.UI;
 using Esri.ArcGISRuntime.UI.Controls; // Make sure to include this for SceneView
 using System;
 using System.Collections.Generic;
+using System.Windows.Threading;
 using System.ComponentModel;
-using System.IO;
 using System.Runtime.CompilerServices;
 using System.Windows; // For System.Windows.Point
-using System.Windows.Input;
+using System.Windows.Controls;
 using System.Drawing; // For System.Drawing.Color
 
 namespace ArcGIS_App
 {
     public class MapViewModel : INotifyPropertyChanged
     {
-        private Scene _scene; // Change from Map to Scene
-        private SceneView _sceneView; // Reference to the SceneView control
-        private GraphicsOverlay _graphicsOverlay; // Graphics overlay for waypoints
-
+        private Scene _scene;
+        private SceneView _sceneView;
+        private GraphicsOverlay _graphicsOverlay;
+        private Graphic _planeGraphic;  // Plane graphic
+        private List<MapPoint> _interpolatedPoints;  // Interpolated path points
+        private DispatcherTimer _movementTimer;
+        private int _currentWaypointIndex = 0;
+        private DateTime _startTime;
+        private bool _isPlaying = false;
+        private Label _timeLabel;
+        private Slider _timelineSlider;
 
         private System.Windows.Point? _startPoint; // Nullable Point for WPF
 
-        public MapViewModel(SceneView sceneView)
+        public bool IsPlaying => _isPlaying;
+        public MapViewModel(SceneView sceneView, Label timeLabel, Slider timelineSlider)
         {
             _sceneView = sceneView;
+            _timeLabel = timeLabel;
+            _timelineSlider = timelineSlider;
+
             _scene = new Scene(BasemapStyle.ArcGISImagery)
             {
                 InitialViewpoint = new Viewpoint(new Envelope(-3.7038, 40.4168, 2.1734, 41.3851, SpatialReferences.Wgs84)) // Initial view around Madrid and Barcelona
@@ -46,85 +57,109 @@ namespace ArcGIS_App
             // Call the method to add the path
             AddPathWithElevationAndGreatCircle();
 
-            _sceneView.MouseDown += SceneView_MouseDown;
-            _sceneView.MouseUp += SceneView_MouseUp;
-            _sceneView.MouseMove += SceneView_MouseMove;
+            // Add the plane graphic at the starting point
+            AddPlaneGraphic(_interpolatedPoints[0]);
 
+            // Initialize the time label
+            _timeLabel.Content = "Time: 00:00:00";
+
+            // Bind the slider event to update the plane's position
+            _timelineSlider.ValueChanged += TimelineSlider_ValueChanged;
         }
 
+        // Start the simulation (play the plane's movement)
+        public void StartSimulation()
+        {
+            if (!_isPlaying)
+            {
+                // Set up the timer and start the animation
+                _movementTimer = new DispatcherTimer
+                {
+                    Interval = TimeSpan.FromMilliseconds(100)  // Update every 100 ms
+                };
 
+                _movementTimer.Tick += MovePlaneAlongPath;  // The function to update the plane's position
+                _movementTimer.Start();
+
+                _startTime = DateTime.Now;  // Record the start time
+                _isPlaying = true;  // Update the state to "playing"
+            }
+        }
+
+        // Pause the simulation (pause the plane's movement)
+        public void PauseSimulation()
+        {
+            if (_isPlaying)
+            {
+                // Pause the animation
+                _movementTimer.Stop();
+                _isPlaying = false;  // Update the state to "paused"
+            }
+        }
+
+        // Add terrain layer to the scene
         private void AddTerrainLayer()
         {
             var terrainLayer = new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer"));
             _scene.BaseSurface.ElevationSources.Add(terrainLayer);
         }
 
+        // Add the path with elevation and calculate great circle path
         private void AddPathWithElevationAndGreatCircle()
         {
-            // Define waypoints with latitude, longitude, and height (elevation)
             List<(double Longitude, double Latitude, double Height)> waypoints = new List<(double, double, double)>
-    {
-        (-3.7038, 40.4168, 650), // Madrid: 650 meters
-        (-1.0, 41.0, 9000),       // Example intermediate point: 900 meters
-        (1.0, 41.2, 10200),       // Example intermediate point: 1200 meters
-        (2.1734, 41.3851, 5)     // Barcelona: Sea level (5 meters)
-    };
+            {
+                (-3.7038, 40.4168, 650), // Madrid
+                (-1.0, 41.0, 9000),      // Example intermediate point
+                (1.0, 41.2, 10200),      // Example intermediate point
+                (2.1734, 41.3851, 5)     // Barcelona
+            };
 
-            // List to hold the interpolated 3D MapPoints
-            List<MapPoint> interpolatedPoints = new List<MapPoint>();
+            _interpolatedPoints = new List<MapPoint>();
 
-            // Interpolate between each pair of waypoints
+            // Interpolate between waypoints
             for (int i = 0; i < waypoints.Count - 1; i++)
             {
                 var startPoint = waypoints[i];
                 var endPoint = waypoints[i + 1];
 
-                // Get great-circle points between this pair of waypoints
                 var segmentPoints = CalculateGreatCircleWithElevation(
                     new MapPoint(startPoint.Longitude, startPoint.Latitude, startPoint.Height, SpatialReferences.Wgs84),
                     new MapPoint(endPoint.Longitude, endPoint.Latitude, endPoint.Height, SpatialReferences.Wgs84),
-                    50 // Number of interpolated points between each pair
+                    50 // Interpolation points
                 );
 
-                interpolatedPoints.AddRange(segmentPoints);
+                _interpolatedPoints.AddRange(segmentPoints);
             }
 
-            // Create a polyline for the 3D path
-            var path = new Polyline(interpolatedPoints);
+            // Optionally, add the last waypoint
+            _interpolatedPoints.Add(new MapPoint(2.1734, 41.3851, 5, SpatialReferences.Wgs84));
 
-            // Create a graphic for the path with a line symbol
-            var pathSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.FromArgb(255, 0, 0, 255), 3); // Blue line
+            // Create and add the polyline path
+            var path = new Polyline(_interpolatedPoints);
+            var pathSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.FromArgb(100, 0, 255, 255), 2); // Blue path
             var pathGraphic = new Graphic(path, pathSymbol);
-
-            // Add the graphic to the graphics overlay
             _graphicsOverlay.Graphics.Add(pathGraphic);
 
-            // Adjust the viewpoint to center on the path and show its vertical extent
-            // Set the viewpoint to include the vertical extent of the polyline
             var polylineExtent = path.Extent;
             _sceneView.SetViewpoint(new Viewpoint(polylineExtent.GetCenter(), 5000000)); // Adjust scale
-
         }
 
-
+        // Calculate great circle with elevation between two points
         private List<MapPoint> CalculateGreatCircleWithElevation(MapPoint startPoint, MapPoint endPoint, int numPoints)
         {
             List<MapPoint> points = new List<MapPoint>();
-
-            // Convert latitude and longitude to radians
             double lat1 = startPoint.Y * Math.PI / 180;
             double lon1 = startPoint.X * Math.PI / 180;
             double lat2 = endPoint.Y * Math.PI / 180;
             double lon2 = endPoint.X * Math.PI / 180;
-
-            double h1 = startPoint.Z; // Elevation of start point
-            double h2 = endPoint.Z;   // Elevation of end point
+            double h1 = startPoint.Z;
+            double h2 = endPoint.Z;
 
             for (int i = 0; i <= numPoints; i++)
             {
                 double fraction = (double)i / numPoints;
 
-                // Great-circle interpolation
                 double delta = 2 * Math.Asin(Math.Sqrt(Math.Pow(Math.Sin((lat2 - lat1) / 2), 2) +
                                                        Math.Cos(lat1) * Math.Cos(lat2) *
                                                        Math.Pow(Math.Sin((lon2 - lon1) / 2), 2)));
@@ -138,54 +173,89 @@ namespace ArcGIS_App
                 double newLat = Math.Atan2(z, Math.Sqrt(x * x + y * y)) * 180 / Math.PI;
                 double newLon = Math.Atan2(y, x) * 180 / Math.PI;
 
-                // Interpolate elevation
-                double newHeight = h1 + fraction * (h2 - h1);
+                double newHeight = h1 + fraction * (h2 - h1); // Linear interpolation for height
 
-                // Add the interpolated point
                 points.Add(new MapPoint(newLon, newLat, newHeight, SpatialReferences.Wgs84));
             }
 
             return points;
         }
 
-
-
-        private void SceneView_MouseDown(object sender, MouseButtonEventArgs e)
+        // Update plane's position when the timeline slider changes
+        public void UpdateSimulationFromSlider(double value)
         {
-            if (e.ChangedButton == MouseButton.Middle)
+            int waypointIndex = (int)value;
+
+            if (waypointIndex >= 0 && waypointIndex < _interpolatedPoints.Count)
             {
-                _startPoint = e.GetPosition(_sceneView); // Uses System.Windows.Point
-                Mouse.Capture(_sceneView);
+                var currentPoint = _interpolatedPoints[waypointIndex];
+                UpdatePlanePosition(currentPoint);
+                _timeLabel.Content = $"Time: {TimeSpan.FromSeconds(waypointIndex)}"; // Adjust time display
             }
         }
 
-        private void SceneView_MouseUp(object sender, MouseButtonEventArgs e)
+        // Move the plane along the path at each tick of the timer
+        private void MovePlaneAlongPath(object sender, EventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Middle)
+            if (_currentWaypointIndex < _interpolatedPoints.Count)
             {
-                _startPoint = null;
-                Mouse.Capture(null);
+                var currentPoint = _interpolatedPoints[_currentWaypointIndex];
+                UpdatePlanePosition(currentPoint);
+                _timelineSlider.Value = _currentWaypointIndex;  // Sync the slider with current position
+
+                _currentWaypointIndex++;
+            }
+            else
+            {
+                // Stop the simulation when the path is complete
+                PauseSimulation();
+            }
+        }
+        private void AddPlaneGraphic(MapPoint startingPoint)
+        {
+            if (_planeGraphic == null)
+            {
+                // Crea el gráfico del avión en el punto inicial
+                _planeGraphic = new Graphic(startingPoint);
+
+                // Puedes usar un símbolo diferente para el avión, como un símbolo de punto o cualquier otro símbolo
+                var planeSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Red, 10); // Un círculo rojo para el avión
+                _planeGraphic.Symbol = planeSymbol;
+
+                // Agregar el gráfico de avión al GraphicsOverlay
+                _graphicsOverlay.Graphics.Add(_planeGraphic);
             }
         }
 
-        private void SceneView_MouseMove(object sender, MouseEventArgs e)
+        // Update the plane's graphic position
+        private void UpdatePlanePosition(MapPoint currentPoint)
         {
-            if (_startPoint.HasValue && e.MiddleButton == MouseButtonState.Pressed)
+            if (_planeGraphic == null)
             {
-                var currentPoint = e.GetPosition(_sceneView); // Uses System.Windows.Point
-                var deltaX = currentPoint.X - _startPoint.Value.X;
-                var deltaY = currentPoint.Y - _startPoint.Value.Y;
-
-                // Pan the scene based on mouse movement
-
-                // Update start point for next move
-                _startPoint = currentPoint;
+                _planeGraphic = new Graphic(currentPoint);
+                _graphicsOverlay.Graphics.Add(_planeGraphic);
+            }
+            else
+            {
+                _planeGraphic.Geometry = currentPoint;
             }
         }
+        private void TimelineSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            // Llama al método para actualizar la simulación desde el valor del slider
+            UpdateSimulationFromSlider(e.NewValue);
+        }
 
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null) =>
-           PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
-        public event PropertyChangedEventHandler? PropertyChanged;
+        // Mueve el avión a lo largo del camino con cada tick del temporizador
+
+        // Actualiza la posición del avión en el gráfico
+
+
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
 }
