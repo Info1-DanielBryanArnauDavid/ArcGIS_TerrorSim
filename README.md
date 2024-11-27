@@ -1,11 +1,10 @@
-# ArcGIS TerroSim Project
+# ArcGIS TerrorSim Project
 
 ## Overview
 
 **ArcGIS TerroSim** is a simulation tool designed to load, manage, and visualize flight plans and waypoints. It integrates data from `.txt` or `.csv` files and uses ArcGIS for geographic visualization. The project includes classes for flight plan management, waypoints, and support for multiple flight plans. The aim is to create a simulation environment where users can explore flight paths, flight levels, and speeds based on a set of waypoints.
 
-![ArcGIS TerroSim Logo](![17326571690176429799158904837156](https://github.com/user-attachments/assets/8539b3bd-6bcb-4b13-b914-1931ea388f7f)
-)
+![ArcGIS TerroSim Logo](https://i.ibb.co/hKq6fzq/logo.jpg)
 
 ---
 
@@ -17,6 +16,12 @@
 - **Simulation Control**: Simulate flights by defining the path using waypoints and displaying flight data in ArcGIS's scene view.
 - **Customizable UI**: The welcome window provides instructions and a clean, semi-transparent UI with a close button.
 - **Extensible**: The system is designed for future extensions to support additional simulation features.
+
+---
+
+## References
+
+-https://aip.enaire.es/AIP/contenido_AIP/ENR/LE_ENR_4_4_es.html
 
 ---
 
