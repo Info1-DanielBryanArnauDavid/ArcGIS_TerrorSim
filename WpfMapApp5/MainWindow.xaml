@@ -8,7 +8,6 @@
         <!-- Style for the Slider -->
         <Style TargetType="Slider">
             <Setter Property="Height" Value="8"/>
-            <!-- Thinner slider -->
             <Setter Property="Width" Value="Auto"/>
             <Setter Property="Minimum" Value="0"/>
             <Setter Property="Maximum" Value="100"/>
@@ -31,7 +30,6 @@
                                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                 <Track.Thumb>
                                     <Thumb Background="Red" Width="12" Height="12" />
-                                    <!-- Smaller thumb -->
                                 </Track.Thumb>
                             </Track>
                         </Grid>
@@ -44,31 +42,35 @@
     <DockPanel>
         <!-- Menu Bar -->
         <Menu DockPanel.Dock="Top" Name="MainMenu">
-            <!-- Menu items here -->
+            <MenuItem Header="_File">
+                <MenuItem Header="Load _Waypoints" Click="LoadWaypoints_Click" />
+                <MenuItem Header="Load _Flight Plans" Click="LoadFlightPlans_Click" />
+                <MenuItem Header="Load _Parameters" Click="LoadParameters_Click" />
+            </MenuItem>
+            <MenuItem Header="_View" />
+            <MenuItem Header="_Options" />
+            <MenuItem Header="_Github" />
+            <MenuItem Header="_Help" />
         </Menu>
 
         <!-- Main Content (SceneView) -->
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
-                <!-- Main content area takes up remaining space -->
             </Grid.RowDefinitions>
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
             <esri:SceneView x:Name="MySceneView" Grid.Row="0" />
-            <!-- SceneView is now docked to fill remaining space -->
 
             <!-- Bottom Bar for controls -->
             <Border Background="#F0F0F0" Padding="5" Height="50" DockPanel.Dock="Bottom" Opacity="0.85" Margin="0,757,0,-167">
-                <!-- Added Opacity for transparency -->
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0">
                     <!-- Timeline Slider -->
                     <Slider x:Name="TimelineSlider" Width="Auto" VerticalAlignment="Center" Minimum="0" Maximum="100" Value="0" TickFrequency="1" 
                             ValueChanged="TimelineSlider_ValueChanged" 
                             Height="8" />
-                    <!-- Reduced height -->
 
                     <!-- Play/Pause Button and Time Label -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0">

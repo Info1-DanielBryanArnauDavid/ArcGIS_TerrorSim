@@ -13,8 +13,8 @@ namespace ArcGISAppTest
         static void Main(string[] args)
         {
             // Define file paths for waypoints and flight plans
-            string waypointFilePath = "C:\\Users\\bolty\\Desktop\\waypoints.txt.txt"; // Path to the waypoint data file
-            string flightPlanFilePath = "C:\\Users\\bolty\\Desktop\\flightPlans.csv.txt"; // Path to the flight plan data file
+            string waypointFilePath = "C:\\Users\\bolty\\Desktop\\waypoints.txt"; // Path to the waypoint data file
+            string flightPlanFilePath = "C:\\Users\\bolty\\Desktop\\flight_plans.txt"; // Path to the flight plan data file
 
             // Load waypoints from file
             List<WaypointGIS> waypoints = FlightPlanListGIS.LoadWaypointsFromFile(waypointFilePath);

@@ -12,11 +12,17 @@ using System.Runtime.CompilerServices;
 using System.Windows; // For System.Windows.Point
 using System.Windows.Controls;
 using System.Drawing; // For System.Drawing.Color
+using Class;
+using System.Linq;
 
 namespace ArcGIS_App
 {
     public class MapViewModel : INotifyPropertyChanged
     {
+        private double _minTextSize = 10; // Minimum font size
+        private double _maxTextSize = 50; // Maximum font size
+        private double _minScale = 10000000; // Minimum scale (zoomed out)
+        private double _maxScale = 1000; // Maximum scale (zoomed in)
         private Scene _scene;
         private SceneView _sceneView;
         private GraphicsOverlay _graphicsOverlay;
@@ -32,11 +38,15 @@ namespace ArcGIS_App
         private System.Windows.Point? _startPoint; // Nullable Point for WPF
 
         public bool IsPlaying => _isPlaying;
-        public MapViewModel(SceneView sceneView, Label timeLabel, Slider timelineSlider)
+        private List<WaypointGIS> _waypoints;
+
+        public MapViewModel(SceneView sceneView, Label timeLabel, Slider timelineSlider, List<WaypointGIS> waypoints)
         {
             _sceneView = sceneView;
             _timeLabel = timeLabel;
             _timelineSlider = timelineSlider;
+            _waypoints = waypoints;
+            _sceneView.ViewpointChanged += SceneView_ViewpointChanged;
 
             _scene = new Scene(BasemapStyle.ArcGISImagery)
             {
@@ -66,6 +76,66 @@ namespace ArcGIS_App
             // Bind the slider event to update the plane's position
             _timelineSlider.ValueChanged += TimelineSlider_ValueChanged;
         }
+        private void SceneView_ViewpointChanged(object sender, EventArgs e)
+        {
+            UpdateTextSize();
+        }
+
+        private void UpdateTextSize()
+        {
+            // Get the current viewpoint (camera position) and target scale
+            Viewpoint viewpoint = _sceneView.GetCurrentViewpoint(ViewpointType.CenterAndScale);
+            MapPoint cameraPosition = viewpoint.TargetGeometry as MapPoint;
+
+            // If the camera position is null, return (don't update text size)
+            if (cameraPosition == null) return;
+
+            // For each graphic, calculate the distance to the camera and adjust text size
+            foreach (var graphic in _graphicsOverlay.Graphics)
+            {
+                if (graphic.Symbol is TextSymbol textSymbol)
+                {
+                    MapPoint labelPosition = graphic.Geometry as MapPoint;
+
+                    // If the label has a valid position (MapPoint), calculate the distance
+                    if (labelPosition != null)
+                    {
+                        // Calculate the 3D distance between the camera and the label
+                        double distance = GeometryEngine.Distance(cameraPosition, labelPosition);
+
+                        // Map the distance to a fixed text size that appears consistent in world space
+                        double textSize = CalculateTextSizeBasedOnDistance(distance);
+
+                        // Update the font size of the label based on the distance
+                        textSymbol.Size = textSize;
+                    }
+                }
+            }
+        }
+
+        // This method calculates the text size based on distance from the camera to the label
+        private double CalculateTextSizeBasedOnDistance(double distance)
+        {
+            // The real-world size of the label in meters (for example, 1 meter)
+            double realWorldSize = 1.0; // You can adjust this to make the labels physically larger or smaller in world units
+
+            // Calculate the scaling factor (size should decrease as distance increases)
+            double sizeFactor = realWorldSize / distance;  // Inverse relation to distance
+
+            // You can optionally limit the range of sizes to prevent the text from becoming too small or too large
+            double minSize = 10;  // Minimum size in pixels
+            double maxSize = 0; // Maximum size in pixels
+
+            // Apply a scaling factor, ensuring the size is within the desired range
+            double textSize = sizeFactor * 20; // Multiply by 1000 to scale the size to visible range
+
+            // Clamp the size to ensure it doesn't become too small or too large
+            textSize = Math.Max(minSize, Math.Min(maxSize, textSize));
+
+            return textSize;
+        }
+
+
 
         // Start the simulation (play the plane's movement)
         public void StartSimulation()
@@ -85,6 +155,68 @@ namespace ArcGIS_App
                 _isPlaying = true;  // Update the state to "playing"
             }
         }
+        public void UpdateWaypoints(List<WaypointGIS> waypoints)
+        {
+            _waypoints = waypoints;
+
+            _graphicsOverlay.Graphics.Clear();
+
+            foreach (var waypoint in _waypoints)
+            {
+                // Create the base point and top point for the vertical line
+                MapPoint basePoint = new MapPoint(waypoint.Longitude, waypoint.Latitude, 0, SpatialReferences.Wgs84);
+                MapPoint topPoint = new MapPoint(waypoint.Longitude, waypoint.Latitude, 10000, SpatialReferences.Wgs84); // 10000 meters high
+
+                // Create a line geometry
+                Polyline verticalLine = new Polyline(new List<MapPoint> { basePoint, topPoint });
+
+                // Create a graphic for the vertical line with light gray color
+                Graphic lineGraphic = new Graphic(verticalLine);
+                SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.LightGray, 2); // Light gray line
+                lineGraphic.Symbol = lineSymbol;
+
+                // Add the line graphic to the overlay
+                _graphicsOverlay.Graphics.Add(lineGraphic);
+
+                // Create a text symbol for the label with a cleaner font style
+                TextSymbol labelSymbol = new TextSymbol
+                {
+                    Text = waypoint.ID,
+                    Color = Color.Black,  // Set label color to black
+                    Size = 14,  // Initial size, will be adjusted on zoom
+                    HorizontalAlignment = Esri.ArcGISRuntime.Symbology.HorizontalAlignment.Center,
+                    FontFamily = "Roboto",  // Use a cleaner font (Arial)
+                    FontStyle = Esri.ArcGISRuntime.Symbology.FontStyle.Normal, // Regular style
+                };
+
+                // Create a graphic for the label
+                Graphic labelGraphic = new Graphic(topPoint, labelSymbol);
+
+                // Add the label graphic to the overlay
+                _graphicsOverlay.Graphics.Add(labelGraphic);
+            }
+
+            // Adjust the viewpoint to include the waypoints
+            if (_waypoints.Count > 0)
+            {
+                var waypointPoints = _waypoints.Select(w => new MapPoint(w.Longitude, w.Latitude, SpatialReferences.Wgs84));
+                var envelope = new Envelope(waypointPoints.Min(p => p.X), waypointPoints.Min(p => p.Y),
+                                            waypointPoints.Max(p => p.X), waypointPoints.Max(p => p.Y),
+                                            SpatialReferences.Wgs84);
+
+                var expandedEnvelope = new Envelope(
+                                envelope.XMin - envelope.Width * 0.25,
+                                envelope.YMin - envelope.Height * 0.25,
+                                envelope.XMax + envelope.Width * 0.25,
+                                envelope.YMax + envelope.Height * 0.25,
+                                envelope.SpatialReference
+                            );
+
+                _sceneView.SetViewpointAsync(new Viewpoint(expandedEnvelope), TimeSpan.FromSeconds(1));
+            }
+        }
+
+
 
         // Pause the simulation (pause the plane's movement)
         public void PauseSimulation()
@@ -240,6 +372,16 @@ namespace ArcGIS_App
                 _planeGraphic.Geometry = currentPoint;
             }
         }
+        public void AddFlightPathGraphic(Graphic flightPathGraphic)
+        {
+            // Add the flight path graphic to the overlay
+            _graphicsOverlay.Graphics.Add(flightPathGraphic);
+
+            // Optionally adjust the viewpoint to include the new flight path
+            var polylineExtent = flightPathGraphic.Geometry.Extent;
+            _sceneView.SetViewpoint(new Viewpoint(polylineExtent.GetCenter(), 5000000)); // Adjust scale
+        }
+
         private void TimelineSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
             // Llama al método para actualizar la simulación desde el valor del slider

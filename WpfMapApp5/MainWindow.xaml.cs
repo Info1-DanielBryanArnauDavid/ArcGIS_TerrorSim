@@ -3,18 +3,25 @@ using System.Windows;
 using Esri.ArcGISRuntime.UI.Controls;
 using System.Windows.Controls;
 using System.Windows.Threading;
+using Class;
+using System.Collections.Generic;
+using Esri.ArcGISRuntime.Geometry;
+using Esri.ArcGISRuntime.Symbology;
+using Esri.ArcGISRuntime.UI;
 
 namespace ArcGIS_App
 {
     public partial class MainWindow : Window
     {
         private MapViewModel _viewModel;
+        private FlightPlanListGIS _flightPlanList;
+        private GraphicsOverlay _graphicsOverlay;
         public MainWindow()
         {
             InitializeComponent();
 
-            // Initialize the MapViewModel and pass the required UI elements (SceneView, TimeLabel, TimelineSlider)
-            _viewModel = new MapViewModel(MySceneView, TimeLabel, TimelineSlider);
+            // Initialize the MapViewModel with an empty list of waypoints
+            _viewModel = new MapViewModel(MySceneView, TimeLabel, TimelineSlider, new List<WaypointGIS>());
             this.DataContext = _viewModel;
 
             // Subscribe to the closed event to ensure the app exits when the window is closed
@@ -25,60 +32,26 @@ namespace ArcGIS_App
             welcomeWindow.Show();
         }
 
+
         // Ensure application exits when MainWindow is closed
         private void MainWindow_Closed(object sender, EventArgs e)
         {
             Application.Current.Shutdown();
         }
-
-        // File Menu: New file click handler
-        private void FileNew_Click(object sender, RoutedEventArgs e)
+        private List<WaypointGIS> LoadWaypoints()
         {
-            MessageBox.Show("New File created!", "File Menu");
-        }
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
+            openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
-        // File Menu: Open file click handler
-        private void FileOpen_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Open File dialog triggered!", "File Menu");
-        }
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string filePath = openFileDialog.FileName;
+                return FlightPlanListGIS.LoadWaypointsFromFile(filePath);
+            }
 
-        // File Menu: Exit click handler
-        private void FileExit_Click(object sender, RoutedEventArgs e)
-        {
-            Application.Current.Shutdown(); // Close the application
+            return null;
         }
-
-        // Add Menu: Add Terrain click handler
-        private void AddTerrain_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Add Terrain clicked!", "Add Menu");
-        }
-
-        // Add Menu: Add Polyline click handler
-        private void AddPolyline_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Add Polyline clicked!", "Add Menu");
-        }
-
-        // View Menu: Reset View click handler
-        private void ResetView_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("View reset to default!", "View Menu");
-        }
-
-        // View Menu: Zoom In click handler
-        private void ZoomIn_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Zoom In clicked!", "View Menu");
-        }
-
-        // View Menu: Zoom Out click handler
-        private void ZoomOut_Click(object sender, RoutedEventArgs e)
-        {
-            MessageBox.Show("Zoom Out clicked!", "View Menu");
-        }
-
         // Play/Pause Button click handler
         private void PlayPauseButton_Click(object sender, RoutedEventArgs e)
         {
@@ -101,6 +74,49 @@ namespace ArcGIS_App
         {
             // Update simulation time when the slider is changed
             _viewModel.UpdateSimulationFromSlider(e.NewValue);
+        }
+
+        private void LoadWaypoints_Click(object sender, RoutedEventArgs e)
+        {
+            List<WaypointGIS> loadedWaypoints = LoadWaypoints();
+            if (loadedWaypoints != null && loadedWaypoints.Count > 0)
+            {
+                _viewModel.UpdateWaypoints(loadedWaypoints);
+                MessageBox.Show($"Loaded {loadedWaypoints.Count} waypoints successfully!", "File Open");
+            }
+        }
+
+        private void LoadFlightPlans_Click(object sender, RoutedEventArgs e)
+        {
+            // Code to handle loading flight plans
+            Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
+            openFileDialog.Filter = "Flight Plan Files (*.txt)|*.txt|All files (*.*)|*.*";
+            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
+
+            if (openFileDialog.ShowDialog() == true)
+            {
+                string filePath = openFileDialog.FileName;
+
+                // Assuming each flight plan is in a file and contains a list of waypoints
+                List<WaypointGIS> loadedWaypoints = FlightPlanListGIS.LoadWaypointsFromFile(filePath); // Implement this function
+
+                if (loadedWaypoints != null && loadedWaypoints.Count > 0)
+                {
+                    _viewModel.UpdateWaypoints(loadedWaypoints);
+
+                    // Now plot the flight path as a polyline on the map
+
+                    MessageBox.Show($"Loaded {loadedWaypoints.Count} waypoints and plotted the flight path.", "Flight Plan Loaded");
+                }
+            }
+        }
+
+
+
+        private void LoadParameters_Click(object sender, RoutedEventArgs e)
+        {
+            // Code to handle loading parameters
+            MessageBox.Show("Loading Parameters");
         }
     }
 }
