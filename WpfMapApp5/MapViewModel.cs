@@ -34,6 +34,7 @@ namespace ArcGIS_App
         private bool _isPlaying = false;
         private Label _timeLabel;
         private Slider _timelineSlider;
+        private bool _areLabelsVisible = false; // Track visibility state
 
         private System.Windows.Point? _startPoint; // Nullable Point for WPF
 
@@ -155,67 +156,92 @@ namespace ArcGIS_App
                 _isPlaying = true;  // Update the state to "playing"
             }
         }
+        public List<WaypointGIS> GetCurrentWaypoints()
+        {
+            return _waypoints;
+        }
         public void UpdateWaypoints(List<WaypointGIS> waypoints)
         {
             _waypoints = waypoints;
-
             _graphicsOverlay.Graphics.Clear();
 
             foreach (var waypoint in _waypoints)
             {
-                // Create the base point and top point for the vertical line
+                double height = waypoint.ID.Length == 3 ? 1000 : 20000; // Set height based on waypoint ID length
                 MapPoint basePoint = new MapPoint(waypoint.Longitude, waypoint.Latitude, 0, SpatialReferences.Wgs84);
-                MapPoint topPoint = new MapPoint(waypoint.Longitude, waypoint.Latitude, 10000, SpatialReferences.Wgs84); // 10000 meters high
+                MapPoint topPoint = new MapPoint(waypoint.Longitude, waypoint.Latitude, height, SpatialReferences.Wgs84);
 
-                // Create a line geometry
                 Polyline verticalLine = new Polyline(new List<MapPoint> { basePoint, topPoint });
 
-                // Create a graphic for the vertical line with light gray color
-                Graphic lineGraphic = new Graphic(verticalLine);
-                SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.LightGray, 2); // Light gray line
-                lineGraphic.Symbol = lineSymbol;
+                // Determine line color based on waypoint ID length
+                Color lineColor = waypoint.ID.Length == 3 ? Color.DarkRed : Color.White; // Dark red for three-letter names
+                SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.FromArgb(100, lineColor.R, lineColor.G, lineColor.B), 2); // Transparent line
 
-                // Add the line graphic to the overlay
+                // Create a graphic for the vertical line
+                Graphic lineGraphic = new Graphic(verticalLine);
+                lineGraphic.Symbol = lineSymbol;
                 _graphicsOverlay.Graphics.Add(lineGraphic);
 
-                // Create a text symbol for the label with a cleaner font style
+                // Create a text symbol for the label positioned slightly above the top point
                 TextSymbol labelSymbol = new TextSymbol
                 {
                     Text = waypoint.ID,
-                    Color = Color.Black,  // Set label color to black
-                    Size = 14,  // Initial size, will be adjusted on zoom
+                    Color = _areLabelsVisible ? (waypoint.ID.Length == 3 ? Color.DarkRed : Color.White) : Color.Transparent,
+                    Size = 12,
                     HorizontalAlignment = Esri.ArcGISRuntime.Symbology.HorizontalAlignment.Center,
-                    FontFamily = "Roboto",  // Use a cleaner font (Arial)
-                    FontStyle = Esri.ArcGISRuntime.Symbology.FontStyle.Normal, // Regular style
+                    FontFamily = "Roboto",
+                    FontStyle = Esri.ArcGISRuntime.Symbology.FontStyle.Normal,
                 };
 
-                // Create a graphic for the label
-                Graphic labelGraphic = new Graphic(topPoint, labelSymbol);
+                // Position the label slightly above the top point
+                MapPoint labelPosition = new MapPoint(topPoint.X, topPoint.Y, topPoint.Z + 1000, SpatialReferences.Wgs84); // Adjust Z value for positioning
 
-                // Add the label graphic to the overlay
+                // Create a graphic for the label
+                Graphic labelGraphic = new Graphic(labelPosition, labelSymbol);
                 _graphicsOverlay.Graphics.Add(labelGraphic);
+
+                // Create a point at the top of the waypoint in the same color as the line
+                var pointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.FromArgb(100, lineColor.R, lineColor.G, lineColor.B), 3); // Circle with specified color and size
+                Graphic pointGraphic = new Graphic(topPoint, pointSymbol);
+                _graphicsOverlay.Graphics.Add(pointGraphic);
             }
 
-            // Adjust the viewpoint to include the waypoints
             if (_waypoints.Count > 0)
             {
                 var waypointPoints = _waypoints.Select(w => new MapPoint(w.Longitude, w.Latitude, SpatialReferences.Wgs84));
-                var envelope = new Envelope(waypointPoints.Min(p => p.X), waypointPoints.Min(p => p.Y),
-                                            waypointPoints.Max(p => p.X), waypointPoints.Max(p => p.Y),
-                                            SpatialReferences.Wgs84);
+
+                var envelope = new Envelope(
+                    waypointPoints.Min(p => p.X),
+                    waypointPoints.Min(p => p.Y),
+                    waypointPoints.Max(p => p.X),
+                    waypointPoints.Max(p => p.Y),
+                    SpatialReferences.Wgs84);
 
                 var expandedEnvelope = new Envelope(
-                                envelope.XMin - envelope.Width * 0.25,
-                                envelope.YMin - envelope.Height * 0.25,
-                                envelope.XMax + envelope.Width * 0.25,
-                                envelope.YMax + envelope.Height * 0.25,
-                                envelope.SpatialReference
-                            );
+                    envelope.XMin - envelope.Width * 0.25,
+                    envelope.YMin - envelope.Height * 0.25,
+                    envelope.XMax + envelope.Width * 0.25,
+                    envelope.YMax + envelope.Height * 0.25,
+                    envelope.SpatialReference);
 
-                _sceneView.SetViewpointAsync(new Viewpoint(expandedEnvelope), TimeSpan.FromSeconds(1));
+                _sceneView.SetViewpoint(new Viewpoint(expandedEnvelope));
             }
         }
 
+
+        public void ToggleWaypointLabels()
+        {
+            _areLabelsVisible = !_areLabelsVisible; // Toggle visibility state
+
+            foreach (var graphic in _graphicsOverlay.Graphics)
+            {
+                if (graphic.Symbol is TextSymbol textSymbol)
+                {
+                    textSymbol.Color = _areLabelsVisible ? Color.White : Color.Transparent; // Change color based on visibility
+                }
+            }
+
+        }
 
 
         // Pause the simulation (pause the plane's movement)
@@ -376,10 +402,7 @@ namespace ArcGIS_App
         {
             // Add the flight path graphic to the overlay
             _graphicsOverlay.Graphics.Add(flightPathGraphic);
-
-            // Optionally adjust the viewpoint to include the new flight path
-            var polylineExtent = flightPathGraphic.Geometry.Extent;
-            _sceneView.SetViewpoint(new Viewpoint(polylineExtent.GetCenter(), 5000000)); // Adjust scale
+          
         }
 
         private void TimelineSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
@@ -387,6 +410,7 @@ namespace ArcGIS_App
             // Llama al método para actualizar la simulación desde el valor del slider
             UpdateSimulationFromSlider(e.NewValue);
         }
+
 
 
         // Mueve el avión a lo largo del camino con cada tick del temporizador

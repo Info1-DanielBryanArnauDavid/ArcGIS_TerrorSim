@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Windows;
+using System.Drawing;
 using Esri.ArcGISRuntime.UI.Controls;
 using System.Windows.Controls;
 using System.Windows.Threading;
@@ -8,6 +9,7 @@ using System.Collections.Generic;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
+using System.Linq;
 
 namespace ArcGIS_App
 {
@@ -16,6 +18,7 @@ namespace ArcGIS_App
         private MapViewModel _viewModel;
         private FlightPlanListGIS _flightPlanList;
         private GraphicsOverlay _graphicsOverlay;
+        private bool _areLabelsVisible = false; // Track visibility state
         public MainWindow()
         {
             InitializeComponent();
@@ -85,32 +88,102 @@ namespace ArcGIS_App
                 MessageBox.Show($"Loaded {loadedWaypoints.Count} waypoints successfully!", "File Open");
             }
         }
+        private void ToggleWaypointLabels_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.ToggleWaypointLabels(); // Call the method to toggle labels
+        }
 
         private void LoadFlightPlans_Click(object sender, RoutedEventArgs e)
         {
-            // Code to handle loading flight plans
+            // Open file dialog to select flight plans file
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
             openFileDialog.Filter = "Flight Plan Files (*.txt)|*.txt|All files (*.*)|*.*";
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);
 
             if (openFileDialog.ShowDialog() == true)
             {
-                string filePath = openFileDialog.FileName;
+                string flightPlansFilePath = openFileDialog.FileName;
 
-                // Assuming each flight plan is in a file and contains a list of waypoints
-                List<WaypointGIS> loadedWaypoints = FlightPlanListGIS.LoadWaypointsFromFile(filePath); // Implement this function
-
-                if (loadedWaypoints != null && loadedWaypoints.Count > 0)
+                try
                 {
-                    _viewModel.UpdateWaypoints(loadedWaypoints);
+                    // First, load the waypoints 
+                    List<WaypointGIS> loadedWaypoints = _viewModel.GetCurrentWaypoints();
 
-                    // Now plot the flight path as a polyline on the map
+                    if (loadedWaypoints == null || loadedWaypoints.Count == 0)
+                    {
+                        MessageBox.Show("Please load waypoints first before loading flight plans.", "Waypoints Required", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        return;
+                    }
 
-                    MessageBox.Show($"Loaded {loadedWaypoints.Count} waypoints and plotted the flight path.", "Flight Plan Loaded");
+                    // Load flight plans using the method in FlightPlanListGIS
+                    List<FlightPlanGIS> flightPlans = FlightPlanListGIS.LoadFlightPlansFromFile(flightPlansFilePath, loadedWaypoints);
+
+                    if (flightPlans != null && flightPlans.Count > 0)
+                    {
+                        // Plot each flight plan
+                        foreach (var flightPlan in flightPlans)
+                        {
+                            // Create a path for the flight plan
+                            List<double> heights = new List<double>();
+
+                            foreach (var level in flightPlan.FlightLevels)
+                            {
+                                // Parse the FLXXX format to get the altitude
+                                if (level.StartsWith("FL"))
+                                {
+                                    if (int.TryParse(level.Substring(2), out int altitude))
+                                    {
+                                        heights.Add((altitude*10)/0.3048); // Add altitude directly if parsing is successful
+                                    }
+                                }
+                            }
+
+                            // Create a Polyline for the flight path
+                            List<MapPoint> flightPathPoints = flightPlan.Waypoints.Select((wp, index) =>
+                                new MapPoint(wp.Longitude, wp.Latitude, heights[index], SpatialReferences.Wgs84)).ToList();
+
+                            var flightPath = new Polyline(flightPathPoints);
+
+                            // Create a graphic for the flight path with a unique color for each flight plan
+                            var pathSymbol = new SimpleLineSymbol(
+                                SimpleLineSymbolStyle.Solid,
+                                Color.FromArgb(150, GetRandomColor().R, GetRandomColor().G, GetRandomColor().B),
+                                3
+                            );
+
+                            var flightPathGraphic = new Graphic(flightPath, pathSymbol);
+
+                            // Add the flight path to the view model
+                            _viewModel.AddFlightPathGraphic(flightPathGraphic);
+
+                            // Optional: Add some metadata to the graphic if needed
+                            flightPathGraphic.Attributes["CompanyName"] = flightPlan.CompanyName;
+                            flightPathGraphic.Attributes["StartTime"] = flightPlan.StartTime;
+                        }
+
+                        MessageBox.Show($"Loaded and plotted {flightPlans.Count} flight plans.", "Flight Plans Loaded", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("No flight plans could be loaded from the file.", "No Flight Plans", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error loading flight plans: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }
-
+        // Helper method to generate random colors for flight paths
+        private Color GetRandomColor()
+        {
+            Random random = new Random();
+            return Color.FromArgb(
+                (byte)random.Next(256),
+                (byte)random.Next(256),
+                (byte)random.Next(256)
+            );
+        }
 
 
         private void LoadParameters_Click(object sender, RoutedEventArgs e)

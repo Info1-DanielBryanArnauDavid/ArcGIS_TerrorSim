@@ -47,7 +47,9 @@
                 <MenuItem Header="Load _Flight Plans" Click="LoadFlightPlans_Click" />
                 <MenuItem Header="Load _Parameters" Click="LoadParameters_Click" />
             </MenuItem>
-            <MenuItem Header="_View" />
+            <MenuItem Header="_View">
+                <MenuItem Header="Toggle Waypoint Labels" Click="ToggleWaypointLabels_Click"/>
+            </MenuItem>
             <MenuItem Header="_Options" />
             <MenuItem Header="_Github" />
             <MenuItem Header="_Help" />
