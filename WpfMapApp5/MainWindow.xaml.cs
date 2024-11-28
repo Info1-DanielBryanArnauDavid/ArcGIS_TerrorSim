@@ -19,6 +19,7 @@ namespace ArcGIS_App
         private FlightPlanListGIS _flightPlanList;
         private GraphicsOverlay _graphicsOverlay;
         private bool _areLabelsVisible = false; // Track visibility state
+        private bool _areFlightPlansVisible = true; // Track visibility state
         public MainWindow()
         {
             InitializeComponent();
@@ -35,6 +36,10 @@ namespace ArcGIS_App
             welcomeWindow.Show();
         }
 
+        private void ToggleFlightPlans_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.ToggleFlightPlanVisibility();
+        }
 
         // Ensure application exits when MainWindow is closed
         private void MainWindow_Closed(object sender, EventArgs e)
@@ -106,7 +111,7 @@ namespace ArcGIS_App
 
                 try
                 {
-                    // First, load the waypoints 
+                    // First, load the waypoints
                     List<WaypointGIS> loadedWaypoints = _viewModel.GetCurrentWaypoints();
 
                     if (loadedWaypoints == null || loadedWaypoints.Count == 0)
@@ -128,30 +133,44 @@ namespace ArcGIS_App
 
                             foreach (var level in flightPlan.FlightLevels)
                             {
-                                // Parse the FLXXX format to get the altitude
-                                if (level.StartsWith("FL"))
+                                // Parse the altitude
+                                if (level.StartsWith("FL")) // Flight Level format
                                 {
-                                    if (int.TryParse(level.Substring(2), out int altitude))
+                                    if (int.TryParse(level.Substring(2), out int fl))
                                     {
-                                        heights.Add((altitude*10)/0.3048); // Add altitude directly if parsing is successful
+                                        heights.Add((fl * 10) / 0.3048); // Convert FL to meters (1 FL = 100 ft -> meters)
+                                    }
+                                }
+                                else if (level.EndsWith("m")) // Altitude in meters
+                                {
+                                    if (double.TryParse(level.Replace("m", ""), out double altitudeMeters))
+                                    {
+                                        heights.Add(altitudeMeters); // Use altitude directly in meters
                                     }
                                 }
                             }
 
-                            // Create a Polyline for the flight path
-                            List<MapPoint> flightPathPoints = flightPlan.Waypoints.Select((wp, index) =>
-                                new MapPoint(wp.Longitude, wp.Latitude, heights[index], SpatialReferences.Wgs84)).ToList();
+                            // Create a Polyline for the flight path using great circle interpolation
+                            List<MapPoint> flightPathPoints = new List<MapPoint>();
+                            for (int j = 0; j < flightPlan.Waypoints.Count - 1; j++)
+                            {
+                                var startWaypoint = flightPlan.Waypoints[j];
+                                var endWaypoint = flightPlan.Waypoints[j + 1];
 
-                            var flightPath = new Polyline(flightPathPoints);
+                                // Calculate great circle points between waypoints
+                                var segmentPoints = CalculateGreatCircleWithElevation(
+                                    new MapPoint(startWaypoint.Longitude, startWaypoint.Latitude, heights.ElementAtOrDefault(j), SpatialReferences.Wgs84),
+                                    new MapPoint(endWaypoint.Longitude, endWaypoint.Latitude, heights.ElementAtOrDefault(j + 1), SpatialReferences.Wgs84),
+                                    50 // Number of interpolation points
+                                );
 
-                            // Create a graphic for the flight path with a unique color for each flight plan
-                            var pathSymbol = new SimpleLineSymbol(
-                                SimpleLineSymbolStyle.Solid,
-                                Color.FromArgb(150, GetRandomColor().R, GetRandomColor().G, GetRandomColor().B),
-                                3
-                            );
+                                flightPathPoints.AddRange(segmentPoints);
+                            }
 
-                            var flightPathGraphic = new Graphic(flightPath, pathSymbol);
+                            // Create a polyline from the calculated points
+                            var path = new Polyline(flightPathPoints);
+                            var pathSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, GetRandomColor(), 1); // Blue path
+                            var flightPathGraphic = new Graphic(path, pathSymbol);
 
                             // Add the flight path to the view model
                             _viewModel.AddFlightPathGraphic(flightPathGraphic);
@@ -174,6 +193,54 @@ namespace ArcGIS_App
                 }
             }
         }
+
+        private List<MapPoint> CalculateGreatCircleWithElevation(MapPoint startPoint, MapPoint endPoint, int numPoints)
+        {
+            List<MapPoint> points = new List<MapPoint>();
+
+            double lat1 = startPoint.Y;
+            double lon1 = startPoint.X;
+            double lat2 = endPoint.Y;
+            double lon2 = endPoint.X;
+
+            double dLat = Math.PI * (lat2 - lat1) / 180;
+            double dLon = Math.PI * (lon2 - lon1) / 180;
+
+            double a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                       Math.Cos(Math.PI * lat1 / 180) * Math.Cos(Math.PI * lat2 / 180) *
+                       Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+
+            double c = 2 * Math.Asin(Math.Sqrt(a));
+
+            double radiusEarthKm = 6371; // Radius of Earth in kilometers
+            double distanceKm = radiusEarthKm * c;
+
+            for (int i = 0; i <= numPoints; i++)
+            {
+                double fractionOfDistance = (double)i / numPoints;
+
+                // Interpolate latitude and longitude using spherical interpolation
+                double A = Math.Sin((1 - fractionOfDistance) * c) / Math.Sin(c);
+                double B = Math.Sin(fractionOfDistance * c) / Math.Sin(c);
+
+                double xLat = A * Math.Cos(lat1 * Math.PI / 180) * Math.Cos(lon1 * Math.PI / 180) +
+                              B * Math.Cos(lat2 * Math.PI / 180) * Math.Cos(lon2 * Math.PI / 180);
+
+                double xLon = A * Math.Cos(lat1 * Math.PI / 180) * Math.Sin(lon1 * Math.PI / 180) +
+                              B * Math.Cos(lat2 * Math.PI / 180) * Math.Sin(lon2 * Math.PI / 180);
+
+                double yLat = A * Math.Sin(lat1 * Math.PI / 180) + B * Math.Sin(lat2 * Math.PI / 180);
+
+                double interpolatedLat = Math.Atan2(yLat, Math.Sqrt(xLat * xLat + xLon * xLon)) * (180 / Math.PI);
+                double interpolatedLon = Math.Atan2(xLon, xLat) * (180 / Math.PI);
+
+                // Add interpolated point with elevation based on its position
+                points.Add(new MapPoint(interpolatedLon, interpolatedLat, startPoint.Z + (endPoint.Z - startPoint.Z) * fractionOfDistance, SpatialReferences.Wgs84));
+            }
+
+            return points;
+        }
+
         // Helper method to generate random colors for flight paths
         private Color GetRandomColor()
         {

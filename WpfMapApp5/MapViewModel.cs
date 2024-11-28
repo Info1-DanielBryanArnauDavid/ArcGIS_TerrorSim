@@ -35,6 +35,8 @@ namespace ArcGIS_App
         private Label _timeLabel;
         private Slider _timelineSlider;
         private bool _areLabelsVisible = false; // Track visibility state
+        private bool areFlightPlansVisible = true;
+
 
         private System.Windows.Point? _startPoint; // Nullable Point for WPF
 
@@ -128,7 +130,7 @@ namespace ArcGIS_App
             double maxSize = 0; // Maximum size in pixels
 
             // Apply a scaling factor, ensuring the size is within the desired range
-            double textSize = sizeFactor * 20; // Multiply by 1000 to scale the size to visible range
+            double textSize = sizeFactor * 200; // Multiply by 1000 to scale the size to visible range
 
             // Clamp the size to ensure it doesn't become too small or too large
             textSize = Math.Max(minSize, Math.Min(maxSize, textSize));
@@ -167,7 +169,7 @@ namespace ArcGIS_App
 
             foreach (var waypoint in _waypoints)
             {
-                double height = waypoint.ID.Length == 3 ? 1000 : 20000; // Set height based on waypoint ID length
+                double height = waypoint.ID.Length == 3 ? 5000 : 20000; // Set height based on waypoint ID length
                 MapPoint basePoint = new MapPoint(waypoint.Longitude, waypoint.Latitude, 0, SpatialReferences.Wgs84);
                 MapPoint topPoint = new MapPoint(waypoint.Longitude, waypoint.Latitude, height, SpatialReferences.Wgs84);
 
@@ -411,11 +413,21 @@ namespace ArcGIS_App
             UpdateSimulationFromSlider(e.NewValue);
         }
 
+        public void ToggleFlightPlanVisibility()
+        {
+            areFlightPlansVisible = !areFlightPlansVisible; // Toggle the state
 
+            // Iterate through the graphics and change visibility based on the state
+            foreach (var graphic in _graphicsOverlay.Graphics)
+            {
+                // You can choose to hide only specific graphics that belong to the flight path (if necessary)
+                if (graphic.Symbol is SimpleLineSymbol || graphic.Symbol is SimpleMarkerSymbol) // flight path graphics
+                {
+                    graphic.IsVisible = areFlightPlansVisible; // Set visibility of flight path graphics
+                }
+            }
+        }
 
-        // Mueve el avión a lo largo del camino con cada tick del temporizador
-
-        // Actualiza la posición del avión en el gráfico
 
 
         public event PropertyChangedEventHandler PropertyChanged;
