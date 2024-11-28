@@ -10,6 +10,7 @@ using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using System.Linq;
+using System.Text;
 
 namespace ArcGIS_App
 {
@@ -20,12 +21,13 @@ namespace ArcGIS_App
         private GraphicsOverlay _graphicsOverlay;
         private bool _areLabelsVisible = false; // Track visibility state
         private bool _areFlightPlansVisible = true; // Track visibility state
+        private FlightPlanListGIS flightplanlist; //la creme de la creme
         public MainWindow()
         {
             InitializeComponent();
 
             // Initialize the MapViewModel with an empty list of waypoints
-            _viewModel = new MapViewModel(MySceneView, TimeLabel, TimelineSlider, new List<WaypointGIS>());
+            _viewModel = new MapViewModel(MySceneView, TimeLabel, TimelineSlider, new List<WaypointGIS>(), flightplanlist);
             this.DataContext = _viewModel;
 
             // Subscribe to the closed event to ensure the app exits when the window is closed
@@ -97,7 +99,6 @@ namespace ArcGIS_App
         {
             _viewModel.ToggleWaypointLabels(); // Call the method to toggle labels
         }
-
         private void LoadFlightPlans_Click(object sender, RoutedEventArgs e)
         {
             // Open file dialog to select flight plans file
@@ -116,81 +117,128 @@ namespace ArcGIS_App
 
                     if (loadedWaypoints == null || loadedWaypoints.Count == 0)
                     {
-                        MessageBox.Show("Please load waypoints first before loading flight plans.", "Waypoints Required", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show(
+                            "Please load waypoints first before loading flight plans.",
+                            "Waypoints Required",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Warning
+                        );
                         return;
                     }
 
-                    // Load flight plans using the method in FlightPlanListGIS
-                    List<FlightPlanGIS> flightPlans = FlightPlanListGIS.LoadFlightPlansFromFile(flightPlansFilePath, loadedWaypoints);
+                    // Load flight plans into the FlightPlanListGIS object
+                    flightplanlist = FlightPlanListGIS.LoadFlightPlansFromFile(flightPlansFilePath, loadedWaypoints);
 
-                    if (flightPlans != null && flightPlans.Count > 0)
+                    if (flightplanlist != null && flightplanlist.FlightPlans.Count > 0)
                     {
-                        // Plot each flight plan
-                        foreach (var flightPlan in flightPlans)
+                        // Create a detailed message with all the flight plans' information
+                        StringBuilder detailsMessage = new StringBuilder();
+                        detailsMessage.AppendLine($"Successfully loaded {flightplanlist.FlightPlans.Count} flight plans.");
+
+                        foreach (var flightPlan in flightplanlist.FlightPlans)
                         {
-                            // Create a path for the flight plan
-                            List<double> heights = new List<double>();
+                            detailsMessage.AppendLine($"Company: {flightPlan.CompanyName}");
+                            detailsMessage.AppendLine($"Start Time: {flightPlan.StartTime.ToString("HH:mm:ss")}");
+                            detailsMessage.AppendLine("Waypoints and Flight Levels:");
 
-                            foreach (var level in flightPlan.FlightLevels)
+                            for (int i = 0; i < flightPlan.Waypoints.Count; i++)
                             {
-                                // Parse the altitude
-                                if (level.StartsWith("FL")) // Flight Level format
-                                {
-                                    if (int.TryParse(level.Substring(2), out int fl))
-                                    {
-                                        heights.Add((fl * 10) / 0.3048); // Convert FL to meters (1 FL = 100 ft -> meters)
-                                    }
-                                }
-                                else if (level.EndsWith("m")) // Altitude in meters
-                                {
-                                    if (double.TryParse(level.Replace("m", ""), out double altitudeMeters))
-                                    {
-                                        heights.Add(altitudeMeters); // Use altitude directly in meters
-                                    }
-                                }
+                                detailsMessage.AppendLine($"  - Waypoint: {flightPlan.Waypoints[i].ID}, Flight Level: {flightPlan.FlightLevels[i]}, Speed: {flightPlan.Speeds[i]}");
                             }
 
-                            // Create a Polyline for the flight path using great circle interpolation
-                            List<MapPoint> flightPathPoints = new List<MapPoint>();
-                            for (int j = 0; j < flightPlan.Waypoints.Count - 1; j++)
-                            {
-                                var startWaypoint = flightPlan.Waypoints[j];
-                                var endWaypoint = flightPlan.Waypoints[j + 1];
-
-                                // Calculate great circle points between waypoints
-                                var segmentPoints = CalculateGreatCircleWithElevation(
-                                    new MapPoint(startWaypoint.Longitude, startWaypoint.Latitude, heights.ElementAtOrDefault(j), SpatialReferences.Wgs84),
-                                    new MapPoint(endWaypoint.Longitude, endWaypoint.Latitude, heights.ElementAtOrDefault(j + 1), SpatialReferences.Wgs84),
-                                    50 // Number of interpolation points
-                                );
-
-                                flightPathPoints.AddRange(segmentPoints);
-                            }
-
-                            // Create a polyline from the calculated points
-                            var path = new Polyline(flightPathPoints);
-                            var pathSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, GetRandomColor(), 1); // Blue path
-                            var flightPathGraphic = new Graphic(path, pathSymbol);
-
-                            // Add the flight path to the view model
-                            _viewModel.AddFlightPathGraphic(flightPathGraphic);
-
-                            // Optional: Add some metadata to the graphic if needed
-                            flightPathGraphic.Attributes["CompanyName"] = flightPlan.CompanyName;
-                            flightPathGraphic.Attributes["StartTime"] = flightPlan.StartTime;
+                            detailsMessage.AppendLine(); // Add extra space between flight plans
                         }
 
-                        MessageBox.Show($"Loaded and plotted {flightPlans.Count} flight plans.", "Flight Plans Loaded", MessageBoxButton.OK, MessageBoxImage.Information);
+                        // Show the detailed information in a message box
+                        MessageBox.Show(detailsMessage.ToString(), "Flight Plans Loaded", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else
                     {
-                        MessageBox.Show("No flight plans could be loaded from the file.", "No Flight Plans", MessageBoxButton.OK, MessageBoxImage.Warning);
+                        MessageBox.Show(
+                            "No flight plans could be loaded from the file.",
+                            "No Flight Plans",
+                            MessageBoxButton.OK,
+                            MessageBoxImage.Warning
+                        );
                     }
                 }
                 catch (Exception ex)
                 {
-                    MessageBox.Show($"Error loading flight plans: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show(
+                        $"Error loading flight plans: {ex.Message}",
+                        "Error",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Error
+                    );
                 }
+            }
+
+            // Visualize the flight plans (this can be handled in a separate method)
+            VisualizeFlightPlans();
+        }
+
+
+
+        private void VisualizeFlightPlans()
+        {
+            if (flightplanlist == null || flightplanlist.FlightPlans.Count == 0)
+            {
+                MessageBox.Show("No flight plans available to visualize. Please load flight plans first.", "No Flight Plans", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            foreach (var flightPlan in flightplanlist.FlightPlans)
+            {
+                // Create a path for the flight plan
+                List<double> heights = new List<double>();
+
+                foreach (var level in flightPlan.FlightLevels)
+                {
+                    // Parse the altitude
+                    if (level.StartsWith("FL")) // Flight Level format
+                    {
+                        if (int.TryParse(level.Substring(2), out int fl))
+                        {
+                            heights.Add((fl * 10) / 0.3048); // Convert FL to meters (1 FL = 100 ft -> meters)
+                        }
+                    }
+                    else if (level.EndsWith("m")) // Altitude in meters
+                    {
+                        if (double.TryParse(level.Replace("m", ""), out double altitudeMeters))
+                        {
+                            heights.Add(altitudeMeters); // Use altitude directly in meters
+                        }
+                    }
+                }
+
+                // Create a Polyline for the flight path using great circle interpolation
+                List<MapPoint> flightPathPoints = new List<MapPoint>();
+                for (int j = 0; j < flightPlan.Waypoints.Count - 1; j++)
+                {
+                    var startWaypoint = flightPlan.Waypoints[j];
+                    var endWaypoint = flightPlan.Waypoints[j + 1];
+
+                    // Calculate great circle points between waypoints
+                    var segmentPoints = CalculateGreatCircleWithElevation(
+                        new MapPoint(startWaypoint.Longitude, startWaypoint.Latitude, heights.ElementAtOrDefault(j), SpatialReferences.Wgs84),
+                        new MapPoint(endWaypoint.Longitude, endWaypoint.Latitude, heights.ElementAtOrDefault(j + 1), SpatialReferences.Wgs84),
+                        50 // Number of interpolation points
+                    );
+
+                    flightPathPoints.AddRange(segmentPoints);
+                }
+
+                // Create a polyline from the calculated points
+                var path = new Polyline(flightPathPoints);
+                var pathSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, GetRandomColor(), 1); // Blue path
+                var flightPathGraphic = new Graphic(path, pathSymbol);
+
+                // Add the flight path to the view model
+                _viewModel.AddFlightPathGraphic(flightPathGraphic);
+
+                // Optional: Add some metadata to the graphic if needed
+                flightPathGraphic.Attributes["CompanyName"] = flightPlan.CompanyName;
+                flightPathGraphic.Attributes["StartTime"] = flightPlan.StartTime;
             }
         }
 

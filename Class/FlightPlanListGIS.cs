@@ -58,9 +58,9 @@ namespace Class
         }
 
         // Method to load flight plans from a file
-        public static List<FlightPlanGIS> LoadFlightPlansFromFile(string filePath, List<WaypointGIS> waypoints)
+        public static FlightPlanListGIS LoadFlightPlansFromFile(string filePath, List<WaypointGIS> waypoints)
         {
-            var flightPlans = new List<FlightPlanGIS>();
+            var flightPlanList = new FlightPlanListGIS(new DateTime(2025,12,25)); // Initialize the FlightPlanListGIS object
             FlightPlanGIS currentFlightPlan = null;
 
             try
@@ -84,7 +84,7 @@ namespace Class
                             // Add the previous flight plan to the list if it exists
                             if (currentFlightPlan != null)
                             {
-                                flightPlans.Add(currentFlightPlan);
+                                flightPlanList.FlightPlans.Add(currentFlightPlan);
                             }
 
                             // Start a new flight plan with the company name and start time
@@ -119,7 +119,7 @@ namespace Class
                 // Add the last flight plan to the list
                 if (currentFlightPlan != null)
                 {
-                    flightPlans.Add(currentFlightPlan);
+                    flightPlanList.FlightPlans.Add(currentFlightPlan);
                 }
             }
             catch (Exception ex)
@@ -127,8 +127,9 @@ namespace Class
                 Console.WriteLine($"Error loading flight plans: {ex.Message}");
             }
 
-            return flightPlans;
+            return flightPlanList;
         }
+
 
         public List<(double Latitude, double Longitude, double Height, string Speed)> CreatePath(List<WaypointGIS> waypoints,List<double> heights,List<string> speeds)
         {

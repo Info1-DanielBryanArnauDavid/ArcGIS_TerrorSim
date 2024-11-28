@@ -42,13 +42,15 @@ namespace ArcGIS_App
 
         public bool IsPlaying => _isPlaying;
         private List<WaypointGIS> _waypoints;
+        private FlightPlanListGIS _flightplans;
 
-        public MapViewModel(SceneView sceneView, Label timeLabel, Slider timelineSlider, List<WaypointGIS> waypoints)
+        public MapViewModel(SceneView sceneView, Label timeLabel, Slider timelineSlider, List<WaypointGIS> waypoints, FlightPlanListGIS flightplans)
         {
             _sceneView = sceneView;
             _timeLabel = timeLabel;
             _timelineSlider = timelineSlider;
             _waypoints = waypoints;
+            _flightplans = flightplans;
             _sceneView.ViewpointChanged += SceneView_ViewpointChanged;
 
             _scene = new Scene(BasemapStyle.ArcGISImagery)
@@ -206,27 +208,7 @@ namespace ArcGIS_App
                 var pointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.FromArgb(100, lineColor.R, lineColor.G, lineColor.B), 3); // Circle with specified color and size
                 Graphic pointGraphic = new Graphic(topPoint, pointSymbol);
                 _graphicsOverlay.Graphics.Add(pointGraphic);
-            }
-
-            if (_waypoints.Count > 0)
-            {
-                var waypointPoints = _waypoints.Select(w => new MapPoint(w.Longitude, w.Latitude, SpatialReferences.Wgs84));
-
-                var envelope = new Envelope(
-                    waypointPoints.Min(p => p.X),
-                    waypointPoints.Min(p => p.Y),
-                    waypointPoints.Max(p => p.X),
-                    waypointPoints.Max(p => p.Y),
-                    SpatialReferences.Wgs84);
-
-                var expandedEnvelope = new Envelope(
-                    envelope.XMin - envelope.Width * 0.25,
-                    envelope.YMin - envelope.Height * 0.25,
-                    envelope.XMax + envelope.Width * 0.25,
-                    envelope.YMax + envelope.Height * 0.25,
-                    envelope.SpatialReference);
-
-                _sceneView.SetViewpoint(new Viewpoint(expandedEnvelope));
+            
             }
         }
 
