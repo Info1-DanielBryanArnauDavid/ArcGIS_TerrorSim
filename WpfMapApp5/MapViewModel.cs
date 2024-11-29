@@ -447,6 +447,7 @@ namespace ArcGIS_App
                 throw new FormatException($"Unrecognized altitude format: {altitudeStr}");
             }
         }
+
       
         public void AddFlightPathGraphic(Graphic flightPathGraphic)
         {
