@@ -9,8 +9,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Class", "Class\Class.csproj
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ArcGIS_App", "WpfMapApp5\ArcGIS_App.csproj", "{F769FBF3-2D1F-4F72-87D2-46821BEC2BDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testingClass", "testingClass\testingClass.csproj", "{33134E52-EA7A-45C0-BD97-90F39C796460}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -25,10 +23,6 @@ Global
 		{F769FBF3-2D1F-4F72-87D2-46821BEC2BDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F769FBF3-2D1F-4F72-87D2-46821BEC2BDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F769FBF3-2D1F-4F72-87D2-46821BEC2BDA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{33134E52-EA7A-45C0-BD97-90F39C796460}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{33134E52-EA7A-45C0-BD97-90F39C796460}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{33134E52-EA7A-45C0-BD97-90F39C796460}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{33134E52-EA7A-45C0-BD97-90F39C796460}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

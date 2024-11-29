@@ -1,4 +1,3 @@
-using Esri.ArcGISRuntime.Data;
 using Esri.ArcGISRuntime.Geometry;
 using Esri.ArcGISRuntime.Mapping;
 using Esri.ArcGISRuntime.Symbology; // For SimpleLineSymbol
@@ -19,14 +18,12 @@ namespace ArcGIS_App
 {
     public class MapViewModel : INotifyPropertyChanged
     {
-        private double _minTextSize = 10; // Minimum font size
-        private double _maxTextSize = 50; // Maximum font size
-        private double _minScale = 10000000; // Minimum scale (zoomed out)
-        private double _maxScale = 1000; // Maximum scale (zoomed in)
         private Scene _scene;
         private SceneView _sceneView;
         private GraphicsOverlay _graphicsOverlay;
-        private Graphic _planeGraphic;  // Plane graphic
+        private Dictionary<string, Graphic> _planeGraphics = new Dictionary<string, Graphic>();
+        private DateTime _simulationStartTime;
+        private DateTime _simulationEndTime;
         private List<MapPoint> _interpolatedPoints;  // Interpolated path points
         private DispatcherTimer _movementTimer;
         private int _currentWaypointIndex = 0;
@@ -69,12 +66,6 @@ namespace ArcGIS_App
             };
             _sceneView.GraphicsOverlays.Add(_graphicsOverlay);
 
-            // Call the method to add the path
-            AddPathWithElevationAndGreatCircle();
-
-            // Add the plane graphic at the starting point
-            AddPlaneGraphic(_interpolatedPoints[0]);
-
             // Initialize the time label
             _timeLabel.Content = "Time: 00:00:00";
 
@@ -85,7 +76,19 @@ namespace ArcGIS_App
         {
             UpdateTextSize();
         }
+        public void InitializeSimulation()
+        {
+            _simulationStartTime = _flightplans.FlightPlans.Min(fp => fp.StartTime);
+            _simulationEndTime = _flightplans.FlightPlans.Max(fp => fp.StartTime.AddSeconds(fp.TotalDuration));
 
+            foreach (var flightPlan in _flightplans.FlightPlans)
+            {
+                AddPlaneGraphic(_interpolatedPoints[0]);
+            }
+
+            _timelineSlider.Minimum = 0;
+            _timelineSlider.Maximum = (_simulationEndTime - _simulationStartTime).TotalSeconds;
+        }
         private void UpdateTextSize()
         {
             // Get the current viewpoint (camera position) and target scale
@@ -140,26 +143,6 @@ namespace ArcGIS_App
             return textSize;
         }
 
-
-
-        // Start the simulation (play the plane's movement)
-        public void StartSimulation()
-        {
-            if (!_isPlaying)
-            {
-                // Set up the timer and start the animation
-                _movementTimer = new DispatcherTimer
-                {
-                    Interval = TimeSpan.FromMilliseconds(100)  // Update every 100 ms
-                };
-
-                _movementTimer.Tick += MovePlaneAlongPath;  // The function to update the plane's position
-                _movementTimer.Start();
-
-                _startTime = DateTime.Now;  // Record the start time
-                _isPlaying = true;  // Update the state to "playing"
-            }
-        }
         public List<WaypointGIS> GetCurrentWaypoints()
         {
             return _waypoints;
@@ -228,14 +211,27 @@ namespace ArcGIS_App
         }
 
 
-        // Pause the simulation (pause the plane's movement)
+        public void StartSimulation()
+        {
+            if (!_isPlaying)
+            {
+                _movementTimer = new DispatcherTimer
+                {
+                    Interval = TimeSpan.FromMilliseconds(100)
+                };
+                _movementTimer.Tick += MovePlanesAlongPaths;
+                _movementTimer.Start();
+                _startTime = DateTime.Now;
+                _isPlaying = true;
+            }
+        }
+
         public void PauseSimulation()
         {
             if (_isPlaying)
             {
-                // Pause the animation
                 _movementTimer.Stop();
-                _isPlaying = false;  // Update the state to "paused"
+                _isPlaying = false;
             }
         }
 
@@ -247,141 +243,111 @@ namespace ArcGIS_App
         }
 
         // Add the path with elevation and calculate great circle path
-        private void AddPathWithElevationAndGreatCircle()
-        {
-            List<(double Longitude, double Latitude, double Height)> waypoints = new List<(double, double, double)>
-            {
-                (-3.7038, 40.4168, 650), // Madrid
-                (-1.0, 41.0, 9000),      // Example intermediate point
-                (1.0, 41.2, 10200),      // Example intermediate point
-                (2.1734, 41.3851, 5)     // Barcelona
-            };
-
-            _interpolatedPoints = new List<MapPoint>();
-
-            // Interpolate between waypoints
-            for (int i = 0; i < waypoints.Count - 1; i++)
-            {
-                var startPoint = waypoints[i];
-                var endPoint = waypoints[i + 1];
-
-                var segmentPoints = CalculateGreatCircleWithElevation(
-                    new MapPoint(startPoint.Longitude, startPoint.Latitude, startPoint.Height, SpatialReferences.Wgs84),
-                    new MapPoint(endPoint.Longitude, endPoint.Latitude, endPoint.Height, SpatialReferences.Wgs84),
-                    50 // Interpolation points
-                );
-
-                _interpolatedPoints.AddRange(segmentPoints);
-            }
-
-            // Optionally, add the last waypoint
-            _interpolatedPoints.Add(new MapPoint(2.1734, 41.3851, 5, SpatialReferences.Wgs84));
-
-            // Create and add the polyline path
-            var path = new Polyline(_interpolatedPoints);
-            var pathSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.FromArgb(100, 0, 255, 255), 2); // Blue path
-            var pathGraphic = new Graphic(path, pathSymbol);
-            _graphicsOverlay.Graphics.Add(pathGraphic);
-
-            var polylineExtent = path.Extent;
-            _sceneView.SetViewpoint(new Viewpoint(polylineExtent.GetCenter(), 5000000)); // Adjust scale
-        }
-
-        // Calculate great circle with elevation between two points
-        private List<MapPoint> CalculateGreatCircleWithElevation(MapPoint startPoint, MapPoint endPoint, int numPoints)
-        {
-            List<MapPoint> points = new List<MapPoint>();
-            double lat1 = startPoint.Y * Math.PI / 180;
-            double lon1 = startPoint.X * Math.PI / 180;
-            double lat2 = endPoint.Y * Math.PI / 180;
-            double lon2 = endPoint.X * Math.PI / 180;
-            double h1 = startPoint.Z;
-            double h2 = endPoint.Z;
-
-            for (int i = 0; i <= numPoints; i++)
-            {
-                double fraction = (double)i / numPoints;
-
-                double delta = 2 * Math.Asin(Math.Sqrt(Math.Pow(Math.Sin((lat2 - lat1) / 2), 2) +
-                                                       Math.Cos(lat1) * Math.Cos(lat2) *
-                                                       Math.Pow(Math.Sin((lon2 - lon1) / 2), 2)));
-                double A = Math.Sin((1 - fraction) * delta) / Math.Sin(delta);
-                double B = Math.Sin(fraction * delta) / Math.Sin(delta);
-
-                double x = A * Math.Cos(lat1) * Math.Cos(lon1) + B * Math.Cos(lat2) * Math.Cos(lon2);
-                double y = A * Math.Cos(lat1) * Math.Sin(lon1) + B * Math.Cos(lat2) * Math.Sin(lon2);
-                double z = A * Math.Sin(lat1) + B * Math.Sin(lat2);
-
-                double newLat = Math.Atan2(z, Math.Sqrt(x * x + y * y)) * 180 / Math.PI;
-                double newLon = Math.Atan2(y, x) * 180 / Math.PI;
-
-                double newHeight = h1 + fraction * (h2 - h1); // Linear interpolation for height
-
-                points.Add(new MapPoint(newLon, newLat, newHeight, SpatialReferences.Wgs84));
-            }
-
-            return points;
-        }
-
-        // Update plane's position when the timeline slider changes
-        public void UpdateSimulationFromSlider(double value)
-        {
-            int waypointIndex = (int)value;
-
-            if (waypointIndex >= 0 && waypointIndex < _interpolatedPoints.Count)
-            {
-                var currentPoint = _interpolatedPoints[waypointIndex];
-                UpdatePlanePosition(currentPoint);
-                _timeLabel.Content = $"Time: {TimeSpan.FromSeconds(waypointIndex)}"; // Adjust time display
-            }
-        }
+       
 
         // Move the plane along the path at each tick of the timer
-        private void MovePlaneAlongPath(object sender, EventArgs e)
+        private void MovePlanesAlongPaths(object sender, EventArgs e)
         {
-            if (_currentWaypointIndex < _interpolatedPoints.Count)
-            {
-                var currentPoint = _interpolatedPoints[_currentWaypointIndex];
-                UpdatePlanePosition(currentPoint);
-                _timelineSlider.Value = _currentWaypointIndex;  // Sync the slider with current position
+            var currentSimulationTime = _simulationStartTime + TimeSpan.FromSeconds(_timelineSlider.Value);
+            _timeLabel.Content = $"Time: {currentSimulationTime:HH:mm:ss}";
 
-                _currentWaypointIndex++;
-            }
-            else
+            foreach (var flightPlan in _flightplans.FlightPlans)
             {
-                // Stop the simulation when the path is complete
+                if (currentSimulationTime >= flightPlan.StartTime && currentSimulationTime <= flightPlan.StartTime.AddSeconds(flightPlan.TotalDuration))
+                {
+                    var elapsedTime = (currentSimulationTime - flightPlan.StartTime).TotalSeconds;
+                    var currentPosition = GetPositionAtTime(flightPlan, elapsedTime);
+                    UpdatePlanePosition(flightPlan.Callsign, currentPosition);
+                }
+            }
+
+            _timelineSlider.Value += 0.1; // Increment by 0.1 seconds
+            if (_timelineSlider.Value >= _timelineSlider.Maximum)
+            {
                 PauseSimulation();
+            }
+        }
+
+        private MapPoint GetPositionAtTime(FlightPlanGIS flightPlan, double elapsedSeconds)
+        {
+            double totalDistance = 0;
+            double coveredDistance = 0;
+
+            for (int i = 1; i < flightPlan.Waypoints.Count; i++)
+            {
+                var start = flightPlan.Waypoints[i - 1];
+                var end = flightPlan.Waypoints[i];
+                var segmentDistance = GeometryEngine.Distance(
+                    new MapPoint(start.Longitude, start.Latitude, 0, SpatialReferences.Wgs84),
+                    new MapPoint(end.Longitude, end.Latitude, 0, SpatialReferences.Wgs84)
+                );
+                totalDistance += segmentDistance;
+            }
+
+            double speed = Convert.ToDouble(flightPlan.Speeds[0]); // Simplified: using initial speed
+            coveredDistance = speed * elapsedSeconds / 3600; // Convert speed from km/h to km/s
+
+            if (coveredDistance >= totalDistance)
+            {
+                return new MapPoint(flightPlan.Waypoints.Last().Longitude, flightPlan.Waypoints.Last().Latitude, 0, SpatialReferences.Wgs84);
+            }
+
+            double currentDistance = 0;
+            for (int i = 1; i < flightPlan.Waypoints.Count; i++)
+            {
+                var start = flightPlan.Waypoints[i - 1];
+                var end = flightPlan.Waypoints[i];
+                var segmentDistance = GeometryEngine.Distance(
+                    new MapPoint(start.Longitude, start.Latitude, 0, SpatialReferences.Wgs84),
+                    new MapPoint(end.Longitude, end.Latitude, 0, SpatialReferences.Wgs84)
+                );
+
+                if (currentDistance + segmentDistance > coveredDistance)
+                {
+                    double t = (coveredDistance - currentDistance) / segmentDistance;
+                    double lat = start.Latitude + t * (end.Latitude - start.Latitude);
+                    double lon = start.Longitude + t * (end.Longitude - start.Longitude);
+                    return new MapPoint(lon, lat, 0, SpatialReferences.Wgs84);
+                }
+
+                currentDistance += segmentDistance;
+            }
+
+            return new MapPoint(flightPlan.Waypoints.Last().Longitude, flightPlan.Waypoints.Last().Latitude, 0, SpatialReferences.Wgs84);
+        }
+
+        private void UpdatePlanePosition(string callsign, MapPoint currentPoint)
+        {
+            if (_planeGraphics.TryGetValue(callsign, out Graphic planeGraphic))
+            {
+                planeGraphic.Geometry = currentPoint;
+            }
+        }
+
+        public void UpdateSimulationFromSlider(double value)
+        {
+            var currentSimulationTime = _simulationStartTime + TimeSpan.FromSeconds(value);
+            _timeLabel.Content = $"Time: {currentSimulationTime:HH:mm:ss}";
+
+            foreach (var flightPlan in _flightplans.FlightPlans)
+            {
+                if (currentSimulationTime >= flightPlan.StartTime && currentSimulationTime <= flightPlan.StartTime.AddSeconds(flightPlan.TotalDuration))
+                {
+                    var elapsedTime = (currentSimulationTime - flightPlan.StartTime).TotalSeconds;
+                    var currentPosition = GetPositionAtTime(flightPlan, elapsedTime);
+                    UpdatePlanePosition(flightPlan.Callsign, currentPosition);
+                }
             }
         }
         private void AddPlaneGraphic(MapPoint startingPoint)
         {
-            if (_planeGraphic == null)
-            {
-                // Crea el gráfico del avión en el punto inicial
-                _planeGraphic = new Graphic(startingPoint);
-
-                // Puedes usar un símbolo diferente para el avión, como un símbolo de punto o cualquier otro símbolo
-                var planeSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, System.Drawing.Color.Red, 10); // Un círculo rojo para el avión
-                _planeGraphic.Symbol = planeSymbol;
-
-                // Agregar el gráfico de avión al GraphicsOverlay
-                _graphicsOverlay.Graphics.Add(_planeGraphic);
-            }
+            var planeGraphic = new Graphic(startingPoint);
+            var planeSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, System.Drawing.Color.Red, 10);
+            planeGraphic.Symbol = planeSymbol;
+            _graphicsOverlay.Graphics.Add(planeGraphic);
         }
 
         // Update the plane's graphic position
-        private void UpdatePlanePosition(MapPoint currentPoint)
-        {
-            if (_planeGraphic == null)
-            {
-                _planeGraphic = new Graphic(currentPoint);
-                _graphicsOverlay.Graphics.Add(_planeGraphic);
-            }
-            else
-            {
-                _planeGraphic.Geometry = currentPoint;
-            }
-        }
         public void AddFlightPathGraphic(Graphic flightPathGraphic)
         {
             // Add the flight path graphic to the overlay

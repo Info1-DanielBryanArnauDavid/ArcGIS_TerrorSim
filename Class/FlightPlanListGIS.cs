@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,48 +61,45 @@ namespace Class
         // Method to load flight plans from a file
         public static FlightPlanListGIS LoadFlightPlansFromFile(string filePath, List<WaypointGIS> waypoints)
         {
-            var flightPlanList = new FlightPlanListGIS(new DateTime(2025,12,25)); // Initialize the FlightPlanListGIS object
+            var flightPlanList = new FlightPlanListGIS(new DateTime(2025, 12, 25));
             FlightPlanGIS currentFlightPlan = null;
 
             try
             {
-                // Read each line from the flight plan file
                 foreach (var line in File.ReadLines(filePath))
                 {
-                    // Skip empty lines
                     if (string.IsNullOrWhiteSpace(line)) continue;
 
                     var parts = line.Split(',');
 
-                    if (parts.Length == 2) // First two columns: time and company
+                    if (parts.Length == 4) // First line: time, airline, callsign, aircraft
                     {
-                        string timeString = parts[0].Trim();
-                        DateTime startTime;
-                        if (DateTime.TryParseExact(timeString, "HH:mm:ss", null, System.Globalization.DateTimeStyles.None, out startTime))
+                        if (currentFlightPlan != null)
                         {
-                            string companyName = parts[1].Trim();
+                            currentFlightPlan.TotalDuration = CalculateTotalDuration(currentFlightPlan);
+                            flightPlanList.FlightPlans.Add(currentFlightPlan);
+                        }
 
-                            // Add the previous flight plan to the list if it exists
-                            if (currentFlightPlan != null)
-                            {
-                                flightPlanList.FlightPlans.Add(currentFlightPlan);
-                            }
+                        string timeString = parts[0].Trim();
+                        string airline = parts[1].Trim();
+                        string callsign = parts[2].Trim();
+                        string aircraft = parts[3].Trim();
 
-                            // Start a new flight plan with the company name and start time
-                            currentFlightPlan = new FlightPlanGIS(companyName, startTime);
+                        if (DateTime.TryParseExact(timeString, "HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.None, out DateTime startTime))
+                        {
+                            currentFlightPlan = new FlightPlanGIS(airline, startTime, callsign, aircraft);
                         }
                         else
                         {
                             Console.WriteLine($"Invalid time format: {timeString}");
                         }
                     }
-                    else if (parts.Length == 3 && currentFlightPlan != null) // Waypoint, FlightLevel, Speed
+                    else if (parts.Length == 3 && currentFlightPlan != null)
                     {
                         string waypointName = parts[0].Trim();
                         string flightLevel = parts[1].Trim();
                         string speed = parts[2].Trim();
 
-                        // Find the waypoint by its ID
                         var waypoint = waypoints.Find(w => w.ID == waypointName);
                         if (waypoint != null)
                         {
@@ -116,9 +114,9 @@ namespace Class
                     }
                 }
 
-                // Add the last flight plan to the list
                 if (currentFlightPlan != null)
                 {
+                    currentFlightPlan.TotalDuration = CalculateTotalDuration(currentFlightPlan);
                     flightPlanList.FlightPlans.Add(currentFlightPlan);
                 }
             }
@@ -130,23 +128,36 @@ namespace Class
             return flightPlanList;
         }
 
-
-        public List<(double Latitude, double Longitude, double Height, string Speed)> CreatePath(List<WaypointGIS> waypoints,List<double> heights,List<string> speeds)
+        private static double CalculateTotalDuration(FlightPlanGIS flightPlan)
         {
-            // This method assumes that the heights and speeds lists have the same number of elements as the waypoints list.
-            if (waypoints.Count != heights.Count || waypoints.Count != speeds.Count)
-                throw new ArgumentException("The number of waypoints, heights, and speeds must match.");
-
-            List<(double Latitude, double Longitude, double Height, string Speed)> path = new List<(double, double, double, string)>();
-
-            for (int i = 0; i < waypoints.Count; i++)
+            double totalDuration = 0;
+            for (int i = 1; i < flightPlan.Waypoints.Count; i++)
             {
-                path.Add((waypoints[i].Latitude, waypoints[i].Longitude, heights[i], speeds[i]));
+                var start = flightPlan.Waypoints[i - 1];
+                var end = flightPlan.Waypoints[i];
+                var distance = CalculateDistance(start, end);
+                var speed = double.Parse(flightPlan.Speeds[i - 1]);
+                totalDuration += distance / speed;
             }
-
-            return path;
+            return totalDuration;
         }
-        
+
+        private static double CalculateDistance(WaypointGIS start, WaypointGIS end)
+        {
+            const double EarthRadius = 6371; // km
+            var dLat = ToRadians(end.Latitude - start.Latitude);
+            var dLon = ToRadians(end.Longitude - start.Longitude);
+            var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
+                    Math.Cos(ToRadians(start.Latitude)) * Math.Cos(ToRadians(end.Latitude)) *
+                    Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
+            var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
+            return EarthRadius * c;
+        }
+
+        private static double ToRadians(double degrees)
+        {
+            return degrees * Math.PI / 180;
+        }
 
 
     }

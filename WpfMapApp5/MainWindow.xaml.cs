@@ -138,6 +138,8 @@ namespace ArcGIS_App
                         foreach (var flightPlan in flightplanlist.FlightPlans)
                         {
                             detailsMessage.AppendLine($"Company: {flightPlan.CompanyName}");
+                            detailsMessage.AppendLine($"Callsign: {flightPlan.Callsign}");
+                            detailsMessage.AppendLine($"Aircraft: {flightPlan.Aircraft}");
                             detailsMessage.AppendLine($"Start Time: {flightPlan.StartTime.ToString("HH:mm:ss")}");
                             detailsMessage.AppendLine("Waypoints and Flight Levels:");
 
