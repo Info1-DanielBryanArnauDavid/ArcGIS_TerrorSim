@@ -127,31 +127,54 @@ namespace Class
 
             return flightPlanList;
         }
-
         private static double CalculateTotalDuration(FlightPlanGIS flightPlan)
         {
             double totalDuration = 0;
+
+            // Iterate through each segment of the flight plan
             for (int i = 1; i < flightPlan.Waypoints.Count; i++)
             {
                 var start = flightPlan.Waypoints[i - 1];
                 var end = flightPlan.Waypoints[i];
+
+                // Calculate the distance between the waypoints
                 var distance = CalculateDistance(start, end);
-                var speed = double.Parse(flightPlan.Speeds[i - 1]);
-                totalDuration += distance / speed;
+
+                // Try to parse the speed and check for valid speeds (in knots)
+                if (double.TryParse(flightPlan.Speeds[i - 1], out double speed) && speed > 0)
+                {
+                    // Convert speed from knots to meters per second
+                    speed = speed * 0.514444;  // 1 knot = 0.514444 meters per second
+
+                    // Calculate the duration for the segment based on distance (in meters) and speed (in m/s)
+                    totalDuration += distance / speed;  // duration = distance / speed
+                }
+                else
+                {
+                    // Handle invalid speed (optional: set a default speed or throw an exception)
+                    throw new InvalidOperationException($"Invalid speed for segment {i - 1} -> {i}: {flightPlan.Speeds[i - 1]}");
+                }
             }
+
             return totalDuration;
         }
 
         private static double CalculateDistance(WaypointGIS start, WaypointGIS end)
         {
-            const double EarthRadius = 6371; // km
+            const double EarthRadius = 6371; // in kilometers
+
+            // Convert latitude and longitude from degrees to radians
             var dLat = ToRadians(end.Latitude - start.Latitude);
             var dLon = ToRadians(end.Longitude - start.Longitude);
+
+            // Haversine formula to calculate the great-circle distance between two points
             var a = Math.Sin(dLat / 2) * Math.Sin(dLat / 2) +
                     Math.Cos(ToRadians(start.Latitude)) * Math.Cos(ToRadians(end.Latitude)) *
                     Math.Sin(dLon / 2) * Math.Sin(dLon / 2);
             var c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-            return EarthRadius * c;
+
+            // Return the distance in kilometers, then convert to meters
+            return EarthRadius * c * 1000;  // Convert kilometers to meters
         }
 
         private static double ToRadians(double degrees)

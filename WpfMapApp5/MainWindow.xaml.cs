@@ -82,8 +82,6 @@ namespace ArcGIS_App
         // TimelineSlider value changed (update plane position and time)
         private void TimelineSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            // Update simulation time when the slider is changed
-            _viewModel.UpdateSimulationFromSlider(e.NewValue);
         }
 
         private void LoadWaypoints_Click(object sender, RoutedEventArgs e)
@@ -128,6 +126,7 @@ namespace ArcGIS_App
 
                     // Load flight plans into the FlightPlanListGIS object
                     flightplanlist = FlightPlanListGIS.LoadFlightPlansFromFile(flightPlansFilePath, loadedWaypoints);
+                    _viewModel.LoadFlightPlanFunc(flightplanlist);
 
                     if (flightplanlist != null && flightplanlist.FlightPlans.Count > 0)
                     {
@@ -242,6 +241,7 @@ namespace ArcGIS_App
                 flightPathGraphic.Attributes["CompanyName"] = flightPlan.CompanyName;
                 flightPathGraphic.Attributes["StartTime"] = flightPlan.StartTime;
             }
+
         }
 
         private List<MapPoint> CalculateGreatCircleWithElevation(MapPoint startPoint, MapPoint endPoint, int numPoints)

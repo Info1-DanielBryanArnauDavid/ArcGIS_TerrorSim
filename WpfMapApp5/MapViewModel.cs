@@ -13,6 +13,7 @@ using System.Windows.Controls;
 using System.Drawing; // For System.Drawing.Color
 using Class;
 using System.Linq;
+using System.Diagnostics;
 
 namespace ArcGIS_App
 {
@@ -33,10 +34,7 @@ namespace ArcGIS_App
         private Slider _timelineSlider;
         private bool _areLabelsVisible = false; // Track visibility state
         private bool areFlightPlansVisible = true;
-
-
         private System.Windows.Point? _startPoint; // Nullable Point for WPF
-
         public bool IsPlaying => _isPlaying;
         private List<WaypointGIS> _waypoints;
         private FlightPlanListGIS _flightplans;
@@ -48,11 +46,12 @@ namespace ArcGIS_App
             _timelineSlider = timelineSlider;
             _waypoints = waypoints;
             _flightplans = flightplans;
+
             _sceneView.ViewpointChanged += SceneView_ViewpointChanged;
 
             _scene = new Scene(BasemapStyle.ArcGISImagery)
             {
-                InitialViewpoint = new Viewpoint(new Envelope(-3.7038, 40.4168, 2.1734, 41.3851, SpatialReferences.Wgs84)) // Initial view around Madrid and Barcelona
+                InitialViewpoint = new Viewpoint(new Envelope(-3.7038, 40.4168, 2.1734, 41.3851, SpatialReferences.Wgs84))
             };
 
             // Add terrain layer
@@ -62,33 +61,60 @@ namespace ArcGIS_App
 
             _graphicsOverlay = new GraphicsOverlay
             {
-                SceneProperties = new LayerSceneProperties(SurfacePlacement.Absolute) // Use absolute placement
+                SceneProperties = new LayerSceneProperties(SurfacePlacement.Absolute)
             };
             _sceneView.GraphicsOverlays.Add(_graphicsOverlay);
 
-            // Initialize the time label
             _timeLabel.Content = "Time: 00:00:00";
 
-            // Bind the slider event to update the plane's position
             _timelineSlider.ValueChanged += TimelineSlider_ValueChanged;
+        }
+        private void TimelineSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            Console.WriteLine($"Slider Value: {_timelineSlider.Value}"); // Check if the slider value changes
+        }
+
+        public void LoadFlightPlanFunc(FlightPlanListGIS plan)
+        {
+            _flightplans = plan;
         }
         private void SceneView_ViewpointChanged(object sender, EventArgs e)
         {
             UpdateTextSize();
         }
-        public void InitializeSimulation()
+        private void InitializeSimulation()
         {
+            if (_flightplans == null || !_flightplans.FlightPlans.Any())
+            {
+                MessageBox.Show("No flight plans available.");
+                return;
+            }
+
+            // Clear existing plane graphics
+            _planeGraphics.Clear();
+
             _simulationStartTime = _flightplans.FlightPlans.Min(fp => fp.StartTime);
             _simulationEndTime = _flightplans.FlightPlans.Max(fp => fp.StartTime.AddSeconds(fp.TotalDuration));
 
             foreach (var flightPlan in _flightplans.FlightPlans)
             {
-                AddPlaneGraphic(_interpolatedPoints[0]);
+                if (flightPlan.Waypoints != null && flightPlan.Waypoints.Any())
+                {
+                    var startPoint = new MapPoint(
+                        flightPlan.Waypoints[0].Longitude,
+                        flightPlan.Waypoints[0].Latitude,
+                        ParseAltitude(flightPlan.FlightLevels[0]),
+                        SpatialReferences.Wgs84
+                    );
+                    AddPlaneGraphic(startPoint, flightPlan.Callsign);
+                }
             }
 
             _timelineSlider.Minimum = 0;
             _timelineSlider.Maximum = (_simulationEndTime - _simulationStartTime).TotalSeconds;
+            _timelineSlider.Value = 0;
         }
+
         private void UpdateTextSize()
         {
             // Get the current viewpoint (camera position) and target scale
@@ -209,29 +235,39 @@ namespace ArcGIS_App
             }
 
         }
-
-
         public void StartSimulation()
         {
             if (!_isPlaying)
             {
-                _movementTimer = new DispatcherTimer
+                try
                 {
-                    Interval = TimeSpan.FromMilliseconds(100)
-                };
-                _movementTimer.Tick += MovePlanesAlongPaths;
-                _movementTimer.Start();
-                _startTime = DateTime.Now;
-                _isPlaying = true;
+                    _movementTimer = new DispatcherTimer
+                    {
+                        Interval = TimeSpan.FromMilliseconds(50)
+                    };
+                    _movementTimer.Tick += MovePlanesAlongPaths;
+                    _movementTimer.Start();
+                    _startTime = DateTime.Now;
+                    _isPlaying = true;
+                    MessageBox.Show("Simulation Started");
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error starting simulation: {ex.Message}");
+                }
             }
         }
-
         public void PauseSimulation()
         {
-            if (_isPlaying)
+            try
             {
-                _movementTimer.Stop();
+                _movementTimer.Stop(); // Stop the timer
                 _isPlaying = false;
+                MessageBox.Show("Simulation Paused");
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"Error pausing simulation: {ex.Message}");
             }
         }
 
@@ -243,31 +279,83 @@ namespace ArcGIS_App
         }
 
         // Add the path with elevation and calculate great circle path
-       
 
-        // Move the plane along the path at each tick of the timer
         private void MovePlanesAlongPaths(object sender, EventArgs e)
         {
-            var currentSimulationTime = _simulationStartTime + TimeSpan.FromSeconds(_timelineSlider.Value);
-            _timeLabel.Content = $"Time: {currentSimulationTime:HH:mm:ss}";
-
-            foreach (var flightPlan in _flightplans.FlightPlans)
+            try
             {
-                if (currentSimulationTime >= flightPlan.StartTime && currentSimulationTime <= flightPlan.StartTime.AddSeconds(flightPlan.TotalDuration))
+                // Calculate elapsed time and current simulation time
+                TimeSpan elapsedTime = DateTime.Now - _startTime;
+                double elapsedSeconds = elapsedTime.TotalSeconds;
+                var currentSimulationTime = _simulationStartTime.AddSeconds(elapsedSeconds);
+
+                // Update time label and slider
+                _timeLabel.Content = $"Time: {currentSimulationTime:HH:mm:ss}";
+                _timelineSlider.Value = elapsedSeconds;
+
+                bool simulationActive = false;
+
+                foreach (var flightPlan in _flightplans.FlightPlans)
                 {
-                    var elapsedTime = (currentSimulationTime - flightPlan.StartTime).TotalSeconds;
-                    var currentPosition = GetPositionAtTime(flightPlan, elapsedTime);
-                    UpdatePlanePosition(flightPlan.Callsign, currentPosition);
-                }
-            }
+                    var flightStartTime = flightPlan.StartTime;
+                    var flightEndTime = flightPlan.StartTime.AddSeconds(flightPlan.TotalDuration);
+                    if (currentSimulationTime >= flightStartTime && currentSimulationTime <= flightEndTime)
+                    {
+                        simulationActive = true;
 
-            _timelineSlider.Value += 0.1; // Increment by 0.1 seconds
-            if (_timelineSlider.Value >= _timelineSlider.Maximum)
+                        // Calculate flight-specific elapsed time
+                        var flightElapsedTime = (currentSimulationTime - flightStartTime).TotalSeconds;
+
+                        // Get current position
+                        var currentPosition = GetPositionAtTime(flightPlan, flightElapsedTime);
+                        // Ensure plane graphic exists and update
+                        if (_planeGraphics.TryGetValue(flightPlan.Callsign, out Graphic planeGraphic))
+                        {
+                            planeGraphic.Geometry = currentPosition;
+                            planeGraphic.IsVisible = true;
+                        }
+                        else
+                        {
+                            Debug.WriteLine($"WARNING: No plane graphic found for {flightPlan.Callsign}");
+                        }
+                    }
+                    else if (currentSimulationTime > flightEndTime)
+                    {
+                        // Position plane at final destination
+                        var lastWaypoint = flightPlan.Waypoints.Last();
+                        double altitude = ParseAltitude(flightPlan.FlightLevels.Last());
+                        var finalPosition = new MapPoint(
+                            lastWaypoint.Longitude,
+                            lastWaypoint.Latitude,
+                            altitude,
+                            SpatialReferences.Wgs84
+                        );
+
+                        if (_planeGraphics.TryGetValue(flightPlan.Callsign, out Graphic planeGraphic))
+                        {
+                            planeGraphic.Geometry = finalPosition;
+                            Debug.WriteLine($"Flight {flightPlan.Callsign} reached final destination");
+                        }
+                    }
+                }
+
+                // Only stop if no flights are active and we've passed the end time
+                if (!simulationActive && currentSimulationTime > _simulationEndTime)
+                {
+                    _movementTimer.Stop();
+                    _isPlaying = false;
+                    Debug.WriteLine("=== Simulation Completed ===");
+                    MessageBox.Show("Simulation Completed");
+                }
+
+                Debug.WriteLine("=== End of Simulation Tick ===\n");
+            }
+            catch (Exception ex)
             {
-                PauseSimulation();
+                Debug.WriteLine($"Simulation error: {ex.Message}");
+                MessageBox.Show($"Simulation error: {ex.Message}");
             }
         }
-
         private MapPoint GetPositionAtTime(FlightPlanGIS flightPlan, double elapsedSeconds)
         {
             double totalDistance = 0;
@@ -277,19 +365,23 @@ namespace ArcGIS_App
             {
                 var start = flightPlan.Waypoints[i - 1];
                 var end = flightPlan.Waypoints[i];
+
                 var segmentDistance = GeometryEngine.Distance(
                     new MapPoint(start.Longitude, start.Latitude, 0, SpatialReferences.Wgs84),
                     new MapPoint(end.Longitude, end.Latitude, 0, SpatialReferences.Wgs84)
                 );
+
                 totalDistance += segmentDistance;
             }
 
-            double speed = Convert.ToDouble(flightPlan.Speeds[0]); // Simplified: using initial speed
-            coveredDistance = speed * elapsedSeconds / 3600; // Convert speed from km/h to km/s
+            double speed = Convert.ToDouble(flightPlan.Speeds[0]);
+            coveredDistance = speed * elapsedSeconds / 3600;
 
             if (coveredDistance >= totalDistance)
             {
-                return new MapPoint(flightPlan.Waypoints.Last().Longitude, flightPlan.Waypoints.Last().Latitude, 0, SpatialReferences.Wgs84);
+                var lastWaypoint = flightPlan.Waypoints.Last();
+                double altitude = ParseAltitude(flightPlan.FlightLevels.Last());
+                return new MapPoint(lastWaypoint.Longitude, lastWaypoint.Latitude, altitude, SpatialReferences.Wgs84);
             }
 
             double currentDistance = 0;
@@ -297,6 +389,7 @@ namespace ArcGIS_App
             {
                 var start = flightPlan.Waypoints[i - 1];
                 var end = flightPlan.Waypoints[i];
+
                 var segmentDistance = GeometryEngine.Distance(
                     new MapPoint(start.Longitude, start.Latitude, 0, SpatialReferences.Wgs84),
                     new MapPoint(end.Longitude, end.Latitude, 0, SpatialReferences.Wgs84)
@@ -307,58 +400,97 @@ namespace ArcGIS_App
                     double t = (coveredDistance - currentDistance) / segmentDistance;
                     double lat = start.Latitude + t * (end.Latitude - start.Latitude);
                     double lon = start.Longitude + t * (end.Longitude - start.Longitude);
-                    return new MapPoint(lon, lat, 0, SpatialReferences.Wgs84);
+
+                    double startAltitude = ParseAltitude(flightPlan.FlightLevels[i - 1]);
+                    double endAltitude = ParseAltitude(flightPlan.FlightLevels[i]);
+                    double altitude = startAltitude + t * (endAltitude - startAltitude);
+
+                    return new MapPoint(lon, lat, altitude, SpatialReferences.Wgs84);
                 }
 
                 currentDistance += segmentDistance;
             }
 
-            return new MapPoint(flightPlan.Waypoints.Last().Longitude, flightPlan.Waypoints.Last().Latitude, 0, SpatialReferences.Wgs84);
+            return new MapPoint(flightPlan.Waypoints.Last().Longitude, flightPlan.Waypoints.Last().Latitude, ParseAltitude(flightPlan.FlightLevels.Last()), SpatialReferences.Wgs84);
         }
-
-        private void UpdatePlanePosition(string callsign, MapPoint currentPoint)
+        private double ParseAltitude(string altitudeStr)
         {
-            if (_planeGraphics.TryGetValue(callsign, out Graphic planeGraphic))
+            // Check if the altitude string has 'FL' (flight level) or 'm' (meters)
+            if (altitudeStr.StartsWith("FL", StringComparison.OrdinalIgnoreCase))
             {
-                planeGraphic.Geometry = currentPoint;
-            }
-        }
-
-        public void UpdateSimulationFromSlider(double value)
-        {
-            var currentSimulationTime = _simulationStartTime + TimeSpan.FromSeconds(value);
-            _timeLabel.Content = $"Time: {currentSimulationTime:HH:mm:ss}";
-
-            foreach (var flightPlan in _flightplans.FlightPlans)
-            {
-                if (currentSimulationTime >= flightPlan.StartTime && currentSimulationTime <= flightPlan.StartTime.AddSeconds(flightPlan.TotalDuration))
+                // Flight level (e.g., FL120) - convert from hundreds of feet to meters
+                string levelStr = altitudeStr.Substring(2); // Remove "FL"
+                if (double.TryParse(levelStr, out double flightLevelFeet))
                 {
-                    var elapsedTime = (currentSimulationTime - flightPlan.StartTime).TotalSeconds;
-                    var currentPosition = GetPositionAtTime(flightPlan, elapsedTime);
-                    UpdatePlanePosition(flightPlan.Callsign, currentPosition);
+                    return flightLevelFeet * 30.48; // Convert feet to meters (1 foot = 0.3048 meters)
+                }
+                else
+                {
+                    throw new FormatException($"Invalid flight level format: {altitudeStr}");
                 }
             }
+            else if (altitudeStr.EndsWith("m", StringComparison.OrdinalIgnoreCase))
+            {
+                // Altitude in meters (e.g., 1200.0m)
+                string metersStr = altitudeStr.Substring(0, altitudeStr.Length - 1); // Remove "m"
+                if (double.TryParse(metersStr, out double altitudeMeters))
+                {
+                    return altitudeMeters; // Already in meters, return as is
+                }
+                else
+                {
+                    throw new FormatException($"Invalid altitude in meters format: {altitudeStr}");
+                }
+            }
+            else
+            {
+                throw new FormatException($"Unrecognized altitude format: {altitudeStr}");
+            }
         }
-        private void AddPlaneGraphic(MapPoint startingPoint)
-        {
-            var planeGraphic = new Graphic(startingPoint);
-            var planeSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, System.Drawing.Color.Red, 10);
-            planeGraphic.Symbol = planeSymbol;
-            _graphicsOverlay.Graphics.Add(planeGraphic);
-        }
-
-        // Update the plane's graphic position
+      
         public void AddFlightPathGraphic(Graphic flightPathGraphic)
         {
             // Add the flight path graphic to the overlay
             _graphicsOverlay.Graphics.Add(flightPathGraphic);
-          
+
+            // Check if flight plans are loaded properly
+            if (_flightplans != null)
+            {
+                if (_flightplans.FlightPlans.Any())
+                {
+                    // Initialize the simulation if flight plans exist
+                    InitializeSimulation();
+                }
+                else
+                {
+                    MessageBox.Show("Flight plans list is empty. Cannot start simulation.");
+                }
+            }
+            else
+            {
+                MessageBox.Show("Flight plans are not initialized. Cannot start simulation.");
+            }
         }
 
-        private void TimelineSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        private void AddPlaneGraphic(MapPoint startingPoint, string callsign)
         {
-            // Llama al método para actualizar la simulación desde el valor del slider
-            UpdateSimulationFromSlider(e.NewValue);
+            var planeGraphic = new Graphic(startingPoint);
+            var planeSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Triangle, System.Drawing.Color.Red, 10);
+            planeGraphic.Symbol = planeSymbol;
+
+            // Add the graphic to the overlay
+            _graphicsOverlay.Graphics.Add(planeGraphic);
+
+            // Store the graphic in the dictionary using the callsign as the key
+            if (!_planeGraphics.ContainsKey(callsign))
+            {
+                _planeGraphics.Add(callsign, planeGraphic);  // Add to dictionary
+            }
+            else
+            {
+                // Optionally handle the case where the callsign already exists in the dictionary
+                Console.WriteLine($"Graphic for callsign {callsign} already exists.");
+            }
         }
 
         public void ToggleFlightPlanVisibility()
