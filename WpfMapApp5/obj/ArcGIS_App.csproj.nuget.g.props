@@ -14,6 +14,7 @@
     <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
   </ItemGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <PkgOxyPlot_Wpf Condition=" '$(PkgOxyPlot_Wpf)' == '' ">C:\Users\bolty\.nuget\packages\oxyplot.wpf\2.2.0</PkgOxyPlot_Wpf>
     <PkgEsri_ArcGISRuntime_WPF Condition=" '$(PkgEsri_ArcGISRuntime_WPF)' == '' ">C:\Users\bolty\.nuget\packages\esri.arcgisruntime.wpf\200.6.0</PkgEsri_ArcGISRuntime_WPF>
   </PropertyGroup>
 </Project>

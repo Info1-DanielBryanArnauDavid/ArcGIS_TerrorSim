@@ -22,13 +22,11 @@ namespace ArcGIS_App
         private Scene _scene;
         private SceneView _sceneView;
         private GraphicsOverlay _graphicsOverlay;
-        private Dictionary<string, Graphic> _planeGraphics = new Dictionary<string, Graphic>();
+        public Dictionary<string, Graphic> _planeGraphics = new Dictionary<string, Graphic>();
         private DateTime _simulationStartTime;
         private DateTime _simulationEndTime;
-        private List<MapPoint> _interpolatedPoints;  // Interpolated path points
         private DispatcherTimer _movementTimer;
-        private int _currentWaypointIndex = 0;
-        private DateTime _startTime;
+        public DateTime _startTime;
         private bool _isPlaying = false;
         private Label _timeLabel;
         private Slider _timelineSlider;
@@ -37,7 +35,7 @@ namespace ArcGIS_App
         private System.Windows.Point? _startPoint; // Nullable Point for WPF
         public bool IsPlaying => _isPlaying;
         private List<WaypointGIS> _waypoints;
-        private FlightPlanListGIS _flightplans;
+        public FlightPlanListGIS _flightplans;
         private double _speedMultiplier = 1.0;
 
 
@@ -53,7 +51,8 @@ namespace ArcGIS_App
 
             _scene = new Scene(BasemapStyle.ArcGISImagery)
             {
-                InitialViewpoint = new Viewpoint(new Envelope(-3.7038, 40.4168, 2.1734, 41.3851, SpatialReferences.Wgs84))
+                InitialViewpoint = new Viewpoint(new Envelope(-9.6, 36.0, 3.5, 43.8, SpatialReferences.Wgs84))
+
             };
 
             // Add terrain layer
@@ -322,7 +321,7 @@ namespace ArcGIS_App
 
         // Add the path with elevation and calculate great circle path
 
-        private void MovePlanesAlongPaths(object sender, EventArgs e)
+        public void MovePlanesAlongPaths(object sender, EventArgs e)
         {
             try
             {
@@ -401,7 +400,7 @@ namespace ArcGIS_App
             }
         }
 
-        private MapPoint GetPositionAtTime(FlightPlanGIS flightPlan, double elapsedSeconds)
+        public MapPoint GetPositionAtTime(FlightPlanGIS flightPlan, double elapsedSeconds)
         {
             double totalDuration = flightPlan.TotalDuration;
             if (elapsedSeconds >= totalDuration)
@@ -530,7 +529,15 @@ namespace ArcGIS_App
                 Console.WriteLine($"Graphic for callsign {callsign} already exists.");
             }
         }
+        public Graphic GetPlaneGraphicForTracking(string callsign)
+        {
+            if (_planeGraphics.ContainsKey(callsign))
+            {
+                return _planeGraphics[callsign]; // Return the graphic if the callsign matches
+            }
 
+            return null; // Return null if no graphic is found for the callsign
+        }
         public void ToggleFlightPlanVisibility()
         {
             areFlightPlansVisible = !areFlightPlansVisible; // Toggle the state

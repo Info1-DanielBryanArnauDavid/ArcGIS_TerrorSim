@@ -141,6 +141,10 @@
             "Esri.ArcGISRuntime.WPF": {
               "target": "Package",
               "version": "[200.6.0, )"
+            },
+            "OxyPlot.Wpf": {
+              "target": "Package",
+              "version": "[2.2.0, )"
             }
           },
           "imports": [

@@ -11,17 +11,22 @@ using Esri.ArcGISRuntime.Symbology;
 using Esri.ArcGISRuntime.UI;
 using System.Linq;
 using System.Text;
+using Esri.ArcGISRuntime.Mapping;
+using System.Diagnostics;
 
 namespace ArcGIS_App
 {
     public partial class MainWindow : Window
     {
-        private MapViewModel _viewModel;
-        private FlightPlanListGIS _flightPlanList;
-        private GraphicsOverlay _graphicsOverlay;
-        private bool _areLabelsVisible = false; // Track visibility state
-        private bool _areFlightPlansVisible = true; // Track visibility state
+        public MapViewModel _viewModel;
         private FlightPlanListGIS flightplanlist; //la creme de la creme
+        private DispatcherTimer _movementTimer;
+        private bool _isTrackingPlane = false;
+        private FlightPlanGIS _currentFlightPlan;
+        private int _currentWaypointIndex = 0;
+        private DateTime _startTime;
+        private MapPoint _currentPlanePosition;
+        private string _currentCallsign; // To store the callsign of the plane being tracked
         public MainWindow()
         {
             InitializeComponent();
@@ -30,6 +35,15 @@ namespace ArcGIS_App
             _viewModel = new MapViewModel(MySceneView, TimeLabel, TimelineSlider, new List<WaypointGIS>(), flightplanlist);
             this.DataContext = _viewModel;
 
+            // Initialize the movement timer with an interval to update position in real-time
+            _movementTimer = new DispatcherTimer
+            {
+                Interval = TimeSpan.FromMilliseconds(100) // Update every 100ms (adjust as needed)
+            };
+            _movementTimer.Tick += CameraTrackingTimer_Tick;
+
+            MySceneView.ViewpointChanged += MySceneView_ViewpointChanged;
+
             // Subscribe to the closed event to ensure the app exits when the window is closed
             this.Closed += MainWindow_Closed;
 
@@ -37,7 +51,77 @@ namespace ArcGIS_App
             WelcomeWindow welcomeWindow = new WelcomeWindow();
             welcomeWindow.Show();
         }
+        private void MySceneView_ViewpointChanged(object sender, EventArgs e)
+        {
+        }
+        private void UpdateCameraViewpoint(MapPoint planePosition)
+        {
+            var viewpoint = new Viewpoint(planePosition, 100000); // Set zoom level (10000 can be adjusted)
+            MySceneView.SetViewpointAsync(viewpoint);
+        }
 
+        public void StartTrackingPlane(FlightPlanGIS selectedFlightPlan)
+        {
+            if (selectedFlightPlan == null)
+            {
+                // If selectedFlightPlan is null, stop tracking the current plane
+                _movementTimer.Stop(); // Stop the timer
+                _currentFlightPlan = null; // Reset the current flight plan
+                _currentCallsign = null; // Reset the callsign
+                _isTrackingPlane = false; // Update tracking status
+
+                // Reset to a default viewpoint (for example, the Iberian Peninsula)
+                var viewpoint = new Viewpoint(new Envelope(-9.6, 36.0, 3.5, 43.8, SpatialReferences.Wgs84));
+                MySceneView.SetViewpointAsync(viewpoint);
+            }
+            else if (selectedFlightPlan == _currentFlightPlan)
+            {
+                // If the same flight plan is clicked again, stop tracking it
+                _movementTimer.Stop();
+                _currentFlightPlan = null; // Reset the current flight plan
+                _currentCallsign = null; // Reset the callsign
+                _isTrackingPlane = false; // Update tracking status
+
+                // Reset the viewpoint to the default (or any other desired location)
+                var viewpoint = new Viewpoint(new Envelope(-9.6, 36.0, 3.5, 43.8, SpatialReferences.Wgs84));
+                MySceneView.SetViewpointAsync(viewpoint);
+            }
+            else
+            {
+                // If a new flight plan is selected, start tracking it
+                _currentFlightPlan = selectedFlightPlan;
+                _currentCallsign = selectedFlightPlan.Callsign; // Store the callsign for tracking
+
+                _isTrackingPlane = true;
+                _movementTimer.Start();  // Start the plane's movement timer
+            }
+        }
+
+
+        private void UpdatePlanePosition()
+        {
+            // Get the plane's graphic from the MapViewModel
+            var planeGraphic = _viewModel.GetPlaneGraphicForTracking(_currentCallsign);
+            if (planeGraphic == null)
+                return;  // If no graphic is found, exit
+
+            // Get the current position of the plane (from the graphic)
+            var planePosition = planeGraphic.Geometry as MapPoint;
+            if (planePosition == null)
+                return;
+
+            // Update the camera's viewpoint to follow the plane's position
+            UpdateCameraViewpoint(planePosition);
+        }
+
+        private void CameraTrackingTimer_Tick(object sender, EventArgs e)
+        {
+            Debug.WriteLine("TICK");
+            if (_isTrackingPlane)
+            {
+                UpdatePlanePosition();
+            }
+        }
         private void ToggleFlightPlans_Click(object sender, RoutedEventArgs e)
         {
             _viewModel.ToggleFlightPlanVisibility();
@@ -193,6 +277,7 @@ namespace ArcGIS_App
                     }
                 }
 
+
                 // Create a Polyline for the flight path using great circle interpolation
                 List<MapPoint> flightPathPoints = new List<MapPoint>();
                 for (int j = 0; j < flightPlan.Waypoints.Count - 1; j++)
@@ -228,6 +313,13 @@ namespace ArcGIS_App
         {
             _viewModel.IncreaseSimulationSpeed();
         }
+        public void SetViewpoint(double latitude, double longitude)
+        {
+            var viewpoint = new Viewpoint(latitude, longitude, 1000); // Example zoom level (10000 can be adjusted)
+            MySceneView.SetViewpointAsync(viewpoint);
+        }
+
+
 
         private void DecreaseSpeedButton_Click(object sender, RoutedEventArgs e)
         {
@@ -282,8 +374,8 @@ namespace ArcGIS_App
         }
         private void ShowFlightPlanDetailsButton_Click(object sender, RoutedEventArgs e)
         {
-            // Open the new FlightPlanDetailsWindow and pass the loaded flight plans to it
-            var flightPlanDetailsWindow = new FlightPlanDetailsWindow(flightplanlist.FlightPlans);
+            // Open the new FlightPlanDetailsWindow and pass the loaded flight plans to it, along with the MainWindow reference
+            var flightPlanDetailsWindow = new FlightPlanDetailsWindow(flightplanlist.FlightPlans, this);
             flightPlanDetailsWindow.Show();
         }
 
@@ -291,12 +383,19 @@ namespace ArcGIS_App
         private Color GetRandomColor()
         {
             Random random = new Random();
-            return Color.FromArgb(
-                (byte)random.Next(256),
-                (byte)random.Next(256),
-                (byte)random.Next(256)
-            );
+
+            // Generate a random alpha (transparency) value between 0 (transparent) and 255 (opaque)
+            byte alpha = 160;
+
+            // Generate random red, green, and blue color values
+            byte red = (byte)random.Next(256);
+            byte green = (byte)random.Next(256);
+            byte blue = (byte)random.Next(256);
+
+            // Return a color with random RGBA values, where A (alpha) is the transparency
+            return Color.FromArgb(alpha, red, green, blue);
         }
+
 
 
         private void LoadParameters_Click(object sender, RoutedEventArgs e)
