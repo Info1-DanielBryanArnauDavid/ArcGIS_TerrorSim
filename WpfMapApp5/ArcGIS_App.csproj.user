@@ -10,6 +10,9 @@
     <Compile Update="Bonjour.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="FlightPlanDetailsWindow.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="Registro.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -19,6 +22,9 @@
   </ItemGroup>
   <ItemGroup>
     <Page Update="Bonjour.xaml">
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Update="FlightPlanDetailsWindow.xaml">
       <SubType>Designer</SubType>
     </Page>
     <Page Update="MainWindow.xaml">

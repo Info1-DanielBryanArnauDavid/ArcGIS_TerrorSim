@@ -1,0 +1,52 @@
+﻿<Window x:Class="ArcGIS_App.FlightPlanDetailsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Flight Plan Details" Height="500" Width="800">
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <!-- Left column for List and SearchBar -->
+            <ColumnDefinition Width="*"/>
+            <!-- Right column for Details -->
+        </Grid.ColumnDefinitions>
+
+        <!-- Left Side: SearchBox and ListBox -->
+        <StackPanel Grid.Column="0" Margin="10">
+            <!-- Watermark Simulation for SearchBox -->
+            <Grid>
+                <!-- Label as Watermark -->
+                <Label x:Name="WatermarkLabel" Content="Search by Callsign" 
+                       HorizontalAlignment="Left" VerticalAlignment="Center" 
+                       Foreground="Gray" Margin="5,0,0,0"/>
+                <!-- TextBox for search input -->
+                <TextBox x:Name="SearchBox" Width="200" Margin="0,0,0,10" 
+                         VerticalAlignment="Top" HorizontalAlignment="Left" 
+                         KeyUp="SearchBox_KeyUp" GotFocus="SearchBox_GotFocus" 
+                         LostFocus="SearchBox_LostFocus"/>
+            </Grid>
+
+            <!-- Buttons for Sorting -->
+            <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                <!-- Sort by Callsign Button -->
+                <!-- Sort by Departure Button -->
+                <!-- Sort by Callsign Button -->
+                <!-- Sort by Departure Button -->
+                <!-- Sort by Callsign Button -->
+                <Button Content="Sort by Name" Width="100" Click="SortByName_Click"/>
+                <!-- Sort by Departure Button -->
+                <Button Content="Sort by Departure" Width="150" Click="SortByDeparture_Click"/>
+            </StackPanel>
+
+            <!-- Flight Plan List -->
+            <ListBox x:Name="FlightPlansList" Width="200" Height="350" 
+                     SelectionChanged="FlightPlansList_SelectionChanged">
+            </ListBox>
+        </StackPanel>
+
+        <!-- Right Side: Flight Plan Details -->
+        <ScrollViewer Grid.Column="1" Margin="10">
+            <TextBlock x:Name="FlightPlanDetailsText" 
+                       TextWrapping="Wrap" FontSize="14" />
+        </ScrollViewer>
+    </Grid>
+</Window>

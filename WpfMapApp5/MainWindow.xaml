@@ -7,26 +7,26 @@
     <Window.Resources>
         <!-- Style for the Slider -->
         <Style TargetType="Slider">
-            <Setter Property="Height" Value="8"/>
-            <Setter Property="Width" Value="Auto"/>
-            <Setter Property="Minimum" Value="0"/>
-            <Setter Property="Maximum" Value="100"/>
-            <Setter Property="TickFrequency" Value="1"/>
-            <Setter Property="TickPlacement" Value="BottomRight"/>
-            <Setter Property="Foreground" Value="Red"/>
-            <Setter Property="Background" Value="#E0E0E0"/>
-            <Setter Property="AutoToolTipPlacement" Value="BottomRight"/>
-            <Setter Property="IsSnapToTickEnabled" Value="True"/>
-            <Setter Property="SmallChange" Value="1"/>
-            <Setter Property="LargeChange" Value="10"/>
-            <Setter Property="Orientation" Value="Horizontal"/>
+            <Setter Property="Height" Value="8" />
+            <Setter Property="Width" Value="Auto" />
+            <Setter Property="Minimum" Value="0" />
+            <Setter Property="Maximum" Value="100" />
+            <Setter Property="TickFrequency" Value="1" />
+            <Setter Property="TickPlacement" Value="BottomRight" />
+            <Setter Property="Foreground" Value="Red" />
+            <Setter Property="Background" Value="#E0E0E0" />
+            <Setter Property="AutoToolTipPlacement" Value="BottomRight" />
+            <Setter Property="IsSnapToTickEnabled" Value="True" />
+            <Setter Property="SmallChange" Value="1" />
+            <Setter Property="LargeChange" Value="10" />
+            <Setter Property="Orientation" Value="Horizontal" />
 
             <!-- Thumb Style -->
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Slider">
                         <Grid Background="{TemplateBinding Background}">
-                            <Track Name="PART_Track" IsDirectionReversed="False" 
+                            <Track Name="PART_Track" IsDirectionReversed="False"
                                    VerticalAlignment="Stretch" HorizontalAlignment="Stretch">
                                 <Track.Thumb>
                                     <Thumb Background="Red" Width="12" Height="12" />
@@ -48,8 +48,9 @@
                 <MenuItem Header="Load _Parameters" Click="LoadParameters_Click" />
             </MenuItem>
             <MenuItem Header="_View">
-                <MenuItem Header="Toggle Waypoint Labels" Click="ToggleWaypointLabels_Click"/>
-                <MenuItem Header="Toggle Paths and Waypoints" Click="ToggleFlightPlans_Click"/>
+                <MenuItem Header="Toggle Waypoint Labels" Click="ToggleWaypointLabels_Click" />
+                <MenuItem Header="Toggle Paths and Waypoints" Click="ToggleFlightPlans_Click" />
+                <MenuItem Header="View and search for flight plans" Click="ShowFlightPlanDetailsButton_Click" />
             </MenuItem>
             <MenuItem Header="_Options" />
             <MenuItem Header="_Github" />
@@ -78,14 +79,28 @@
                     <!-- Play/Pause Button and Time Label -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0">
                         <!-- Play/Pause Button -->
+
+                        <!-- Decrease Speed Button -->
+                        <Button x:Name="DecreaseSpeedButton" Width="35" Height="30" HorizontalAlignment="Center" Click="DecreaseSpeedButton_Click" Margin="5,0">
+                            <Button.Content>
+                                <TextBlock FontSize="18" Text="&lt;&lt;"/>
+                            </Button.Content>
+                        </Button>
                         <Button x:Name="PlayPauseButton" Width="35" Height="30" HorizontalAlignment="Center" Click="PlayPauseButton_Click" Margin="5,0">
                             <Button.Content>
                                 <TextBlock x:Name="PlayPauseText" FontSize="18" Text=">" />
                             </Button.Content>
                         </Button>
 
-                        <!-- Time Label (aligned to the right of the button) -->
-                        <Label x:Name="TimeLabel" Content="Time: 00:00:00" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Center" Width="80" Margin="5,0"/>
+                        <!-- Increase Speed Button -->
+                        <Button x:Name="IncreaseSpeedButton" Width="35" Height="30" HorizontalAlignment="Center" Click="IncreaseSpeedButton_Click" Margin="5,0">
+                            <Button.Content>
+                                <TextBlock FontSize="18" Text=">>" />
+                            </Button.Content>
+                        </Button>
+
+                        <!-- Time Label -->
+                        <Label x:Name="TimeLabel" Content="Time: 00:00:00" FontSize="10" HorizontalAlignment="Right" VerticalAlignment="Center" Width="80" Margin="5,0" />
                     </StackPanel>
                 </StackPanel>
             </Border>

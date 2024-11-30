@@ -994,3 +994,5 @@ C:\Users\bolty\Desktop\ArcGIS_TerrorSim\WpfMapApp5\obj\Debug\net8.0-windows10.0.
 C:\Users\bolty\Desktop\ArcGIS_TerrorSim\WpfMapApp5\obj\Debug\net8.0-windows10.0.26100.0\ArcGIS_App.pdb
 C:\Users\bolty\Desktop\ArcGIS_TerrorSim\WpfMapApp5\obj\Debug\net8.0-windows10.0.26100.0\ArcGIS_App.genruntimeconfig.cache
 C:\Users\bolty\Desktop\ArcGIS_TerrorSim\WpfMapApp5\obj\Debug\net8.0-windows10.0.26100.0\ref\ArcGIS_App.dll
+C:\Users\bolty\Desktop\ArcGIS_TerrorSim\WpfMapApp5\obj\Debug\net8.0-windows10.0.26100.0\FlightPlanDetailsWindow.baml
+C:\Users\bolty\Desktop\ArcGIS_TerrorSim\WpfMapApp5\obj\Debug\net8.0-windows10.0.26100.0\FlightPlanDetailsWindow.g.cs

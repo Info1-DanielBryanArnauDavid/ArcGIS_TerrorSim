@@ -133,25 +133,6 @@ namespace ArcGIS_App
                         // Create a detailed message with all the flight plans' information
                         StringBuilder detailsMessage = new StringBuilder();
                         detailsMessage.AppendLine($"Successfully loaded {flightplanlist.FlightPlans.Count} flight plans.");
-
-                        foreach (var flightPlan in flightplanlist.FlightPlans)
-                        {
-                            detailsMessage.AppendLine($"Company: {flightPlan.CompanyName}");
-                            detailsMessage.AppendLine($"Callsign: {flightPlan.Callsign}");
-                            detailsMessage.AppendLine($"Aircraft: {flightPlan.Aircraft}");
-                            detailsMessage.AppendLine($"Start Time: {flightPlan.StartTime.ToString("HH:mm:ss")}");
-                            detailsMessage.AppendLine("Waypoints and Flight Levels:");
-
-                            for (int i = 0; i < flightPlan.Waypoints.Count; i++)
-                            {
-                                detailsMessage.AppendLine($"  - Waypoint: {flightPlan.Waypoints[i].ID}, Flight Level: {flightPlan.FlightLevels[i]}, Speed: {flightPlan.Speeds[i]}");
-                            }
-
-                            detailsMessage.AppendLine(); // Add extra space between flight plans
-                        }
-
-                        // Show the detailed information in a message box
-                        MessageBox.Show(detailsMessage.ToString(), "Flight Plans Loaded", MessageBoxButton.OK, MessageBoxImage.Information);
                     }
                     else
                     {
@@ -231,7 +212,7 @@ namespace ArcGIS_App
 
                 // Create a polyline from the calculated points
                 var path = new Polyline(flightPathPoints);
-                var pathSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, GetRandomColor(), 1); // Blue path
+                var pathSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, GetRandomColor(), 1);
                 var flightPathGraphic = new Graphic(path, pathSymbol);
 
                 // Add the flight path to the view model
@@ -242,6 +223,15 @@ namespace ArcGIS_App
                 flightPathGraphic.Attributes["StartTime"] = flightPlan.StartTime;
             }
 
+        }
+        private void IncreaseSpeedButton_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.IncreaseSimulationSpeed();
+        }
+
+        private void DecreaseSpeedButton_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.DecreaseSimulationSpeed();
         }
 
         private List<MapPoint> CalculateGreatCircleWithElevation(MapPoint startPoint, MapPoint endPoint, int numPoints)
@@ -289,6 +279,12 @@ namespace ArcGIS_App
             }
 
             return points;
+        }
+        private void ShowFlightPlanDetailsButton_Click(object sender, RoutedEventArgs e)
+        {
+            // Open the new FlightPlanDetailsWindow and pass the loaded flight plans to it
+            var flightPlanDetailsWindow = new FlightPlanDetailsWindow(flightplanlist.FlightPlans);
+            flightPlanDetailsWindow.Show();
         }
 
         // Helper method to generate random colors for flight paths

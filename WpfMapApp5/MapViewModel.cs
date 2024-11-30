@@ -38,6 +38,8 @@ namespace ArcGIS_App
         public bool IsPlaying => _isPlaying;
         private List<WaypointGIS> _waypoints;
         private FlightPlanListGIS _flightplans;
+        private double _speedMultiplier = 1.0;
+
 
         public MapViewModel(SceneView sceneView, Label timeLabel, Slider timelineSlider, List<WaypointGIS> waypoints, FlightPlanListGIS flightplans)
         {
@@ -82,6 +84,28 @@ namespace ArcGIS_App
         {
             UpdateTextSize();
         }
+        public void IncreaseSimulationSpeed()
+        {
+            _speedMultiplier = Math.Min(_speedMultiplier * 2, 128); // Cap at 32x
+            UpdateTimerInterval();
+        }
+
+        public void DecreaseSimulationSpeed()
+        {
+            _speedMultiplier = Math.Max(_speedMultiplier / 2, 0.125); // Min at 1/8x
+            UpdateTimerInterval();
+        }
+        private void UpdateTimerInterval()
+        {
+            if (_movementTimer != null && _movementTimer.IsEnabled)
+            {
+                _movementTimer.Interval = TimeSpan.FromMilliseconds(50 / _speedMultiplier);
+
+                // Adjust _startTime to reflect the speed change
+                _startTime = DateTime.Now.AddSeconds(-_timelineSlider.Value / _speedMultiplier);
+            }
+        }
+
         private void InitializeSimulation()
         {
             if (_flightplans == null || !_flightplans.FlightPlans.Any())
@@ -241,15 +265,27 @@ namespace ArcGIS_App
             {
                 try
                 {
-                    _movementTimer = new DispatcherTimer
+                    if (_movementTimer == null)
                     {
-                        Interval = TimeSpan.FromMilliseconds(50)
-                    };
-                    _movementTimer.Tick += MovePlanesAlongPaths;
+                        _movementTimer = new DispatcherTimer();
+                        _movementTimer.Tick += MovePlanesAlongPaths;
+                    }
+
+                    _movementTimer.Interval = TimeSpan.FromMilliseconds(50 / _speedMultiplier);
+
+                    // Adjust the start time based on the current timeline slider value
+                    if (_timelineSlider.Value > 0)
+                    {
+                        _startTime = DateTime.Now.AddSeconds(-_timelineSlider.Value / _speedMultiplier);
+                    }
+                    else
+                    {
+                        _startTime = DateTime.Now;
+                    }
+
                     _movementTimer.Start();
-                    _startTime = DateTime.Now;
                     _isPlaying = true;
-                    MessageBox.Show("Simulation Started");
+
                 }
                 catch (Exception ex)
                 {
@@ -257,19 +293,25 @@ namespace ArcGIS_App
                 }
             }
         }
+
         public void PauseSimulation()
         {
             try
             {
-                _movementTimer.Stop(); // Stop the timer
+                if (_movementTimer != null)
+                {
+                    _movementTimer.Stop();
+                }
+
                 _isPlaying = false;
-                MessageBox.Show("Simulation Paused");
+
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"Error pausing simulation: {ex.Message}");
             }
         }
+
 
         // Add terrain layer to the scene
         private void AddTerrainLayer()
@@ -286,7 +328,7 @@ namespace ArcGIS_App
             {
                 // Calculate elapsed time and current simulation time
                 TimeSpan elapsedTime = DateTime.Now - _startTime;
-                double elapsedSeconds = elapsedTime.TotalSeconds;
+                double elapsedSeconds = elapsedTime.TotalSeconds * _speedMultiplier; // Adjust for speed multiplier
                 var currentSimulationTime = _simulationStartTime.AddSeconds(elapsedSeconds);
 
                 // Update time label and slider
@@ -299,6 +341,7 @@ namespace ArcGIS_App
                 {
                     var flightStartTime = flightPlan.StartTime;
                     var flightEndTime = flightPlan.StartTime.AddSeconds(flightPlan.TotalDuration);
+
                     if (currentSimulationTime >= flightStartTime && currentSimulationTime <= flightEndTime)
                     {
                         simulationActive = true;
@@ -308,6 +351,7 @@ namespace ArcGIS_App
 
                         // Get current position
                         var currentPosition = GetPositionAtTime(flightPlan, flightElapsedTime);
+
                         // Ensure plane graphic exists and update
                         if (_planeGraphics.TryGetValue(flightPlan.Callsign, out Graphic planeGraphic))
                         {
@@ -356,63 +400,56 @@ namespace ArcGIS_App
                 MessageBox.Show($"Simulation error: {ex.Message}");
             }
         }
+
         private MapPoint GetPositionAtTime(FlightPlanGIS flightPlan, double elapsedSeconds)
         {
-            double totalDistance = 0;
-            double coveredDistance = 0;
-
-            for (int i = 1; i < flightPlan.Waypoints.Count; i++)
+            double totalDuration = flightPlan.TotalDuration;
+            if (elapsedSeconds >= totalDuration)
             {
-                var start = flightPlan.Waypoints[i - 1];
-                var end = flightPlan.Waypoints[i];
-
-                var segmentDistance = GeometryEngine.Distance(
-                    new MapPoint(start.Longitude, start.Latitude, 0, SpatialReferences.Wgs84),
-                    new MapPoint(end.Longitude, end.Latitude, 0, SpatialReferences.Wgs84)
-                );
-
-                totalDistance += segmentDistance;
-            }
-
-            double speed = Convert.ToDouble(flightPlan.Speeds[0]);
-            coveredDistance = speed * elapsedSeconds / 3600;
-
-            if (coveredDistance >= totalDistance)
-            {
+                // End of flight
                 var lastWaypoint = flightPlan.Waypoints.Last();
                 double altitude = ParseAltitude(flightPlan.FlightLevels.Last());
                 return new MapPoint(lastWaypoint.Longitude, lastWaypoint.Latitude, altitude, SpatialReferences.Wgs84);
             }
 
-            double currentDistance = 0;
+            // Find the current segment based on elapsedSeconds
+            double cumulativeTime = 0;
             for (int i = 1; i < flightPlan.Waypoints.Count; i++)
             {
-                var start = flightPlan.Waypoints[i - 1];
-                var end = flightPlan.Waypoints[i];
+                double segmentDuration = GeometryEngine.Distance(
+                    new MapPoint(flightPlan.Waypoints[i - 1].Longitude, flightPlan.Waypoints[i - 1].Latitude, 0, SpatialReferences.Wgs84),
+                    new MapPoint(flightPlan.Waypoints[i].Longitude, flightPlan.Waypoints[i].Latitude, 0, SpatialReferences.Wgs84)
+                ) / Convert.ToDouble(flightPlan.Speeds[i - 1]) * 3600; // Convert hours to seconds
 
-                var segmentDistance = GeometryEngine.Distance(
-                    new MapPoint(start.Longitude, start.Latitude, 0, SpatialReferences.Wgs84),
-                    new MapPoint(end.Longitude, end.Latitude, 0, SpatialReferences.Wgs84)
-                );
 
-                if (currentDistance + segmentDistance > coveredDistance)
+                if (cumulativeTime + segmentDuration > elapsedSeconds)
                 {
-                    double t = (coveredDistance - currentDistance) / segmentDistance;
-                    double lat = start.Latitude + t * (end.Latitude - start.Latitude);
-                    double lon = start.Longitude + t * (end.Longitude - start.Longitude);
-
-                    double startAltitude = ParseAltitude(flightPlan.FlightLevels[i - 1]);
-                    double endAltitude = ParseAltitude(flightPlan.FlightLevels[i]);
-                    double altitude = startAltitude + t * (endAltitude - startAltitude);
-
-                    return new MapPoint(lon, lat, altitude, SpatialReferences.Wgs84);
+                    double t = (elapsedSeconds - cumulativeTime) / segmentDuration;
+                    return InterpolatePosition(
+                        flightPlan.Waypoints[i - 1],
+                        flightPlan.Waypoints[i],
+                        t,
+                        ParseAltitude(flightPlan.FlightLevels[i - 1]),
+                        ParseAltitude(flightPlan.FlightLevels[i])
+                    );
                 }
 
-                currentDistance += segmentDistance;
+                cumulativeTime += segmentDuration;
             }
 
-            return new MapPoint(flightPlan.Waypoints.Last().Longitude, flightPlan.Waypoints.Last().Latitude, ParseAltitude(flightPlan.FlightLevels.Last()), SpatialReferences.Wgs84);
+            // Fallback (shouldn't reach here)
+            return null;
         }
+
+        private MapPoint InterpolatePosition(WaypointGIS start, WaypointGIS end, double t, double startAltitude, double endAltitude)
+        {
+            double lat = start.Latitude + t * (end.Latitude - start.Latitude);
+            double lon = start.Longitude + t * (end.Longitude - start.Longitude);
+            double altitude = startAltitude + t * (endAltitude - startAltitude);
+
+            return new MapPoint(lon, lat, altitude, SpatialReferences.Wgs84);
+        }
+
         private double ParseAltitude(string altitudeStr)
         {
             // Check if the altitude string has 'FL' (flight level) or 'm' (meters)
