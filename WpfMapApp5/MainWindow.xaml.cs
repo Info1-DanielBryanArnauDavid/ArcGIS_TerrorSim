@@ -60,42 +60,56 @@ namespace ArcGIS_App
             MySceneView.SetViewpointAsync(viewpoint);
         }
 
+        private OrbitGeoElementCameraController _orbitCameraController;
+
         public void StartTrackingPlane(FlightPlanGIS selectedFlightPlan)
         {
-            if (selectedFlightPlan == null)
+            if (selectedFlightPlan == null || selectedFlightPlan == _currentFlightPlan)
             {
-                // If selectedFlightPlan is null, stop tracking the current plane
-                _movementTimer.Stop(); // Stop the timer
-                _currentFlightPlan = null; // Reset the current flight plan
-                _currentCallsign = null; // Reset the callsign
-                _isTrackingPlane = false; // Update tracking status
-
-                // Reset to a default viewpoint (for example, the Iberian Peninsula)
-                var viewpoint = new Viewpoint(new Envelope(-9.6, 36.0, 3.5, 43.8, SpatialReferences.Wgs84));
-                MySceneView.SetViewpointAsync(viewpoint);
-            }
-            else if (selectedFlightPlan == _currentFlightPlan)
-            {
-                // If the same flight plan is clicked again, stop tracking it
-                _movementTimer.Stop();
-                _currentFlightPlan = null; // Reset the current flight plan
-                _currentCallsign = null; // Reset the callsign
-                _isTrackingPlane = false; // Update tracking status
-
-                // Reset the viewpoint to the default (or any other desired location)
-                var viewpoint = new Viewpoint(new Envelope(-9.6, 36.0, 3.5, 43.8, SpatialReferences.Wgs84));
-                MySceneView.SetViewpointAsync(viewpoint);
+                StopTracking();
             }
             else
             {
-                // If a new flight plan is selected, start tracking it
                 _currentFlightPlan = selectedFlightPlan;
-                _currentCallsign = selectedFlightPlan.Callsign; // Store the callsign for tracking
-
+                _currentCallsign = selectedFlightPlan.Callsign;
                 _isTrackingPlane = true;
-                _movementTimer.Start();  // Start the plane's movement timer
+
+                if (_viewModel._planeGraphics.TryGetValue(_currentCallsign, out Graphic planeGraphic))
+                {
+                    // Configure the orbit camera controller
+                    _orbitCameraController = new OrbitGeoElementCameraController(planeGraphic, 1000)
+                    {
+                        CameraPitchOffset = 45,
+                        MinCameraDistance = 500,
+                        MaxCameraDistance = 5000
+                    };
+
+                    MySceneView.CameraController = _orbitCameraController;
+
+                    // Suscribirse al evento ViewpointChanged
+                    MySceneView.ViewpointChanged += MySceneView_ViewpointChanged;
+                }
             }
         }
+
+        private void StopTracking()
+        {
+            _currentFlightPlan = null;
+            _currentCallsign = null;
+            _isTrackingPlane = false;
+
+     
+
+            // Reset to default viewpoint
+            var viewpoint = new Viewpoint(new Envelope(-9.6, 36.0, 3.5, 43.8, SpatialReferences.Wgs84));
+            MySceneView.SetViewpointAsync(viewpoint);
+
+            // Reset camera controller to default
+            MySceneView.CameraController = new GlobeCameraController();
+
+            _orbitCameraController = null;
+        }
+
 
 
         private void UpdatePlanePosition()
@@ -154,6 +168,8 @@ namespace ArcGIS_App
                 // Switch to Play icon ('>')
                 PlayPauseText.Text = ">";
                 _viewModel.PauseSimulation();
+                _viewModel.ResetMultiplier();
+                UpdateSpeedLabel();
             }
             else
             {
@@ -241,6 +257,7 @@ namespace ArcGIS_App
 
             // Visualize the flight plans (this can be handled in a separate method)
             VisualizeFlightPlans();
+            EnableControlButtons(true);
         }
 
 
@@ -265,7 +282,8 @@ namespace ArcGIS_App
                     {
                         if (int.TryParse(level.Substring(2), out int fl))
                         {
-                            heights.Add((fl * 10) / 0.3048); // Convert FL to meters (1 FL = 100 ft -> meters)
+                            // Convert FL to meters (1 FL = 100 ft -> meters), multiply by 30.48
+                            heights.Add(fl * 30.48); // Correct conversion from flight level to meters
                         }
                     }
                     else if (level.EndsWith("m")) // Altitude in meters
@@ -277,6 +295,12 @@ namespace ArcGIS_App
                     }
                 }
 
+                // Ensure there are enough heights to match the number of waypoints
+                // If there are fewer heights than waypoints, we can replicate the last height for remaining waypoints
+                while (heights.Count < flightPlan.Waypoints.Count)
+                {
+                    heights.Add(heights.Last()); // Duplicate the last height
+                }
 
                 // Create a Polyline for the flight path using great circle interpolation
                 List<MapPoint> flightPathPoints = new List<MapPoint>();
@@ -285,7 +309,7 @@ namespace ArcGIS_App
                     var startWaypoint = flightPlan.Waypoints[j];
                     var endWaypoint = flightPlan.Waypoints[j + 1];
 
-                    // Calculate great circle points between waypoints
+                    // Calculate great circle points between waypoints with elevation
                     var segmentPoints = CalculateGreatCircleWithElevation(
                         new MapPoint(startWaypoint.Longitude, startWaypoint.Latitude, heights.ElementAtOrDefault(j), SpatialReferences.Wgs84),
                         new MapPoint(endWaypoint.Longitude, endWaypoint.Latitude, heights.ElementAtOrDefault(j + 1), SpatialReferences.Wgs84),
@@ -307,23 +331,29 @@ namespace ArcGIS_App
                 flightPathGraphic.Attributes["CompanyName"] = flightPlan.CompanyName;
                 flightPathGraphic.Attributes["StartTime"] = flightPlan.StartTime;
             }
-
         }
+
         private void IncreaseSpeedButton_Click(object sender, RoutedEventArgs e)
         {
             _viewModel.IncreaseSimulationSpeed();
+            UpdateSpeedLabel();
         }
-        public void SetViewpoint(double latitude, double longitude)
-        {
-            var viewpoint = new Viewpoint(latitude, longitude, 1000); // Example zoom level (10000 can be adjusted)
-            MySceneView.SetViewpointAsync(viewpoint);
-        }
-
-
 
         private void DecreaseSpeedButton_Click(object sender, RoutedEventArgs e)
         {
             _viewModel.DecreaseSimulationSpeed();
+            UpdateSpeedLabel();
+        }
+
+        private void UpdateSpeedLabel()
+        {
+            SpeedMultiplierLabel.Content = $"Speed: {_viewModel._speedMultiplier}x";
+        }
+        private void EnableControlButtons(bool enable)
+        {
+            PlayPauseButton.IsEnabled = enable;
+            IncreaseSpeedButton.IsEnabled = enable;
+            DecreaseSpeedButton.IsEnabled = enable;
         }
 
         private List<MapPoint> CalculateGreatCircleWithElevation(MapPoint startPoint, MapPoint endPoint, int numPoints)
@@ -395,8 +425,6 @@ namespace ArcGIS_App
             // Return a color with random RGBA values, where A (alpha) is the transparency
             return Color.FromArgb(alpha, red, green, blue);
         }
-
-
 
         private void LoadParameters_Click(object sender, RoutedEventArgs e)
         {

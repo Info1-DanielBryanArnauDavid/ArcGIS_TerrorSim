@@ -20,7 +20,6 @@
             <Setter Property="SmallChange" Value="1" />
             <Setter Property="LargeChange" Value="10" />
             <Setter Property="Orientation" Value="Horizontal" />
-
             <!-- Thumb Style -->
             <Setter Property="Template">
                 <Setter.Value>
@@ -78,22 +77,24 @@
 
                     <!-- Play/Pause Button and Time Label -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0">
-                        <!-- Play/Pause Button -->
+                        <!-- Speed Multiplier Label -->
+                        <Label x:Name="SpeedMultiplierLabel" Content="Speed: 1x" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0" />
 
                         <!-- Decrease Speed Button -->
-                        <Button x:Name="DecreaseSpeedButton" Width="35" Height="30" HorizontalAlignment="Center" Click="DecreaseSpeedButton_Click" Margin="5,0">
+                        <Button x:Name="DecreaseSpeedButton" Width="35" Height="30" HorizontalAlignment="Center" Click="DecreaseSpeedButton_Click" Margin="5,0" IsEnabled="False">
                             <Button.Content>
                                 <TextBlock FontSize="18" Text="&lt;&lt;"/>
                             </Button.Content>
                         </Button>
-                        <Button x:Name="PlayPauseButton" Width="35" Height="30" HorizontalAlignment="Center" Click="PlayPauseButton_Click" Margin="5,0">
+
+                        <Button x:Name="PlayPauseButton" Width="35" Height="30" HorizontalAlignment="Center" Click="PlayPauseButton_Click" Margin="5,0" IsEnabled="False">
                             <Button.Content>
                                 <TextBlock x:Name="PlayPauseText" FontSize="18" Text=">" />
                             </Button.Content>
                         </Button>
 
                         <!-- Increase Speed Button -->
-                        <Button x:Name="IncreaseSpeedButton" Width="35" Height="30" HorizontalAlignment="Center" Click="IncreaseSpeedButton_Click" Margin="5,0">
+                        <Button x:Name="IncreaseSpeedButton" Width="35" Height="30" HorizontalAlignment="Center" Click="IncreaseSpeedButton_Click" Margin="5,0" IsEnabled="False">
                             <Button.Content>
                                 <TextBlock FontSize="18" Text=">>" />
                             </Button.Content>
