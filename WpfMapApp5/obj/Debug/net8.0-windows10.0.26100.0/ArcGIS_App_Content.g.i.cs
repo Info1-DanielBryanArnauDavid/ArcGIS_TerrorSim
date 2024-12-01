@@ -8,6 +8,10 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("recursoschulos/a320model.mtl")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("recursoschulos/a320model.obj")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("recursoschulos/simplea320model.mtl")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("recursoschulos/simplea320model.obj")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("strings.bin")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("egm96_compressed.bin")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("atmosphere_accurate_3d_ps.cso")]
