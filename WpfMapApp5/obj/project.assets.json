@@ -478,6 +478,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "Esri.ArcGISRuntime.WPF": "200.6.0",
           "Microsoft.Data.Sqlite": "9.0.0"
         },
         "compile": {
@@ -838,6 +839,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "Esri.ArcGISRuntime.WPF": "200.6.0",
           "Microsoft.Data.Sqlite": "9.0.0"
         },
         "compile": {
@@ -1198,6 +1200,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "Esri.ArcGISRuntime.WPF": "200.6.0",
           "Microsoft.Data.Sqlite": "9.0.0"
         },
         "compile": {
@@ -1558,6 +1561,7 @@
         "type": "project",
         "framework": ".NETCoreApp,Version=v8.0",
         "dependencies": {
+          "Esri.ArcGISRuntime.WPF": "200.6.0",
           "Microsoft.Data.Sqlite": "9.0.0"
         },
         "compile": {

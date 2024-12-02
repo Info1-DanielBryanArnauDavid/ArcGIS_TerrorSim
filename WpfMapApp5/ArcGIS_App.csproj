@@ -12,8 +12,6 @@
   <ItemGroup>
     <None Remove="RecursosChulos\A320model.mtl" />
     <None Remove="RecursosChulos\A320model.obj" />
-    <None Remove="RecursosChulos\SimpleA320model.mtl" />
-    <None Remove="RecursosChulos\SimpleA320model.obj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -21,12 +19,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="RecursosChulos\A320model.obj">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="RecursosChulos\SimpleA320model.mtl">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="RecursosChulos\SimpleA320model.obj">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

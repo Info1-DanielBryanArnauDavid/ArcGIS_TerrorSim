@@ -60,14 +60,10 @@ namespace ArcGIS_App
             _flightplans = flightplans;
             _sceneView.ViewpointChanged += SceneView_ViewpointChanged;
 
-            // Coordinates for Montserrat (latitude, longitude)
-            double montserratLat = 16.7424;
-            double montserratLon = -62.1875;
-
-            // Create an initial viewpoint that orbits around Montserrat
-           _scene = new Scene(BasemapStyle.ArcGISImagery)
-           {
-           };
+            _scene = new Scene(BasemapStyle.ArcGISImagery)
+            {
+                BaseSurface = new Surface()
+            };
 
             // Add terrain layer (if necessary)
             AddTerrainLayer();
@@ -85,7 +81,7 @@ namespace ArcGIS_App
             _sceneView.GraphicsOverlays.Add(_graphicsOverlay);
 
             // Initialize time label
-            _timeLabel.Content = "Time: 00:00:00";
+            _timeLabel.Content = "Time: --:--:--";
 
             // Subscribe to the timeline slider value changed event
             _timelineSlider.ValueChanged += TimelineSlider_ValueChanged;
@@ -96,6 +92,7 @@ namespace ArcGIS_App
             _sceneView.MouseDoubleClick += SceneView_UserInteractionStarted;
             _sceneView.MouseLeftButtonDown += SceneView_UserInteractionStarted;
             _sceneView.MouseRightButtonDown += SceneView_UserInteractionStarted;
+            _sceneView.MouseWheel+= SceneView_UserInteractionStarted;
 
             // Initialize orbiting
             InitializeOrbiting();
@@ -200,13 +197,11 @@ namespace ArcGIS_App
             string basePath = AppDomain.CurrentDomain.BaseDirectory;
 
             // Construct URIs for your model files located in the Resources folder
-            Uri simpleModelUri = new Uri(Path.Combine(basePath, "RecursosChulos", "SimpleA320model.obj"));
             Uri detailedModelUri = new Uri(Path.Combine(basePath, "RecursosChulos", "A320model.obj"));
 
             try
             {
                 // Load models with specified sizes
-                _farPlaneSymbol = await ModelSceneSymbol.CreateAsync(simpleModelUri, 600);
                 _closePlaneSymbol = await ModelSceneSymbol.CreateAsync(detailedModelUri, 1.5);
             }
             catch (Exception ex)

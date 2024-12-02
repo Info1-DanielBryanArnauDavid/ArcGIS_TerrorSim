@@ -1,9 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "SlilyfmhjNM=",
+  "dgSpecHash": "Wtt0Zi9VMUo=",
   "success": true,
   "projectFilePath": "C:\\Users\\bolty\\Desktop\\ArcGIS_TerrorSim\\Class\\Class.csproj",
   "expectedPackageFiles": [
+    "C:\\Users\\bolty\\.nuget\\packages\\esri.arcgisruntime\\200.6.0\\esri.arcgisruntime.200.6.0.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\esri.arcgisruntime.runtimes.win\\200.6.0\\esri.arcgisruntime.runtimes.win.200.6.0.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\esri.arcgisruntime.wpf\\200.6.0\\esri.arcgisruntime.wpf.200.6.0.nupkg.sha512",
     "C:\\Users\\bolty\\.nuget\\packages\\microsoft.data.sqlite\\9.0.0\\microsoft.data.sqlite.9.0.0.nupkg.sha512",
     "C:\\Users\\bolty\\.nuget\\packages\\microsoft.data.sqlite.core\\9.0.0\\microsoft.data.sqlite.core.9.0.0.nupkg.sha512",
     "C:\\Users\\bolty\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.10\\sqlitepclraw.bundle_e_sqlite3.2.1.10.nupkg.sha512",

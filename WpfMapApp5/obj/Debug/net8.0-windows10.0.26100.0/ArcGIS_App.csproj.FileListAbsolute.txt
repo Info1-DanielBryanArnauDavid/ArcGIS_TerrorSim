@@ -1002,5 +1002,3 @@ C:\Users\bolty\Desktop\ArcGIS_TerrorSim\WpfMapApp5\bin\Debug\net8.0-windows10.0.
 C:\Users\bolty\Desktop\ArcGIS_TerrorSim\WpfMapApp5\bin\Debug\net8.0-windows10.0.26100.0\NetTopologySuite.dll
 C:\Users\bolty\Desktop\ArcGIS_TerrorSim\WpfMapApp5\bin\Debug\net8.0-windows10.0.26100.0\RecursosChulos\A320model.mtl
 C:\Users\bolty\Desktop\ArcGIS_TerrorSim\WpfMapApp5\bin\Debug\net8.0-windows10.0.26100.0\RecursosChulos\A320model.obj
-C:\Users\bolty\Desktop\ArcGIS_TerrorSim\WpfMapApp5\bin\Debug\net8.0-windows10.0.26100.0\RecursosChulos\SimpleA320model.mtl
-C:\Users\bolty\Desktop\ArcGIS_TerrorSim\WpfMapApp5\bin\Debug\net8.0-windows10.0.26100.0\RecursosChulos\SimpleA320model.obj

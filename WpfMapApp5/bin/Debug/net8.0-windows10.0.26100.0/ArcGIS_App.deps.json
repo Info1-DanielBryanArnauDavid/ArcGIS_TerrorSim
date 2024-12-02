@@ -450,6 +450,7 @@
       "System.Memory/4.5.4": {},
       "Class/1.0.0": {
         "dependencies": {
+          "Esri.ArcGISRuntime.WPF": "200.6.0",
           "Microsoft.Data.Sqlite": "9.0.0"
         },
         "runtime": {
