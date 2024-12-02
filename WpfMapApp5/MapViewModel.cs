@@ -17,6 +17,7 @@ using System.Linq;
 using System.Diagnostics;
 using System.Threading.Tasks;
 using NetTopologySuite.Index.Quadtree;
+using NetTopologySuite.Operation.Overlay;
 
 namespace ArcGIS_App
 {
@@ -49,6 +50,10 @@ namespace ArcGIS_App
         private double _currentAngle = 0;
         private const double FAR_THRESHOLD = 10000; // meters
         private bool _isOrbiting = true;
+        private int safetyDistance;
+        private GraphicsOverlay _securityDistanceOverlay;
+        private List<Graphic> _securityDistanceGraphics = new List<Graphic>();
+
 
         // Constructor
         public MapViewModel(SceneView sceneView, Label timeLabel, Slider timelineSlider, List<WaypointGIS> waypoints, FlightPlanListGIS flightplans)
@@ -82,6 +87,11 @@ namespace ArcGIS_App
 
             // Initialize time label
             _timeLabel.Content = "Time: --:--:--";
+            _securityDistanceOverlay = new GraphicsOverlay
+            {
+                SceneProperties = new LayerSceneProperties(SurfacePlacement.Absolute)
+            };
+            _sceneView.GraphicsOverlays.Add(_securityDistanceOverlay);
 
             // Subscribe to the timeline slider value changed event
             _timelineSlider.ValueChanged += TimelineSlider_ValueChanged;
@@ -96,6 +106,11 @@ namespace ArcGIS_App
 
             // Initialize orbiting
             InitializeOrbiting();
+        }
+
+        public void LoadParameters(int valor)
+        {
+            safetyDistance=valor;
         }
         private void InitializeOrbiting()
         {
@@ -113,6 +128,51 @@ namespace ArcGIS_App
             {
                 _orbitTimer.Stop();
                 _isOrbiting = false;
+            }
+        }
+        private void AddSafetyDistanceGraphics(MapPoint planePosition)
+        {
+            // Create a symbol for the transparent red disk
+            var circleSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.FromArgb(100, 255, 0, 0),25); // Half of safetyDistance for radius
+
+            // Create a graphic for the disk at the plane's position
+            Graphic circleGraphic = new Graphic(planePosition, circleSymbol);
+
+            // Add the graphic to the security distance overlay
+            _securityDistanceOverlay.Graphics.Add(circleGraphic);
+        }
+        private bool _areCylindersVisible = false; // Track visibility state for cylinders
+        public void UpdateSafetyDistanceGraphics()
+        {
+            // Clear existing graphics
+            _securityDistanceOverlay.Graphics.Clear();
+
+            foreach (var planeGraphic in _planeGraphics.Values)
+            {
+                if (planeGraphic.Geometry is MapPoint planePosition)
+                {
+                    AddSafetyDistanceGraphics(planePosition); // Call to add graphics
+                }
+            }
+        }
+        public void ToggleSecurityDistanceCylinders()
+        {
+            _areCylindersVisible = !_areCylindersVisible; // Toggle visibility state
+
+            if (_areCylindersVisible)
+            {
+                foreach (var planeGraphic in _planeGraphics.Values)
+                {
+                    MapPoint planePosition = planeGraphic.Geometry as MapPoint; // Assuming planeGraphic has a MapPoint geometry
+                    if (planePosition != null)
+                    {
+                        AddSafetyDistanceGraphics(planePosition); // Add disk graphic for each plane
+                    }
+                }
+            }
+            else
+            {
+                _securityDistanceOverlay.Graphics.Clear(); // Clear all graphics when toggled off
             }
         }
 
@@ -535,6 +595,7 @@ namespace ArcGIS_App
                             UpdatePlaneModel(planeGraphic, _sceneView.Camera, heading, pitch, roll);
 
                             planeGraphic.IsVisible = true;
+                            UpdateSafetyDistanceGraphics();
 
                             // Update label position and visibility
                             if (_planeLabelGraphics.TryGetValue(flightPlan.Callsign, out Graphic labelGraphic))

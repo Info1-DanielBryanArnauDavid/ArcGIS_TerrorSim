@@ -234,6 +234,10 @@ namespace ArcGIS_App
         {
 
         }
+        private void Safety_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.ToggleSecurityDistanceCylinders();
+        }
         private void LoadFlightPlans_Click(object sender, RoutedEventArgs e)
         {
             // Open file dialog to select flight plans file
@@ -465,8 +469,52 @@ namespace ArcGIS_App
 
         private void LoadParameters_Click(object sender, RoutedEventArgs e)
         {
-            // Code to handle loading parameters
-            MessageBox.Show("Loading Parameters");
+            // Create a new Window for the dialog
+            Window dialog = new Window
+            {
+                Title = "Enter Safety Distance (Nautical Miles)",
+                Width = 300,
+                Height = 150,
+                WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                Owner = Window.GetWindow(this)
+            };
+
+            // Create a StackPanel to hold the input fields
+            StackPanel panel = new StackPanel { Margin = new Thickness(10) };
+
+            // Add input fields for parameters
+            TextBox parameterBox1 = new TextBox { Margin = new Thickness(5) };
+            panel.Children.Add(new TextBlock { Text = "Safety Distance:" });
+            panel.Children.Add(parameterBox1);
+
+            // Add OK and Cancel buttons
+            StackPanel buttonPanel = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = System.Windows.HorizontalAlignment.Right, Margin = new Thickness(0, 10, 0, 0) };
+            Button okButton = new Button { Content = "OK", Width = 80, Margin = new Thickness(5) };
+            Button cancelButton = new Button { Content = "Cancel", Width = 80, Margin = new Thickness(5) };
+
+            okButton.Click += (s, args) => { dialog.DialogResult = true; };
+            cancelButton.Click += (s, args) => { dialog.DialogResult = false; };
+
+            buttonPanel.Children.Add(okButton);
+            buttonPanel.Children.Add(cancelButton);
+
+            panel.Children.Add(buttonPanel);
+
+            dialog.Content = panel;
+
+            // Show the dialog and handle the result
+            if (dialog.ShowDialog() == true)
+            {
+                string param1 = parameterBox1.Text;
+                if (int.TryParse(param1, out int safetyDistance))
+                {
+                    _viewModel.LoadParameters(safetyDistance);
+                }
+                else
+                {
+                    MessageBox.Show("Invalid input. Please enter a valid integer for safety distance.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+            }
         }
     }
 }

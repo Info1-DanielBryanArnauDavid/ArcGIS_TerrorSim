@@ -51,6 +51,7 @@
                 <MenuItem Header="Toggle Waypoint Labels" Click="ToggleWaypointLabels_Click" />
                 <MenuItem Header="Toggle Paths and Waypoints" Click="ToggleFlightPlans_Click" />
                 <MenuItem Header="Toggle Plane Labels" Click="TogglePlaneLabels_Click" />
+                <MenuItem Header="Toggle Safety Distance cylinders" Click="Safety_Click" />
                 <MenuItem Header="View and search for flight plans" Click="ShowFlightPlanDetailsButton_Click" />
             </MenuItem>
             <MenuItem Header="_Options">
