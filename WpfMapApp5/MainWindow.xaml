@@ -40,6 +40,7 @@
 
     <DockPanel>
         <!-- Menu Bar -->
+        <!-- Menu Bar -->
         <Menu DockPanel.Dock="Top" Name="MainMenu">
             <MenuItem Header="_File">
                 <MenuItem Header="Load _Waypoints" Click="LoadWaypoints_Click" />
@@ -49,31 +50,36 @@
             <MenuItem Header="_View">
                 <MenuItem Header="Toggle Waypoint Labels" Click="ToggleWaypointLabels_Click" />
                 <MenuItem Header="Toggle Paths and Waypoints" Click="ToggleFlightPlans_Click" />
+                <MenuItem Header="Toggle Plane Labels" Click="TogglePlaneLabels_Click" />
                 <MenuItem Header="View and search for flight plans" Click="ShowFlightPlanDetailsButton_Click" />
             </MenuItem>
-            <MenuItem Header="_Options" />
-            <MenuItem Header="_Github" />
-            <MenuItem Header="_Help" />
+            <MenuItem Header="_Options">
+                <MenuItem Header="Fix FlightPlans" Click="FixFlightPlans_Click" />
+            </MenuItem>
+            <MenuItem Header="_Github">
+                <MenuItem Header="ArcGIS_TerrorSim" Click="OpenGithubRepo_Click" />
+            </MenuItem>
+            <MenuItem Header="_Help">
+                <MenuItem Header="Good Luck" Click="GoodLuck_Click" />
+            </MenuItem>
         </Menu>
 
         <!-- Main Content (SceneView) -->
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
             </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
 
             <esri:SceneView x:Name="MySceneView" Grid.Row="0" />
 
             <!-- Bottom Bar for controls -->
-            <Border Background="#F0F0F0" Padding="5" Height="50" DockPanel.Dock="Bottom" Opacity="0.85" Margin="0,757,0,-167">
+            <Border Grid.Row="1" Background="#F0F0F0" Padding="5" Height="50" Opacity="0.85">
                 <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" VerticalAlignment="Center" Margin="0">
                     <!-- Timeline Slider -->
                     <Slider x:Name="TimelineSlider" Width="Auto" VerticalAlignment="Center" Minimum="0" Maximum="100" Value="0" TickFrequency="1" 
-                            ValueChanged="TimelineSlider_ValueChanged" 
-                            Height="8" />
+                    ValueChanged="TimelineSlider_ValueChanged" 
+                    Height="8" />
 
                     <!-- Play/Pause Button and Time Label -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0">

@@ -26,6 +26,7 @@ namespace ArcGIS_App
         private SceneView _sceneView;
         private GraphicsOverlay _graphicsOverlay;
         public Dictionary<string, Graphic> _planeGraphics = new Dictionary<string, Graphic>();
+        public Dictionary<string, Graphic> _planeLabelGraphics = new Dictionary<string, Graphic>();
         private DateTime _simulationStartTime;
         private DateTime _simulationEndTime;
         private DispatcherTimer _movementTimer;
@@ -34,6 +35,7 @@ namespace ArcGIS_App
         private Label _timeLabel;
         private Slider _timelineSlider;
         private bool _areLabelsVisible = false; // Track visibility state
+        private bool _arePlaneLabelsVisible = false;
         private bool areFlightPlansVisible = true;
         private System.Windows.Point? _startPoint; // Nullable Point for WPF
         public bool IsPlaying => _isPlaying;
@@ -41,18 +43,11 @@ namespace ArcGIS_App
         public FlightPlanListGIS _flightplans;
         public double _speedMultiplier = 1.0;
         private ModelSceneSymbol _farPlaneSymbol;
-        private ModelSceneSymbol _midPlaneSymbol;
         private ModelSceneSymbol _closePlaneSymbol;
         private Quadtree<string> _planeSpatialIndex;
         private DispatcherTimer _orbitTimer;
         private double _currentAngle = 0;
-        private const double MontserratLat = 41.5955;
-        private const double MontserratLon = 1.83035;
-        private const double OrbitAltitude = 2500; // Meters above the mountain
-
-
         private const double FAR_THRESHOLD = 10000; // meters
-        private const double MID_THRESHOLD = 2000; // meters
         private bool _isOrbiting = true;
 
         // Constructor
@@ -72,7 +67,6 @@ namespace ArcGIS_App
             // Create an initial viewpoint that orbits around Montserrat
            _scene = new Scene(BasemapStyle.ArcGISImagery)
            {
-               InitialViewpoint = CreateInitialViewpoint()
            };
 
             // Add terrain layer (if necessary)
@@ -106,23 +100,11 @@ namespace ArcGIS_App
             // Initialize orbiting
             InitializeOrbiting();
         }
-        private Viewpoint CreateInitialViewpoint()
-        {
-            return new Viewpoint(
-                new Envelope(
-                    MontserratLon - 0.1,
-                    MontserratLat - 0.1,
-                    MontserratLon + 0.1,
-                    MontserratLat + 0.1,
-                    SpatialReferences.Wgs84
-                )
-            );
-        }
         private void InitializeOrbiting()
         {
             _orbitTimer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(40)
+                Interval = TimeSpan.FromMilliseconds(50)
             };
             _orbitTimer.Tick += OrbitCamera;
             _orbitTimer.Start();
@@ -140,64 +122,68 @@ namespace ArcGIS_App
         private void OrbitCamera(object sender, EventArgs e)
         {
             // Increment the angle more smoothly
-            _currentAngle += 1; // Reduced speed for smoother movement
+            _currentAngle += 0.0005; // Adjust this speed for slower/faster orbit
             if (_currentAngle >= 360) _currentAngle = 0;
 
             // Convert angle to radians
             double angleRad = _currentAngle * Math.PI / 180;
 
-            // More precise Montserrat mountain coordinates
-            double MontserratLat = 41.59555;
-            double MontserratLon = 1.83035;
+            // Coordinates for the center of the Earth (approximately)
+            double earthLat = 41.3;  // Latitude of the Earth's center (Equator)
+            double earthLon = 100;  // Longitude of the Earth's center (Prime Meridian)
 
-            // Increase orbit radius for a wider, smoother arc
-            double orbitRadius = 0.07; // Increased to create a more pronounced orbit
+            // Orbit radius: A very large orbit for a far-away view (e.g., 10,000 km above the surface)
+            double orbitRadius = 10000000; // Orbit radius in meters (10,000 km for a far orbit)
 
-            // Calculate orbital position using trigonometric functions
-            double orbitLat = MontserratLat + orbitRadius * Math.Sin(angleRad);
-            double orbitLon = MontserratLon + orbitRadius * Math.Cos(angleRad);
+            // Calculate orbital position using trigonometric functions (Circular path around Earth)
+            double orbitLat = earthLat; // Keep latitude fixed for a global view (i.e., equator view)
+            double orbitLon = earthLon + orbitRadius * Math.Cos(angleRad); // Longitude changes as we orbit
 
-            // Create camera at orbital position
+            // Altitude of the camera (in meters) to simulate being far away in space
+            double orbitAltitude = 14000000; // 10,000 km altitude for a high orbit
+
+            // Create the camera at orbital position
             Camera orbitCamera = new Camera(
-                orbitLat,        // Latitude of camera
-                orbitLon,        // Longitude of camera
-                OrbitAltitude,   // Altitude above surface
-                GetHeadingToMontserrat(orbitLat, orbitLon), // Heading always pointing to Montserrat
-                60,              // Reduced pitch for a more natural view
-                0                // Roll
+                orbitLat,            // Latitude of the camera
+                orbitLon,            // Longitude of the camera
+                orbitAltitude,       // Altitude (simulating the far-away orbit)
+                GetHeadingToEarth(orbitLat, orbitLon),  // Heading always pointing towards Earth
+                0,                  // Pitch (adjust for better visibility)
+                270                     // Roll (set to zero)
             );
 
-            // Create an Envelope centered precisely on Montserrat
+            // Define a large Envelope around the Earth to simulate a global view
             Envelope orbitEnvelope = new Envelope(
-                MontserratLon - orbitRadius,
-                MontserratLat - orbitRadius,
-                MontserratLon + orbitRadius,
-                MontserratLat + orbitRadius,
+                earthLon - orbitRadius,         // West longitude
+                earthLat - orbitRadius,         // South latitude
+                earthLon + orbitRadius,         // East longitude
+                earthLat + orbitRadius,         // North latitude
                 SpatialReferences.Wgs84
             );
 
-            // Create Viewpoint using Envelope and Camera
+            // Create a Viewpoint using the calculated Envelope and Camera
             Viewpoint orbitViewpoint = new Viewpoint(orbitEnvelope, orbitCamera);
 
-            // Update view
+            // Update the SceneView with the new viewpoint to simulate orbiting the planet
             _sceneView.SetViewpoint(orbitViewpoint);
         }
 
-        private double GetHeadingToMontserrat(double currentLat, double currentLon)
+        private double GetHeadingToEarth(double currentLat, double currentLon)
         {
-            // Precise Montserrat mountain coordinates
-            double MontserratLat = 41.59555;
-            double MontserratLon = 1.83035;
+            // Coordinates for Earth's center (lat = 0, lon = 0)
+            double earthLat = 0.0;
+            double earthLon = 0.0;
 
-            // Calculate bearing using more direct method
-            double dLon = MontserratLon - currentLon;
-            double dLat = MontserratLat - currentLat;
+            // Calculate bearing (heading) from current position to the Earth's center
+            double dLon = earthLon - currentLon;
+            double dLat = earthLat - currentLat;
 
             double bearing = Math.Atan2(dLon, dLat) * 180 / Math.PI;
 
-            // Normalize to 0-360 degrees
+            // Normalize the bearing to a range of 0-360 degrees
             return (bearing + 360) % 360;
         }
+
 
         private void InitializeSpatialIndex()
         {
@@ -221,7 +207,6 @@ namespace ArcGIS_App
             {
                 // Load models with specified sizes
                 _farPlaneSymbol = await ModelSceneSymbol.CreateAsync(simpleModelUri, 600);
-                _midPlaneSymbol = await ModelSceneSymbol.CreateAsync(simpleModelUri, 100);
                 _closePlaneSymbol = await ModelSceneSymbol.CreateAsync(detailedModelUri, 1.5);
             }
             catch (Exception ex)
@@ -365,20 +350,22 @@ namespace ArcGIS_App
             _waypoints = waypoints;
             _graphicsOverlay.Graphics.Clear();
 
+            // Initialize bounds for the envelope
+            double minLat = double.MaxValue, maxLat = double.MinValue;
+            double minLon = double.MaxValue, maxLon = double.MinValue;
+
             foreach (var waypoint in _waypoints)
             {
                 double height = waypoint.ID.Length == 3 ? 5000 : 20000; // Set height based on waypoint ID length
                 MapPoint basePoint = new MapPoint(waypoint.Longitude, waypoint.Latitude, 0, SpatialReferences.Wgs84);
                 MapPoint topPoint = new MapPoint(waypoint.Longitude, waypoint.Latitude, height, SpatialReferences.Wgs84);
 
-                Polyline verticalLine = new Polyline(new List<MapPoint> { basePoint, topPoint });
-
                 // Determine line color based on waypoint ID length
-                Color lineColor = waypoint.ID.Length == 3 ? Color.DarkRed : Color.White; // Dark red for three-letter names
+                Color lineColor = waypoint.ID.Length == 3 ? Color.DarkRed : Color.White;
                 SimpleLineSymbol lineSymbol = new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.FromArgb(100, lineColor.R, lineColor.G, lineColor.B), 2); // Transparent line
 
                 // Create a graphic for the vertical line
-                Graphic lineGraphic = new Graphic(verticalLine);
+                Graphic lineGraphic = new Graphic(new Polyline(new List<MapPoint> { basePoint, topPoint }));
                 lineGraphic.Symbol = lineSymbol;
                 _graphicsOverlay.Graphics.Add(lineGraphic);
 
@@ -404,8 +391,22 @@ namespace ArcGIS_App
                 var pointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.FromArgb(100, lineColor.R, lineColor.G, lineColor.B), 3); // Circle with specified color and size
                 Graphic pointGraphic = new Graphic(topPoint, pointSymbol);
                 _graphicsOverlay.Graphics.Add(pointGraphic);
-            
+
+                // Update the bounds of the envelope
+                minLat = Math.Min(minLat, waypoint.Latitude);
+                maxLat = Math.Max(maxLat, waypoint.Latitude);
+                minLon = Math.Min(minLon, waypoint.Longitude);
+                maxLon = Math.Max(maxLon, waypoint.Longitude);
             }
+
+            // Create the envelope based on the min/max latitude and longitude of the waypoints
+            Envelope waypointEnvelope = new Envelope(minLon, minLat, maxLon, maxLat, SpatialReferences.Wgs84);
+
+            // Create a viewpoint for the envelope
+            Viewpoint waypointViewpoint = new Viewpoint(waypointEnvelope);
+            _orbitTimer.Stop();
+            // Pan the camera to the new viewpoint asynchronously
+            _sceneView.SetViewpointAsync(waypointViewpoint);
         }
 
 
@@ -422,7 +423,14 @@ namespace ArcGIS_App
             }
 
         }
+
+        public void TogglePlaneLabels()
+        {
+            _arePlaneLabelsVisible = !_arePlaneLabelsVisible;
+            TogglePlaneLabels(_arePlaneLabelsVisible);
+        }
         public async Task StartSimulation()
+
         {
             if (!_isPlaying)
             {
@@ -464,8 +472,6 @@ namespace ArcGIS_App
             }
         }
 
-
-
         public void PauseSimulation()
         {
             try
@@ -488,16 +494,15 @@ namespace ArcGIS_App
         // Add terrain layer to the scene
         private void AddTerrainLayer()
         {
-            var terrainLayer = new ArcGISTiledElevationSource(new Uri("https://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/Terrain3D/ImageServer"));
+            var terrainLayer = new ArcGISTiledElevationSource(new Uri("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/TopoBathy3D/ImageServer"));
             _scene.BaseSurface.ElevationSources.Add(terrainLayer);
         }
-
-        // Add the path with elevation and calculate great circle path
 
         public void MovePlanesAlongPaths(object sender, EventArgs e)
         {
             try
             {
+                // Calculate elapsed time
                 TimeSpan elapsedTime = DateTime.Now - _startTime;
                 double elapsedSeconds = elapsedTime.TotalSeconds * _speedMultiplier;
                 var currentSimulationTime = _simulationStartTime.AddSeconds(elapsedSeconds);
@@ -518,24 +523,40 @@ namespace ArcGIS_App
                         {
                             simulationActive = true;
 
-                            var flightElapsedTime = (currentSimulationTime - flightStartTime).TotalSeconds;
-                            var currentPosition = GetPositionAtTime(flightPlan, flightElapsedTime);
-                            var nextPosition = GetPositionAtTime(flightPlan, flightElapsedTime + 1); // Look slightly ahead
+                            // Calculate the position and orientation of the plane
+                            double flightElapsedTime = (currentSimulationTime - flightStartTime).TotalSeconds;
+
+                            // Get current position along the curved path (Great Circle)
+                            var currentPosition = GetPositionAlongPath(flightPlan, flightElapsedTime);
 
                             // Calculate orientation (heading, pitch, roll)
-                            double heading = CalculateHeading(flightPlan, flightElapsedTime);
-                            double pitch = CalculatePitch(currentPosition, nextPosition, previousPitch: 0); // Smooth pitch
-                            double roll = CalculateRoll(flightPlan, flightElapsedTime);
+                            var nextPosition = GetPositionAlongPath(flightPlan, flightElapsedTime + 1); // Look ahead
+                            double heading = CalculateHeading(currentPosition, nextPosition);
+                            double pitch = CalculatePitch(currentPosition, nextPosition);
+                            double roll = CalculateRoll(flightPlan, flightElapsedTime, heading);
 
-                            // Update plane's position and orientation
+                            // Update the plane's position and orientation
                             planeGraphic.Geometry = currentPosition;
                             UpdatePlaneModel(planeGraphic, _sceneView.Camera, heading, pitch, roll);
 
                             planeGraphic.IsVisible = true;
+
+                            // Update label position and visibility
+                            if (_planeLabelGraphics.TryGetValue(flightPlan.Callsign, out Graphic labelGraphic))
+                            {
+                                labelGraphic.Geometry = currentPosition;
+                                labelGraphic.IsVisible = _arePlaneLabelsVisible;
+                            }
                         }
                         else
                         {
-                            planeGraphic.IsVisible = false; // Hide planes outside active time
+                            planeGraphic.IsVisible = false; // Hide planes outside their active time
+
+                            // Hide label for inactive planes
+                            if (_planeLabelGraphics.TryGetValue(flightPlan.Callsign, out Graphic labelGraphic))
+                            {
+                                labelGraphic.IsVisible = false;
+                            }
                         }
                     }
                 }
@@ -555,50 +576,144 @@ namespace ArcGIS_App
         }
 
 
-        private double CalculatePitch(MapPoint currentPosition, MapPoint nextPosition, double previousPitch)
+        private MapPoint GetPositionAlongPath(FlightPlanGIS flightPlan, double elapsedTime)
         {
-            if (currentPosition == null || nextPosition == null) return previousPitch;
+            if (flightPlan.Waypoints.Count < 2)
+            {
+                return null;
+            }
 
-            // Calculate differences in position and altitude
-            double deltaX = nextPosition.X - currentPosition.X;
-            double deltaY = nextPosition.Y - currentPosition.Y;
+            double segmentDuration = 0;
+            for (int i = 0; i < flightPlan.Waypoints.Count - 1; i++)
+            {
+                var startPoint = new MapPoint(flightPlan.Waypoints[i].Longitude, flightPlan.Waypoints[i].Latitude, SpatialReferences.Wgs84);
+                var endPoint = new MapPoint(flightPlan.Waypoints[i + 1].Longitude, flightPlan.Waypoints[i + 1].Latitude, SpatialReferences.Wgs84);
+
+                GeodeticDistanceResult distanceResult = GeometryEngine.DistanceGeodetic(
+                    startPoint,
+                    endPoint,
+                    LinearUnits.Kilometers,
+                    AngularUnits.Degrees,
+                    GeodeticCurveType.Geodesic
+                );
+
+                double segmentDistance = distanceResult.Distance;
+                double segmentSpeed = double.Parse(flightPlan.Speeds[i]);
+                double segmentTime = (segmentDistance / segmentSpeed) * 3600; // Tiempo en segundos
+
+                segmentDuration += segmentTime;
+
+                if (elapsedTime <= segmentDuration)
+                {
+                    double timeInSegment = elapsedTime - (segmentDuration - segmentTime);
+                    double segmentFraction = timeInSegment / segmentTime;
+
+                    MapPoint interpolatedPoint = (MapPoint)GeometryEngine.MoveGeodetic(
+                        new[] { startPoint },
+                        segmentDistance * segmentFraction,
+                        LinearUnits.Kilometers,
+                        distanceResult.Azimuth1,
+                        AngularUnits.Degrees,
+                        GeodeticCurveType.Geodesic
+                    )[0];
+
+                    double startAltitude = ConvertFlightLevelToMeters(flightPlan.FlightLevels[i]);
+                    double endAltitude = ConvertFlightLevelToMeters(flightPlan.FlightLevels[i + 1]);
+                    double interpolatedAltitude = startAltitude + segmentFraction * (endAltitude - startAltitude);
+
+                    return new MapPoint(interpolatedPoint.X, interpolatedPoint.Y, interpolatedAltitude, SpatialReferences.Wgs84);
+                }
+            }
+
+            var lastWaypoint = flightPlan.Waypoints.Last();
+            double lastAltitude = ConvertFlightLevelToMeters(flightPlan.FlightLevels.Last());
+            return new MapPoint(lastWaypoint.Longitude, lastWaypoint.Latitude, lastAltitude, SpatialReferences.Wgs84);
+        }
+
+        private double ConvertFlightLevelToMeters(string flightLevel)
+        {
+            // Check if the flight level is in the FLXX format (e.g., FL100, FL350)
+            if (flightLevel.StartsWith("FL", StringComparison.OrdinalIgnoreCase))
+            {
+                string levelStr = flightLevel.Substring(2); // Remove "FL"
+                if (double.TryParse(levelStr, out double flightLevelFeet))
+                {
+                    // Convert from FLXX (feet) to meters
+                    return flightLevelFeet * 100 * 0.3048; // 1 foot = 0.3048 meters
+                }
+                else
+                {
+                    throw new FormatException($"Invalid flight level format: {flightLevel}");
+                }
+            }
+            // Check if the flight level is in meters (e.g., "3000m" or "3500.5m")
+            else if (flightLevel.EndsWith("m", StringComparison.OrdinalIgnoreCase))
+            {
+                // Remove the "m" and parse the remaining value
+                string levelStr = flightLevel.Substring(0, flightLevel.Length - 1); // Remove "m"
+                if (double.TryParse(levelStr, out double altitudeMeters))
+                {
+                    // If it's already in meters, return as-is
+                    return altitudeMeters;
+                }
+                else
+                {
+                    throw new FormatException($"Invalid altitude format: {flightLevel}");
+                }
+            }
+            else
+            {
+                throw new FormatException($"Invalid flight level or altitude format: {flightLevel}");
+            }
+        }
+
+
+        private double CalculateHeading(MapPoint currentPosition, MapPoint nextPosition)
+        {
+            // Use the Geodesic to calculate bearing (heading) from current position to next position
+            double lat1 = currentPosition.Y * Math.PI / 180.0; // Convert to radians
+            double lon1 = currentPosition.X * Math.PI / 180.0;
+            double lat2 = nextPosition.Y * Math.PI / 180.0;
+            double lon2 = nextPosition.X * Math.PI / 180.0;
+
+            double deltaLon = lon2 - lon1;
+            double deltaLat = lat2 - lat1;
+
+            double x = Math.Sin(deltaLon) * Math.Cos(lat2);
+            double y = Math.Cos(lat1) * Math.Sin(lat2) - Math.Sin(lat1) * Math.Cos(lat2) * Math.Cos(deltaLon);
+
+            double azimuth = 180+Math.Atan2(x, y) * 180.0 / Math.PI; // Convert from radians to degrees
+
+            return (azimuth + 360) % 360; // Normalize to 0-360 degrees
+        }
+
+        private double CalculatePitch(MapPoint currentPosition, MapPoint nextPosition)
+        {
+            // Calculate pitch based on the altitude difference between current and next position
             double deltaZ = nextPosition.Z - currentPosition.Z;
+            double horizontalDistance = GeometryEngine.DistanceGeodetic(
+                currentPosition,
+                nextPosition,
+                LinearUnits.Meters, AngularUnits.Degrees, GeodeticCurveType.Geodesic).Distance;
 
-            // Distance in horizontal plane (XY)
-            double horizontalDistance = Math.Sqrt(deltaX * deltaX + deltaY * deltaY);
-
-            // Calculate pitch angle (reversed sign for proper orientation)
-            double pitch = Math.Atan2(deltaZ, horizontalDistance) * (180 / Math.PI); // Convert radians to degrees
-
-            // Apply a cap on pitch (to avoid unrealistic climb or descent angles)
-            double maxPitch = 30; // Max climb/descent angle (adjust this as needed)
-            pitch = Math.Min(Math.Max(pitch, -maxPitch), maxPitch);  // Clamp pitch to reasonable range
-
-            // Smooth the pitch change to avoid overshooting
-            double smoothedPitch = previousPitch + 0.1 * (pitch - previousPitch); // Smooth transition (0.1 can be adjusted)
-            return smoothedPitch;
+            // Invert the sign to correct the direction
+            return -Math.Atan2(deltaZ, horizontalDistance) * (180 / Math.PI); // Pitch in degrees
         }
-
-
-        private double CalculateRoll(FlightPlanGIS flightPlan, double elapsedTime)
+        private double CalculateRoll(FlightPlanGIS flightPlan, double elapsedTime, double currentHeading)
         {
-            const double rollSensitivity = 0.5; // Adjust for desired roll intensity
+            // Use the heading difference between two points to calculate roll
+            double nextHeading = CalculateHeading(
+                GetPositionAlongPath(flightPlan, elapsedTime),
+                GetPositionAlongPath(flightPlan, elapsedTime + 1)
+            );
 
-            // Current and next headings
-            double currentHeading = CalculateHeading(flightPlan, elapsedTime);
-            double nextHeading = CalculateHeading(flightPlan, elapsedTime + 1);
-
-            // Change in heading
             double deltaHeading = nextHeading - currentHeading;
+            deltaHeading = (deltaHeading + 360) % 360; // Normalize to 0-360
+            if (deltaHeading > 180) deltaHeading -= 360; // Normalize to -180 to 180
 
-            // Normalize to -180 to 180 range
-            deltaHeading = (deltaHeading + 360) % 360;
-            if (deltaHeading > 180) deltaHeading -= 360;
-
-            // Calculate roll proportional to deltaHeading
-            double roll = rollSensitivity * deltaHeading;
-            return roll;
+            return deltaHeading * 0.1; // Adjust roll sensitivity
         }
+
 
         private void UpdatePlaneModel(Graphic planeGraphic, Camera camera, double heading, double pitch, double roll)
         {
@@ -609,150 +724,38 @@ namespace ArcGIS_App
                     planePosition, camera.Location,
                     LinearUnits.Meters, AngularUnits.Degrees, GeodeticCurveType.Geodesic).Distance;
 
-                // Determine the LOD based on distance
-                if (distance > FAR_THRESHOLD)
+                if (distance > FAR_THRESHOLD / 2)
                 {
-                    // Use a simple point marker for far distances
-                    var pointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, Color.Red, 8);
+                    // Marker behavior: fades from red to white as it gets closer
+
+                    // Size: Starts at 10 (far) and shrinks to 3 (closer)
+                    double size = Math.Clamp(10 - (FAR_THRESHOLD - distance) / 1000, 3, 10);
+
+                    // Color: Fades from red (255, 0, 0) to white (255, 255, 255)
+                    int fadeValue = (int)Math.Clamp((FAR_THRESHOLD - distance) / 10, 0, 255); // Starts at 0 and increases to 255
+                    var color = Color.FromArgb(255, 255, fadeValue, fadeValue); // Red fades to white
+
+                    var pointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, color, size);
                     planeGraphic.Symbol = pointSymbol;
-                }
-                else if (distance > MID_THRESHOLD)
-                {
-                    // Use a mid-detail 3D model
-                    planeGraphic.Symbol = _midPlaneSymbol;
                 }
                 else
                 {
-                    // Use the full-detail 3D model for close distances
+                    // Switch to the detailed 3D model when close
                     planeGraphic.Symbol = _closePlaneSymbol;
 
-                    // Apply orientation (only to the detailed model)
+                    // Apply orientation (heading, pitch, roll)
                     if (planeGraphic.Symbol is ModelSceneSymbol modelSymbol)
                     {
-                        // Correct orientation application:
-                        // Heading (Yaw), Pitch (Climb/Descent), and Roll (Banking)
-
-                        modelSymbol.Heading = heading; // Yaw (rotate around the vertical axis)
-
-                        // Correct Pitch: Normalize to realistic values
-                        modelSymbol.Pitch = pitch;     // Pitch (rotate around the horizontal axis)
-                        modelSymbol.Roll = roll;       // Roll (rotate around the plane's longitudinal axis)
+                        modelSymbol.Heading = heading;
+                        modelSymbol.Pitch = pitch;
+                        modelSymbol.Roll = roll;
                     }
                 }
             }
+
+
         }
 
-
-        private double CalculateHeading(FlightPlanGIS flightPlan, double elapsedTime)
-        {
-            const double delta = 1; // Small time delta for more accurate heading calculation
-            MapPoint currentPosition = GetPositionAtTime(flightPlan, elapsedTime);
-            MapPoint nextPosition = GetPositionAtTime(flightPlan, elapsedTime + delta); // Look slightly ahead
-
-            if (currentPosition != null && nextPosition != null)
-            {
-                // Calculate differences in the X and Y positions
-                double deltaX = nextPosition.X - currentPosition.X;
-                double deltaY = nextPosition.Y - currentPosition.Y;
-
-                // Calculate heading in degrees (atan2 gives the angle in radians, so we convert it)
-                double heading =125+ Math.Atan2(deltaY, deltaX) * (180 / Math.PI);
-
-                // Normalize heading to 0-360 range
-                heading = (heading + 360) % 360;
-
-                return heading;
-            }
-
-            return 0; // Default heading if calculation is not possible
-        }
-
-
-
-
-        private MapPoint GetPositionAtTime(FlightPlanGIS flightPlan, double elapsedTime)
-        {
-            // Ensure waypoints exist
-            if (flightPlan.Waypoints.Count < 2)
-            {
-                return null; // Can't calculate position with less than two waypoints
-            }
-
-            // Find the segment of the flight we're currently on
-            double segmentDuration = 0;
-            for (int i = 0; i < flightPlan.Waypoints.Count - 1; i++)
-            {
-                // Calculate duration for each segment based on the distance and speed
-                double segmentDistance = CalculateDistance(flightPlan.Waypoints[i], flightPlan.Waypoints[i + 1]);
-                double segmentSpeed = double.Parse(flightPlan.Speeds[i]);  // Assuming the speeds are in km/h or other units
-                double segmentTime = (segmentDistance / segmentSpeed) * 3600; // Time in seconds for this segment
-
-                segmentDuration += segmentTime;
-
-                if (elapsedTime <= segmentDuration)
-                {
-                    // Interpolate position and altitude for this segment
-
-                    // Calculate the time elapsed on this segment (relative to the start of the segment)
-                    double timeInSegment = elapsedTime - (segmentDuration - segmentTime);
-
-                    // Interpolate position along the segment
-                    double segmentFraction = timeInSegment / segmentTime;
-
-                    // Get the current waypoint and the next waypoint
-                    var startWaypoint = flightPlan.Waypoints[i];
-                    var endWaypoint = flightPlan.Waypoints[i + 1];
-
-                    // Interpolate the position (latitude, longitude)
-                    double currentLatitude = startWaypoint.Latitude + segmentFraction * (endWaypoint.Latitude - startWaypoint.Latitude);
-                    double currentLongitude = startWaypoint.Longitude + segmentFraction * (endWaypoint.Longitude - startWaypoint.Longitude);
-
-                    // Directly use the flight plan altitude values for interpolation
-                    double startAltitude = ParseAltitude(flightPlan.FlightLevels[i]); // This is AMSL (Above Mean Sea Level)
-                    double endAltitude = ParseAltitude(flightPlan.FlightLevels[i + 1]); // This is AMSL (Above Mean Sea Level)
-
-                    // Interpolate altitude between the two waypoints based on time
-                    double currentAltitude = startAltitude + segmentFraction * (endAltitude - startAltitude);
-
-                    // Return the calculated position
-                    return new MapPoint(currentLongitude, currentLatitude, currentAltitude, SpatialReferences.Wgs84);
-                }
-            }
-
-            // If no segment matched, return the last waypoint's position
-            var lastWaypoint = flightPlan.Waypoints.Last();
-            double lastAltitude = ParseAltitude(flightPlan.FlightLevels.Last());
-            return new MapPoint(lastWaypoint.Longitude, lastWaypoint.Latitude, lastAltitude, SpatialReferences.Wgs84);
-        }
-
-
-
-
-        private double CalculateDistance(WaypointGIS startWaypoint, WaypointGIS endWaypoint)
-        {
-            const double R = 6371; // Earth radius in kilometers
-
-            // Convert degrees to radians
-            double lat1 = startWaypoint.Latitude * (Math.PI / 180);
-            double lon1 = startWaypoint.Longitude * (Math.PI / 180);
-            double lat2 = endWaypoint.Latitude * (Math.PI / 180);
-            double lon2 = endWaypoint.Longitude * (Math.PI / 180);
-
-            // Haversine formula
-            double dlat = lat2 - lat1;
-            double dlon = lon2 - lon1;
-
-            double a = Math.Sin(dlat / 2) * Math.Sin(dlat / 2) +
-                       Math.Cos(lat1) * Math.Cos(lat2) *
-                       Math.Sin(dlon / 2) * Math.Sin(dlon / 2);
-
-            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-
-            // Distance in kilometers
-            double distance = R * c;
-
-            return distance;
-        }
         private double ParseAltitude(string altitudeStr, double terrainHeight = 0)
         {
             // Check if the altitude string has 'FL' (flight level), 'm' (meters), or 'AGL' (above ground level)
@@ -836,11 +839,34 @@ namespace ArcGIS_App
                 {
                     _graphicsOverlay.Graphics.Remove(existingGraphic);
                 }
+                if (_planeLabelGraphics.TryGetValue(callsign, out Graphic existingLabelGraphic))
+                {
+                    _graphicsOverlay.Graphics.Remove(existingLabelGraphic);
+                }
 
-                // Use shared model instances
+                // Create the plane graphic
                 Graphic planeGraphic = new Graphic(startingPoint, _farPlaneSymbol);
                 _graphicsOverlay.Graphics.Add(planeGraphic);
                 _planeGraphics[callsign] = planeGraphic;
+
+                // Create the label graphic
+                TextSymbol labelSymbol = new TextSymbol
+                {
+                    Text = callsign,
+                    Color = System.Drawing.Color.Black,
+                    Size = 12,
+                    FontWeight = Esri.ArcGISRuntime.Symbology.FontWeight.Bold,
+                    HorizontalAlignment = Esri.ArcGISRuntime.Symbology.HorizontalAlignment.Center,
+                    VerticalAlignment = Esri.ArcGISRuntime.Symbology.VerticalAlignment.Bottom,
+                    BackgroundColor = System.Drawing.Color.White,
+                    OutlineColor = System.Drawing.Color.Black,
+                    OutlineWidth = 1
+                };
+
+                Graphic labelGraphic = new Graphic(startingPoint, labelSymbol);
+                labelGraphic.IsVisible = _arePlaneLabelsVisible;
+                _graphicsOverlay.Graphics.Add(labelGraphic);
+                _planeLabelGraphics[callsign] = labelGraphic;
 
                 return planeGraphic;
             }
@@ -848,6 +874,18 @@ namespace ArcGIS_App
             {
                 Console.WriteLine($"Error adding plane graphic: {ex.Message}");
                 return null;
+            }
+        }
+        private void TogglePlaneLabels(bool isVisible)
+        {
+            _arePlaneLabelsVisible = isVisible;
+            _arePlaneLabelsVisible = isVisible;
+            foreach (var planeGraphic in _planeGraphics.Values)
+            {
+                if (planeGraphic is Graphic labelGraphic)
+                {
+                    labelGraphic.IsVisible = isVisible;
+                }
             }
         }
 

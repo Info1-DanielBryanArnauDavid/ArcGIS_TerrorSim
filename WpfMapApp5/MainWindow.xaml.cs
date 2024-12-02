@@ -26,6 +26,7 @@ namespace ArcGIS_App
         private int _currentWaypointIndex = 0;
         private DateTime _startTime;
         private MapPoint _currentPlanePosition;
+        private OrbitGeoElementCameraController _orbitCameraController;
         private string _currentCallsign; // To store the callsign of the plane being tracked
         public MainWindow()
         {
@@ -60,13 +61,11 @@ namespace ArcGIS_App
             MySceneView.SetViewpointAsync(viewpoint);
         }
 
-        private OrbitGeoElementCameraController _orbitCameraController;
-
         public void StartTrackingPlane(FlightPlanGIS selectedFlightPlan)
         {
             if (selectedFlightPlan == null || selectedFlightPlan == _currentFlightPlan)
             {
-                StopTracking();
+                StopTracking(); // Stop tracking if the plane is already being tracked or no plane is selected.
             }
             else
             {
@@ -76,8 +75,8 @@ namespace ArcGIS_App
 
                 if (_viewModel._planeGraphics.TryGetValue(_currentCallsign, out Graphic planeGraphic))
                 {
-                    // Configure the orbit camera controller
-                    _orbitCameraController = new OrbitGeoElementCameraController(planeGraphic, 1000)
+                    // Configure the orbit camera controller to track the plane
+                    _orbitCameraController = new OrbitGeoElementCameraController(planeGraphic, 300)
                     {
                         CameraPitchOffset = 45,
                         MinCameraDistance = 100,
@@ -86,11 +85,26 @@ namespace ArcGIS_App
 
                     MySceneView.CameraController = _orbitCameraController;
 
-                    // Suscribirse al evento ViewpointChanged
+                    // Subscribe to the ViewpointChanged event if needed (optional)
                     MySceneView.ViewpointChanged += MySceneView_ViewpointChanged;
                 }
+
+                // Start listening to mouse click events to stop tracking
+                MySceneView.MouseLeftButtonDown += SceneView_MouseLeftButtonDown;
             }
         }
+        private void SceneView_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            // Check if we're tracking a plane
+            if (_isTrackingPlane)
+            {
+                // Stop tracking the plane
+                StopTracking();  // Stop tracking the plane when the left mouse click occurs
+
+                // Optionally: Reset other properties or behaviors when stopping the tracking.
+            }
+        }
+
 
         private void StopTracking()
         {
@@ -98,17 +112,23 @@ namespace ArcGIS_App
             _currentCallsign = null;
             _isTrackingPlane = false;
 
-     
-
-            // Reset to default viewpoint
+            // Reset to default viewpoint or another desired viewpoint
             var viewpoint = new Viewpoint(new Envelope(-9.6, 36.0, 3.5, 43.8, SpatialReferences.Wgs84));
             MySceneView.SetViewpointAsync(viewpoint);
 
-            // Reset camera controller to default
+            // Reset camera controller to default (optional)
             MySceneView.CameraController = new GlobeCameraController();
 
+            // Clean up or reset other tracking-related settings as needed
             _orbitCameraController = null;
+
+            // Unsubscribe from the ViewpointChanged event if needed
+            MySceneView.ViewpointChanged -= MySceneView_ViewpointChanged;
+
+            // Unsubscribe from MouseLeftButtonDown to stop further tracking
+            MySceneView.MouseLeftButtonDown -= SceneView_MouseLeftButtonDown;
         }
+
 
 
 
@@ -196,6 +216,23 @@ namespace ArcGIS_App
         private void ToggleWaypointLabels_Click(object sender, RoutedEventArgs e)
         {
             _viewModel.ToggleWaypointLabels(); // Call the method to toggle labels
+        }
+        private void FixFlightPlans_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+        private void OpenGithubRepo_Click(object sender, RoutedEventArgs e)
+        {
+            string url = "https://github.com/Info1-DanielBryanArnauDavid/ArcGIS_TerrorSim/tree/Fas3.1";
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url) { UseShellExecute = true });
+        }
+        private void TogglePlaneLabels_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.TogglePlaneLabels(); // Call the method to toggle labels
+        }
+        private void GoodLuck_Click(object sender, RoutedEventArgs e)
+        {
+
         }
         private void LoadFlightPlans_Click(object sender, RoutedEventArgs e)
         {
