@@ -109,7 +109,7 @@ namespace Class
                         }
                         else
                         {
-                            Console.WriteLine($"Waypoint not jodido: {waypointName}");
+                            Console.WriteLine($"Waypoint not guay: {waypointName}");
                         }
                     }
                 }
