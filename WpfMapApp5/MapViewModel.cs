@@ -122,7 +122,7 @@ namespace ArcGIS_App
         {
             _orbitTimer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(20)
+                Interval = TimeSpan.FromMilliseconds(40)
             };
             _orbitTimer.Tick += OrbitCamera;
             _orbitTimer.Start();
@@ -151,7 +151,7 @@ namespace ArcGIS_App
             double MontserratLon = 1.83035;
 
             // Increase orbit radius for a wider, smoother arc
-            double orbitRadius = 0.05; // Increased to create a more pronounced orbit
+            double orbitRadius = 0.07; // Increased to create a more pronounced orbit
 
             // Calculate orbital position using trigonometric functions
             double orbitLat = MontserratLat + orbitRadius * Math.Sin(angleRad);

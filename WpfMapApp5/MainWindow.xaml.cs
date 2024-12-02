@@ -80,8 +80,8 @@ namespace ArcGIS_App
                     _orbitCameraController = new OrbitGeoElementCameraController(planeGraphic, 1000)
                     {
                         CameraPitchOffset = 45,
-                        MinCameraDistance = 500,
-                        MaxCameraDistance = 5000
+                        MinCameraDistance = 100,
+                        MaxCameraDistance = 10000
                     };
 
                     MySceneView.CameraController = _orbitCameraController;
