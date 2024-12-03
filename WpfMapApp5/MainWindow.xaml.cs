@@ -2,6 +2,7 @@
 using System.Windows;
 using System.Drawing;
 using Esri.ArcGISRuntime.UI.Controls;
+using System.Globalization;
 using System.Windows.Controls;
 using System.Windows.Threading;
 using Class;
@@ -168,6 +169,7 @@ namespace ArcGIS_App
         }
         private List<WaypointGIS> LoadWaypoints()
         {
+
             Microsoft.Win32.OpenFileDialog openFileDialog = new Microsoft.Win32.OpenFileDialog();
             openFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
             openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments);

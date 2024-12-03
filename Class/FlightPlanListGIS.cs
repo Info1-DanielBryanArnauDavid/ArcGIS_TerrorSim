@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -35,10 +36,13 @@ namespace Class
                     if (parts.Length == 3)
                     {
                         var id = parts[0].Trim();
-                        if (double.TryParse(parts[1].Trim(), out double lat) && double.TryParse(parts[2].Trim(), out double lon))
+                        if (double.TryParse(parts[1].Trim(), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double lat) &&
+                        double.TryParse(parts[2].Trim(), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double lon))
                         {
                             waypoints.Add(new WaypointGIS(id, lat, lon));
+                            Debug.WriteLine(parts[2]);
                         }
+
                         else
                         {
                             Console.WriteLine($"Invalid latitude or longitude values in line: {line}");

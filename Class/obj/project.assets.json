@@ -1187,24 +1187,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\bolty\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\BRYAN\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\bolty\\Desktop\\ArcGIS_TerrorSim\\Class\\Class.csproj",
+      "projectUniqueName": "C:\\Users\\BRYAN\\Source\\Repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\Class\\Class.csproj",
       "projectName": "Class",
-      "projectPath": "C:\\Users\\bolty\\Desktop\\ArcGIS_TerrorSim\\Class\\Class.csproj",
-      "packagesPath": "C:\\Users\\bolty\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\bolty\\Desktop\\ArcGIS_TerrorSim\\Class\\obj\\",
+      "projectPath": "C:\\Users\\BRYAN\\Source\\Repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\Class\\Class.csproj",
+      "packagesPath": "C:\\Users\\BRYAN\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\BRYAN\\Source\\Repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\Class\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\bolty\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\BRYAN\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -1228,9 +1223,8 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "all"
-      },
-      "SdkAnalysisLevel": "9.0.100"
+        "auditMode": "direct"
+      }
     },
     "frameworks": {
       "net8.0-windows10.0.26100": {
@@ -1259,18 +1253,18 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.Windows.SDK.NET.Ref",
-            "version": "[10.0.26100.54, 10.0.26100.54]"
+            "version": "[10.0.26100.34, 10.0.26100.34]"
           }
         ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           },
-          "Microsoft.Windows.SDK.NET.Ref.Windows": {
+          "Microsoft.Windows.SDK.NET.Ref": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
   }
