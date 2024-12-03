@@ -27,9 +27,13 @@ namespace ArcGIS_App
         // Method to update the progress bar
         public void UpdateProgress(double progress)
         {
-            CollisionProgressBar.Value = progress;
+            Dispatcher.Invoke(() =>
+            {
+                CollisionProgressBar.Value = progress;
+            });
         }
 
+        //metodo de añadir a la datagridview
 
     }
     public class CollisionData
