@@ -165,7 +165,6 @@ namespace ArcGIS_App
                 MessageBox.Show($"An error occurred while generating the report: {ex.Message}");
             }
         }
-
         private void GenerateReportInBackground(CollisionReportWindow reportWindow)
         {
             try
@@ -178,6 +177,8 @@ namespace ArcGIS_App
                 double progress = 0; // Initial progress value
 
                 reportWindow.UpdateProgress(progress);  // Initialize progress bar
+
+                List<CollisionData> collisionDataList = new List<CollisionData>();  // To store collision data
 
                 // Loop through each pair of flight plans
                 for (int i = 0; i < _flightplans.FlightPlans.Count; i++)
@@ -192,13 +193,19 @@ namespace ArcGIS_App
                         // Detect collisions between the two planes
                         List<Tuple<string, string, DateTime, DateTime>> collisions = CollisionDetection.DetectCollisionsBetweenPlanes(flightPlan1, flightPlan2, _waypoints, safetyDistance * 1852);
 
-                        // Format the detected collisions and append to the report
+                        // Format the detected collisions and add to collisionDataList
                         foreach (var collision in collisions)
                         {
-                            string collisionInfo = $"{flightPlan1.Callsign} - {flightPlan2.Callsign} - " +
-                                                   $"{collision.Item3:HH:mm:ss} - {collision.Item4:HH:mm:ss} - " +
-                                                   $"{collision.Item1} - {collision.Item2}";
-                            collisionReport.AppendLine(collisionInfo);
+                            CollisionData collisionData = new CollisionData
+                            {
+                                Callsign1 = flightPlan1.Callsign,
+                                Callsign2 = flightPlan2.Callsign,
+                                CollisionStart = collision.Item3.ToString("HH:mm:ss"),
+                                CollisionEnd = collision.Item4.ToString("HH:mm:ss"),
+                                FLcallsign1 = collision.Item1,
+                                FLcallsign2 = collision.Item2
+                            };
+                            collisionDataList.Add(collisionData);
                         }
 
                         // Update progress bar after each pair is processed
@@ -207,11 +214,9 @@ namespace ArcGIS_App
                     }
                 }
 
-                // When finished, show the final result (or pass data to update the UI)
-                MessageBox.Show("Collision Report Generated!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                // Once all collision detection is done, pass the collected data to the window
+                reportWindow.LoadCollisionData(collisionDataList);
 
-                // Optionally, update the DataGrid or handle the final result here (for example, display the report)
-                // If you need to populate the DataGrid, you can pass `collisionReport` to the next window.
             }
             catch (Exception ex)
             {

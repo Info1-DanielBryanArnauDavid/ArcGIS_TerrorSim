@@ -127,7 +127,7 @@ namespace Class
         {
             double totalDuration = 0;
 
-            // Assume some reasonable climb and descent rates (in meters per second)
+            // Assume reasonable climb and descent rates (in meters per second)
             const double climbRate = 5.0;  // meters per second (climbing)
             const double descentRate = 3.0;  // meters per second (descending)
 

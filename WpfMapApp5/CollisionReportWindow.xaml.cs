@@ -25,13 +25,26 @@ namespace ArcGIS_App
         }
 
         // Method to update the progress bar
+        // Method to update the progress bar
         public void UpdateProgress(double progress)
         {
+            // Use Dispatcher to ensure updates are done on the UI thread
             Dispatcher.Invoke(() =>
             {
                 CollisionProgressBar.Value = progress;
             });
         }
+
+        // Method to load the collision data into the DataGrid
+        public void LoadCollisionData(List<CollisionData> collisionData)
+        {
+            // Use Dispatcher to ensure the DataGrid update happens on the UI thread
+            Dispatcher.Invoke(() =>
+            {
+                CollisionDataGrid.ItemsSource = collisionData;
+            });
+        }
+
 
         //metodo de añadir a la datagridview
 

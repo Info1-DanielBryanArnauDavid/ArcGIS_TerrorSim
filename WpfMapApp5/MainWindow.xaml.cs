@@ -474,7 +474,7 @@ namespace ArcGIS_App
             // Create a new Window for the dialog
             Window dialog = new Window
             {
-                Title = "Enter Safety Distance (Nautical Miles)",
+                Title = "Safety Distance",
                 Width = 300,
                 Height = 150,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
@@ -486,7 +486,7 @@ namespace ArcGIS_App
 
             // Add input fields for parameters
             TextBox parameterBox1 = new TextBox { Margin = new Thickness(5) };
-            panel.Children.Add(new TextBlock { Text = "Safety Distance:" });
+            panel.Children.Add(new TextBlock { Text = "Safety Distance (NM):" });
             panel.Children.Add(parameterBox1);
 
             // Add OK and Cancel buttons
