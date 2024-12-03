@@ -323,7 +323,7 @@ namespace ArcGIS_App
                     // Parse the altitude
                     if (level.StartsWith("FL")) // Flight Level format
                     {
-                        if (int.TryParse(level.Substring(2), out int fl))
+                        if (int.TryParse(level.Substring(2), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out int fl))
                         {
                             // Convert FL to meters (1 FL = 100 ft -> meters), multiply by 30.48
                             heights.Add(fl * 30.48); // Correct conversion from flight level to meters
@@ -331,7 +331,7 @@ namespace ArcGIS_App
                     }
                     else if (level.EndsWith("m")) // Altitude in meters
                     {
-                        if (double.TryParse(level.Replace("m", ""), out double altitudeMeters))
+                        if (double.TryParse(level.Replace("m", ""), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture,out double altitudeMeters))
                         {
                             heights.Add(altitudeMeters); // Use altitude directly in meters
                         }
