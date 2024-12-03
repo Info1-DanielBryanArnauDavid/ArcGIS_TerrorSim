@@ -71,7 +71,20 @@ namespace ArcGIS_App
 
         private void checkBox1_CheckedChanged(object sender, RoutedEventArgs e)
         {
-
+            if (checkBox1.IsChecked == true)
+            {
+                // Mostrar contraseña
+                textBoxVisible.Text = textBox2.Password; // Sincronizar texto
+                textBoxVisible.Visibility = Visibility.Visible;
+                textBox2.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                // Ocultar contraseña
+                textBox2.Password = textBoxVisible.Text; // Sincronizar contraseña
+                textBoxVisible.Visibility = Visibility.Collapsed;
+                textBox2.Visibility = Visibility.Visible;
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)

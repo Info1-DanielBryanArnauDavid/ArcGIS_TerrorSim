@@ -13,6 +13,8 @@
         <Label Content="Password" Margin="40,189,0,0" VerticalAlignment="Top"/>
         <PasswordBox x:Name="textBox2" Height="30" Margin="100,187,380,0" VerticalAlignment="Top"
                      Background="#F5F5F5"/>
+        <TextBox x:Name="textBoxVisible" Height="30" Margin="100,187,380,0" VerticalAlignment="Top"
+         Background="#F5F5F5" Visibility="Collapsed"/>
 
         <CheckBox x:Name="checkBox1" Content="Show password" Margin="95,230,55,0" VerticalAlignment="Top"
                   Foreground="#666666"
