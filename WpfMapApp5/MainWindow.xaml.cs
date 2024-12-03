@@ -219,9 +219,9 @@ namespace ArcGIS_App
         {
             _viewModel.ToggleWaypointLabels(); // Call the method to toggle labels
         }
-        private void FixFlightPlans_Click(object sender, RoutedEventArgs e)
+        private void ReportGenerate_Click(object sender, RoutedEventArgs e)
         {
-
+            _viewModel.GenerateReport();
         }
         private void OpenGithubRepo_Click(object sender, RoutedEventArgs e)
         {

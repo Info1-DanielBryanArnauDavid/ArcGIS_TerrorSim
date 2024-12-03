@@ -55,7 +55,7 @@
                 <MenuItem Header="View and search for flight plans" Click="ShowFlightPlanDetailsButton_Click" />
             </MenuItem>
             <MenuItem Header="_Options">
-                <MenuItem Header="Fix FlightPlans" Click="FixFlightPlans_Click" />
+                <MenuItem Header="Generate Report of colisions" Click="ReportGenerate_Click" />
             </MenuItem>
             <MenuItem Header="_Github">
                 <MenuItem Header="ArcGIS_TerrorSim" Click="OpenGithubRepo_Click" />

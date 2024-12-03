@@ -18,6 +18,8 @@ using System.Diagnostics;
 using System.Threading.Tasks;
 using NetTopologySuite.Index.Quadtree;
 using NetTopologySuite.Operation.Overlay;
+using static ArcGIS_App.CollisionReportWindow;
+using System.Text;
 
 namespace ArcGIS_App
 {
@@ -40,7 +42,7 @@ namespace ArcGIS_App
         private bool areFlightPlansVisible = true;
         private System.Windows.Point? _startPoint; // Nullable Point for WPF
         public bool IsPlaying => _isPlaying;
-        private List<WaypointGIS> _waypoints;
+        public List<WaypointGIS> _waypoints;
         public FlightPlanListGIS _flightplans;
         public double _speedMultiplier = 1.0;
         private ModelSceneSymbol _farPlaneSymbol;
@@ -54,8 +56,7 @@ namespace ArcGIS_App
         private GraphicsOverlay _securityDistanceOverlay;
         // This dictionary will track the safety distance graphics for each plane by their callsign
         private Dictionary<string, Graphic> _safetyDistanceGraphics = new Dictionary<string, Graphic>();
-
-        private bool isSafetyVisible;
+        private bool isSafetyVisible=false;
 
 
         // Constructor
@@ -115,6 +116,111 @@ namespace ArcGIS_App
         {
             safetyDistance=valor;
         }
+        public List<CollisionData> ConvertReportToCollisionData(string report)
+        {
+            List<CollisionData> collisionDataList = new List<CollisionData>();
+
+            // Split the report into lines
+            string[] lines = report.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
+
+            // Parse each line and convert it to CollisionData
+            foreach (var line in lines)
+            {
+                // Split each line by the delimiter (assumed to be ' - ')
+                var parts = line.Split(new[] { " - " }, StringSplitOptions.None);
+
+                if (parts.Length == 6)
+                {
+                    // Create a new CollisionData object
+                    var collisionData = new CollisionData
+                    {
+                        Callsign1 = parts[0],
+                        Callsign2 = parts[1],
+                        CollisionStart = parts[2],  // This will be in "HH:mm:ss" format
+                        CollisionEnd = parts[3],    // This will be in "HH:mm:ss" format
+                        FLcallsign1 = parts[4],
+                        FLcallsign2 = parts[5]
+                    };
+
+                    // Add the collision data to the list
+                    collisionDataList.Add(collisionData);
+                }
+            }
+
+            return collisionDataList;
+        }
+        public async void GenerateReport()
+        {
+            try
+            {
+                // Create and show the collision report window immediately
+                CollisionReportWindow reportWindow = new CollisionReportWindow();
+                reportWindow.Show();
+
+                // Run the collision detection in the background
+                await Task.Run(() => GenerateReportInBackground(reportWindow));
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while generating the report: {ex.Message}");
+            }
+        }
+
+        private void GenerateReportInBackground(CollisionReportWindow reportWindow)
+        {
+            try
+            {
+                // Initialize the progress variable
+                double totalPairs = (_flightplans.FlightPlans.Count * (_flightplans.FlightPlans.Count - 1)) / 2; // Number of unique pairs
+                double progressIncrement = 100.0 / totalPairs;  // Calculate how much to increment each time
+
+                StringBuilder collisionReport = new StringBuilder();
+                double progress = 0; // Initial progress value
+
+                reportWindow.UpdateProgress(progress);  // Initialize progress bar
+
+                // Loop through each pair of flight plans
+                for (int i = 0; i < _flightplans.FlightPlans.Count; i++)
+                {
+                    var flightPlan1 = _flightplans.FlightPlans[i];
+
+                    // Check collisions with all subsequent flight plans
+                    for (int j = i + 1; j < _flightplans.FlightPlans.Count; j++)
+                    {
+                        var flightPlan2 = _flightplans.FlightPlans[j];
+
+                        // Detect collisions between the two planes
+                        List<Tuple<string, string, DateTime, DateTime>> collisions = CollisionDetection.DetectCollisionsBetweenPlanes(flightPlan1, flightPlan2, _waypoints, safetyDistance * 1852);
+
+                        // Format the detected collisions and append to the report
+                        foreach (var collision in collisions)
+                        {
+                            string collisionInfo = $"{flightPlan1.Callsign} - {flightPlan2.Callsign} - " +
+                                                   $"{collision.Item3:HH:mm:ss} - {collision.Item4:HH:mm:ss} - " +
+                                                   $"{collision.Item1} - {collision.Item2}";
+                            collisionReport.AppendLine(collisionInfo);
+                        }
+
+                        // Update progress bar after each pair is processed
+                        progress += progressIncrement;
+                        reportWindow.UpdateProgress(progress);
+                    }
+                }
+
+                // When finished, show the final result (or pass data to update the UI)
+                MessageBox.Show("Collision Report Generated!", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+
+                // Optionally, update the DataGrid or handle the final result here (for example, display the report)
+                // If you need to populate the DataGrid, you can pass `collisionReport` to the next window.
+            }
+            catch (Exception ex)
+            {
+                // Handle any errors that occur during the background task
+                MessageBox.Show($"Error generating report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
+
+
         private void InitializeOrbiting()
         {
             _orbitTimer = new DispatcherTimer
@@ -774,23 +880,35 @@ namespace ArcGIS_App
             {
                 double safetyDistanceMeters = safetyDistance * 1852; // Convert nautical miles to meters
 
-                // Create a simple marker symbol for the safety distance circle (flat circle)
-                var circleSymbol = new SimpleMarkerSymbol(
-                    SimpleMarkerSymbolStyle.Circle,          // Use circle style
-                    Color.FromArgb(100, 255, 0, 0),         // Semi-transparent red
-                    safetyDistanceMeters                    // Radius of the circle
+                // Get the plane's current altitude (Z value)
+                double planeAltitude = planePosition.Z;
+
+                // Create the geodesic buffer (circle) around the plane's position
+                var circleGeometry = GeometryEngine.BufferGeodetic(
+                    planePosition,                         // Plane's position
+                    safetyDistanceMeters,                  // Radius (in meters)
+                    LinearUnits.Meters,                    // Radius units
+                    Double.NaN,                             // No curve offset
+                    GeodeticCurveType.Geodesic             // Geodesic curve type (snapped to the surface)
                 );
 
-                // Use the plane's current position to create or update the graphic
+                // Create a simple symbol for the safety distance circle (red outline)
+                var circleSymbol = new SimpleFillSymbol(
+                    SimpleFillSymbolStyle.Solid,
+                    Color.FromArgb(100, 255, 0, 0), // Semi-transparent red
+                    new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Red, 2) // Red outline
+                );
+
+                // Check if we already have a safety distance circle for this plane
                 if (_safetyDistanceGraphics.ContainsKey(callsign))
                 {
-                    // If it exists, update the position of the circle (not creating a new graphic)
-                    _safetyDistanceGraphics[callsign].Geometry = planePosition;
+                    // If it exists, update the geometry (move it to the new position)
+                    _safetyDistanceGraphics[callsign].Geometry = circleGeometry;
                 }
                 else
                 {
                     // If the circle doesn't exist, create a new graphic
-                    var circleGraphic = new Graphic(planePosition, circleSymbol);
+                    var circleGraphic = new Graphic(circleGeometry, circleSymbol);
 
                     // Add the graphic to the overlay
                     _graphicsOverlay.Graphics.Add(circleGraphic);
@@ -798,14 +916,16 @@ namespace ArcGIS_App
                     // Store the graphic in the dictionary for future updates or removal
                     _safetyDistanceGraphics[callsign] = circleGraphic;
                 }
+
+                // Set visibility based on `isSafetyVisible`
+                _safetyDistanceGraphics[callsign].IsVisible = isSafetyVisible;
+
             }
             catch (Exception ex)
             {
                 Console.WriteLine($"Error adding safety distance circle: {ex.Message}");
             }
         }
-
-
 
         private void RemoveSafetyDistanceCircle(string callsign)
         {
