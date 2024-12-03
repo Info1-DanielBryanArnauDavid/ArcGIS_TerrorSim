@@ -45,6 +45,7 @@ namespace ArcGIS_App
     {
         if (MisUsuarios.ComprovarSiElUsuarioiContraseñaExiste(textBox1.Text, textBox2.Password) == 1)
         {
+            MisUsuarios.Cerrar();
             MainWindow mainWindow = new MainWindow();
             mainWindow.Closed += (s, args) =>
             {
