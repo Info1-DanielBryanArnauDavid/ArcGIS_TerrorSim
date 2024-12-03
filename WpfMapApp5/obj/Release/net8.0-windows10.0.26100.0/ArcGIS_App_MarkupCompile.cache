@@ -4,17 +4,17 @@
 winexe
 C#
 .cs
-C:\Users\bolty\Desktop\ArcGIS_TerrorSim\WpfMapApp5\obj\Release\net8.0-windows10.0.26100.0\
+C:\Users\bolty\source\repos\Info1-DanielBryanArnauDavid\ArcGIS_TerrorSim\WpfMapApp5\obj\Release\net8.0-windows10.0.26100.0\
 ArcGIS_App
 none
 false
 TRACE;RELEASE;NET;NET8_0;NETCOREAPP
-C:\Users\bolty\Desktop\ArcGIS_TerrorSim\WpfMapApp5\App.xaml
-41775157356
-
-9-511037713
-2071057794826
-Bonjour.xaml;MainWindow.xaml;Registro.xaml;WelcomeWindow.xaml;
+C:\Users\bolty\source\repos\Info1-DanielBryanArnauDavid\ArcGIS_TerrorSim\WpfMapApp5\App.xaml
+5-1884970395
+237519698
+10-1504679215
+211-1743413331
+Bonjour.xaml;FlightPlanDetailsWindow.xaml;MainWindow.xaml;Registro.xaml;WelcomeWindow.xaml;
 
 False
 

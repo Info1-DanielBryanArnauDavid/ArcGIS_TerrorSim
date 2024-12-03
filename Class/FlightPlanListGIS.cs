@@ -43,20 +43,12 @@ namespace Class
                             Debug.WriteLine(parts[2]);
                         }
 
-                        else
-                        {
-                            Console.WriteLine($"Invalid latitude or longitude values in line: {line}");
-                        }
-                    }
-                    else
-                    {
-                        Console.WriteLine($"Invalid format in line: {line}");
                     }
                 }
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error loading waypoints: {ex.Message}");
+
             }
 
             return waypoints;
@@ -95,7 +87,7 @@ namespace Class
                         }
                         else
                         {
-                            Console.WriteLine($"Invalid time format: {timeString}");
+
                         }
                     }
                     else if (parts.Length == 3 && currentFlightPlan != null)
@@ -113,7 +105,7 @@ namespace Class
                         }
                         else
                         {
-                            Console.WriteLine($"Waypoint not guay: {waypointName}");
+
                         }
                     }
                 }
@@ -179,10 +171,6 @@ namespace Class
                     double segmentDuration = horizontalDuration + verticalDuration;
                     totalDuration += segmentDuration;
 
-                    // Log segment info for debugging
-                    Console.WriteLine($"Segment {i}: Start({start.Latitude}, {start.Longitude}) -> End({end.Latitude}, {end.Longitude}), " +
-                        $"Distance: {distance} meters, Speed: {speed} m/s, Horizontal Duration: {horizontalDuration}s, " +
-                        $"Altitude Change: {altitudeChange}m, Vertical Duration: {verticalDuration}s, Total Duration: {segmentDuration}s");
                 }
                 else
                 {
@@ -202,7 +190,7 @@ namespace Class
             {
                 // Flight level (e.g., FL120) - convert from hundreds of feet to meters
                 string levelStr = altitudeStr.Substring(2); // Remove "FL"
-                if (int.TryParse(levelStr, out int flightLevel))
+                if (int.TryParse(levelStr, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out int flightLevel))
                 {
                     // Convert FL (Flight Level) to meters (1 FL = 100 feet)
                     return (flightLevel * 100) * 0.3048; // Convert FL to meters (1 FL = 100 feet -> meters)
@@ -216,7 +204,7 @@ namespace Class
             {
                 // Altitude in meters (e.g., 1200.0m)
                 string metersStr = altitudeStr.Substring(0, altitudeStr.Length - 1); // Remove "m"
-                if (double.TryParse(metersStr, out double altitudeMeters))
+                if (double.TryParse(metersStr, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double altitudeMeters))
                 {
                     return altitudeMeters; // Return altitude in meters
                 }
@@ -229,7 +217,7 @@ namespace Class
             {
                 // Altitude in meters Above Ground Level (AGL)
                 string aglStr = altitudeStr.Substring(0, altitudeStr.Length - 3); // Remove "AGL"
-                if (double.TryParse(aglStr, out double altitudeAGL))
+                if (double.TryParse(aglStr, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double altitudeAGL))
                 {
                     return altitudeAGL; // Return AGL altitude (above ground level)
                 }

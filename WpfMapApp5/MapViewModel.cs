@@ -52,7 +52,10 @@ namespace ArcGIS_App
         private bool _isOrbiting = true;
         private int safetyDistance;
         private GraphicsOverlay _securityDistanceOverlay;
-        private List<Graphic> _securityDistanceGraphics = new List<Graphic>();
+        // This dictionary will track the safety distance graphics for each plane by their callsign
+        private Dictionary<string, Graphic> _safetyDistanceGraphics = new Dictionary<string, Graphic>();
+
+        private bool isSafetyVisible;
 
 
         // Constructor
@@ -130,49 +133,37 @@ namespace ArcGIS_App
                 _isOrbiting = false;
             }
         }
-        private void AddSafetyDistanceGraphics(MapPoint planePosition)
+        private bool IsPlaneFlying(DateTime currentSimulationTime, FlightPlanGIS flightPlan)
         {
-            // Create a symbol for the transparent red disk
-            var circleSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Circle, Color.FromArgb(100, 255, 0, 0),25); // Half of safetyDistance for radius
+            DateTime flightStartTime = flightPlan.StartTime;
+            DateTime flightEndTime = flightPlan.StartTime.AddSeconds(flightPlan.TotalDuration);
 
-            // Create a graphic for the disk at the plane's position
-            Graphic circleGraphic = new Graphic(planePosition, circleSymbol);
-
-            // Add the graphic to the security distance overlay
-            _securityDistanceOverlay.Graphics.Add(circleGraphic);
+            // A plane is flying only if the current simulation time is within the flight duration
+            return currentSimulationTime >= flightStartTime && currentSimulationTime <= flightEndTime;
         }
-        private bool _areCylindersVisible = false; // Track visibility state for cylinders
-        public void UpdateSafetyDistanceGraphics()
-        {
-            // Clear existing graphics
-            _securityDistanceOverlay.Graphics.Clear();
 
-            foreach (var planeGraphic in _planeGraphics.Values)
-            {
-                if (planeGraphic.Geometry is MapPoint planePosition)
-                {
-                    AddSafetyDistanceGraphics(planePosition); // Call to add graphics
-                }
-            }
-        }
         public void ToggleSecurityDistanceCylinders()
         {
-            _areCylindersVisible = !_areCylindersVisible; // Toggle visibility state
+            // Toggle the global visibility flag
+            isSafetyVisible = !isSafetyVisible;
 
-            if (_areCylindersVisible)
+            // Apply the visibility setting to all planes (currently flying and newly departing)
+            foreach (var planeGraphic in _planeGraphics)
             {
-                foreach (var planeGraphic in _planeGraphics.Values)
+                string callsign = planeGraphic.Key; // Get the plane's callsign
+                if (planeGraphic.Value.Geometry is MapPoint planePosition)
                 {
-                    MapPoint planePosition = planeGraphic.Geometry as MapPoint; // Assuming planeGraphic has a MapPoint geometry
-                    if (planePosition != null)
+                    if (isSafetyVisible)
                     {
-                        AddSafetyDistanceGraphics(planePosition); // Add disk graphic for each plane
+                        // Add or update the safety distance circle when visibility is enabled
+                        AddOrUpdateSafetyDistanceCircle(planePosition, callsign);
+                    }
+                    else
+                    {
+                        // Remove the safety distance circle when visibility is disabled
+                        RemoveSafetyDistanceCircle(callsign);
                     }
                 }
-            }
-            else
-            {
-                _securityDistanceOverlay.Graphics.Clear(); // Clear all graphics when toggled off
             }
         }
 
@@ -249,7 +240,7 @@ namespace ArcGIS_App
 
         private void TimelineSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-            Console.WriteLine($"Slider Value: {_timelineSlider.Value}"); // Check if the slider value changes
+
         }
         private async Task InitializeModelSymbols()
         {
@@ -569,33 +560,30 @@ namespace ArcGIS_App
 
                 foreach (var flightPlan in _flightplans.FlightPlans)
                 {
-                    var flightStartTime = flightPlan.StartTime;
-                    var flightEndTime = flightPlan.StartTime.AddSeconds(flightPlan.TotalDuration);
-
                     if (_planeGraphics.TryGetValue(flightPlan.Callsign, out Graphic planeGraphic))
                     {
-                        if (currentSimulationTime >= flightStartTime && currentSimulationTime <= flightEndTime)
+                        if (IsPlaneFlying(currentSimulationTime, flightPlan))
                         {
                             simulationActive = true;
 
                             // Calculate the position and orientation of the plane
-                            double flightElapsedTime = (currentSimulationTime - flightStartTime).TotalSeconds;
+                            double flightElapsedTime = (currentSimulationTime - flightPlan.StartTime).TotalSeconds;
 
-                            // Get current position along the curved path (Great Circle)
+                            // Get the current position along the path
                             var currentPosition = GetPositionAlongPath(flightPlan, flightElapsedTime);
 
                             // Calculate orientation (heading, pitch, roll)
-                            var nextPosition = GetPositionAlongPath(flightPlan, flightElapsedTime + 1); // Look ahead
+                            var nextPosition = GetPositionAlongPath(flightPlan, flightElapsedTime + 1);
                             double heading = CalculateHeading(currentPosition, nextPosition);
                             double pitch = CalculatePitch(currentPosition, nextPosition);
                             double roll = CalculateRoll(flightPlan, flightElapsedTime, heading);
 
                             // Update the plane's position and orientation
                             planeGraphic.Geometry = currentPosition;
-                            UpdatePlaneModel(planeGraphic, _sceneView.Camera, heading, pitch, roll);
+                            UpdatePlaneModel(planeGraphic, _sceneView.Camera, heading, pitch, roll, isSafetyVisible);
 
+                            // Make the plane visible
                             planeGraphic.IsVisible = true;
-                            UpdateSafetyDistanceGraphics();
 
                             // Update label position and visibility
                             if (_planeLabelGraphics.TryGetValue(flightPlan.Callsign, out Graphic labelGraphic))
@@ -603,20 +591,39 @@ namespace ArcGIS_App
                                 labelGraphic.Geometry = currentPosition;
                                 labelGraphic.IsVisible = _arePlaneLabelsVisible;
                             }
+
+                            // Update the safety distance circle visibility and position if isSafetyVisible is true
+                            if (isSafetyVisible)
+                            {
+                                // Update or add the safety distance circle at the new position of the plane
+                                AddOrUpdateSafetyDistanceCircle(currentPosition, flightPlan.Callsign);
+                            }
+                            else
+                            {
+                                // Remove the safety distance circle if not visible
+                                RemoveSafetyDistanceCircle(flightPlan.Callsign);
+                            }
                         }
                         else
                         {
-                            planeGraphic.IsVisible = false; // Hide planes outside their active time
+                            // Hide planes and labels when not flying
+                            planeGraphic.IsVisible = false;
 
-                            // Hide label for inactive planes
                             if (_planeLabelGraphics.TryGetValue(flightPlan.Callsign, out Graphic labelGraphic))
                             {
                                 labelGraphic.IsVisible = false;
+                            }
+
+                            // Remove or hide the safety distance disk
+                            if (_safetyDistanceGraphics.ContainsKey(flightPlan.Callsign))
+                            {
+                                _safetyDistanceGraphics[flightPlan.Callsign].IsVisible = false;
                             }
                         }
                     }
                 }
 
+                // Stop simulation if no planes are active and time is past the end
                 if (!simulationActive && currentSimulationTime > _simulationEndTime)
                 {
                     _movementTimer.Stop();
@@ -769,26 +776,103 @@ namespace ArcGIS_App
 
             return deltaHeading * 0.1; // Adjust roll sensitivity
         }
-
-
-        private void UpdatePlaneModel(Graphic planeGraphic, Camera camera, double heading, double pitch, double roll)
+        private void AddOrUpdateSafetyDistanceCircle(MapPoint currentPlanePosition, string callsign)
         {
+            try
+            {
+                // Safety distance in meters (assuming it's defined elsewhere)
+                double safetyDistanceMeters = safetyDistance * 1852; // Convert nautical miles to meters
+
+                // Get the plane's current altitude (Z value)
+                double planeAltitude = currentPlanePosition.Z;
+
+                // Create a new MapPoint with the same X (longitude), Y (latitude), and Z (altitude)
+                // This is important because MapPoint.Z is read-only, so we create a new point with the correct altitude
+                MapPoint updatedPlanePosition = new MapPoint(
+                    currentPlanePosition.X,  // Longitude
+                    currentPlanePosition.Y,  // Latitude
+                    planeAltitude,           // Altitude (Z)
+                    currentPlanePosition.SpatialReference  // Use the same spatial reference
+                );
+
+                // Create the circle geometry centered on the plane's current position, including its altitude
+                var circleGeometry = GeometryEngine.BufferGeodetic(
+                    updatedPlanePosition,
+                    safetyDistanceMeters / 2,  // Radius (half the safety distance for diameter)
+                    LinearUnits.Meters,
+                    Double.NaN,
+                    GeodeticCurveType.Geodesic
+                );
+
+                // Create a simple symbol for the safety distance circle (red circle)
+                var circleSymbol = new SimpleFillSymbol(
+                    SimpleFillSymbolStyle.Solid,
+                    Color.FromArgb(100, 255, 0, 0), // Semi-transparent red
+                    new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Red, 2) // Red outline
+                );
+
+                // Check if we already have a safety distance circle for this plane
+                if (_safetyDistanceGraphics.ContainsKey(callsign))
+                {
+                    // If it exists, update the geometry (move it to the new position)
+                    _safetyDistanceGraphics[callsign].Geometry = circleGeometry;
+                }
+                else
+                {
+                    // If it doesn't exist, create a new graphic for the safety distance circle
+                    var circleGraphic = new Graphic(circleGeometry, circleSymbol);
+
+                    // Add the graphic to the overlay
+                    _graphicsOverlay.Graphics.Add(circleGraphic);
+
+                    // Store the graphic in the dictionary for future updates or removal
+                    _safetyDistanceGraphics[callsign] = circleGraphic;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding safety distance circle: {ex.Message}");
+            }
+        }
+
+        private void RemoveSafetyDistanceCircle(string callsign)
+        {
+            try
+            {
+                // If a circle exists for this plane, remove it
+                if (_safetyDistanceGraphics.ContainsKey(callsign))
+                {
+                    // Remove the circle graphic from the overlay
+                    _graphicsOverlay.Graphics.Remove(_safetyDistanceGraphics[callsign]);
+
+                    // Remove it from the dictionary
+                    _safetyDistanceGraphics.Remove(callsign);
+                }
+            }
+            catch (Exception ex)
+            {
+            }
+        }
+
+
+        private void UpdatePlaneModel(Graphic planeGraphic, Camera camera, double heading, double pitch, double roll, bool isSafetyVisible)
+        {
+            // Assume you have a way to get the CallSign for each plane, which is stored in your _planeGraphics dictionary
+            string planeCallSign = GetPlaneCallSign(planeGraphic);
+
             if (planeGraphic.Geometry is MapPoint planePosition)
             {
-                // Calculate distance between the camera and the plane
+                // Calculate the distance between the camera and the plane
                 double distance = GeometryEngine.DistanceGeodetic(
                     planePosition, camera.Location,
                     LinearUnits.Meters, AngularUnits.Degrees, GeodeticCurveType.Geodesic).Distance;
 
+                // Update the plane model based on the distance to the camera
                 if (distance > FAR_THRESHOLD / 2)
                 {
                     // Marker behavior: fades from red to white as it gets closer
-
-                    // Size: Starts at 10 (far) and shrinks to 3 (closer)
                     double size = Math.Clamp(10 - (FAR_THRESHOLD - distance) / 1000, 3, 10);
-
-                    // Color: Fades from red (255, 0, 0) to white (255, 255, 255)
-                    int fadeValue = (int)Math.Clamp((FAR_THRESHOLD - distance) / 10, 0, 255); // Starts at 0 and increases to 255
+                    int fadeValue = (int)Math.Clamp((FAR_THRESHOLD - distance) / 10, 0, 255); // Red fades to white
                     var color = Color.FromArgb(255, 255, fadeValue, fadeValue); // Red fades to white
 
                     var pointSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbolStyle.Diamond, color, size);
@@ -799,7 +883,6 @@ namespace ArcGIS_App
                     // Switch to the detailed 3D model when close
                     planeGraphic.Symbol = _closePlaneSymbol;
 
-                    // Apply orientation (heading, pitch, roll)
                     if (planeGraphic.Symbol is ModelSceneSymbol modelSymbol)
                     {
                         modelSymbol.Heading = heading;
@@ -807,10 +890,35 @@ namespace ArcGIS_App
                         modelSymbol.Roll = roll;
                     }
                 }
+
+                // Add or update the safety distance circle if isSafetyVisible is true
+                if (isSafetyVisible)
+                {
+                    // Add or update the red safety distance circle for this plane
+                    AddOrUpdateSafetyDistanceCircle(planePosition, planeCallSign);
+                }
+                else
+                {
+                    // If safety is not visible, remove the safety distance circle
+                    RemoveSafetyDistanceCircle(planeCallSign);
+                }
             }
-
-
         }
+
+
+        private string GetPlaneCallSign(Graphic planeGraphic)
+        {
+            // Assuming you have a dictionary that tracks the CallSigns of planes
+            foreach (var plane in _planeGraphics)
+            {
+                if (plane.Value == planeGraphic)
+                {
+                    return plane.Key; // Return the CallSign (or ID) associated with this Graphic
+                }
+            }
+            return null; // Return null if no matching plane found
+        }
+
 
         private double ParseAltitude(string altitudeStr, double terrainHeight = 0)
         {
@@ -891,6 +999,7 @@ namespace ArcGIS_App
         {
             try
             {
+                // Remove existing plane graphic and label graphic if they exist
                 if (_planeGraphics.TryGetValue(callsign, out Graphic existingGraphic))
                 {
                     _graphicsOverlay.Graphics.Remove(existingGraphic);
@@ -924,14 +1033,80 @@ namespace ArcGIS_App
                 _graphicsOverlay.Graphics.Add(labelGraphic);
                 _planeLabelGraphics[callsign] = labelGraphic;
 
+
+                // Add the safety distance circle if isSafetyVisible is true
+                if (isSafetyVisible)
+                {
+                    AddSafetyDistanceCircle(startingPoint, callsign);
+                }
+
                 return planeGraphic;
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error adding plane graphic: {ex.Message}");
                 return null;
             }
         }
+
+        private void AddSafetyDistanceCircle(MapPoint planePosition, string callsign)
+        {
+            try
+            {
+                double safetyDistanceMeters = safetyDistance * 1852; // Convert nautical miles to meters
+
+                // Ensure the plane's current altitude (Z-value) is used for the circle
+                double planeAltitude = planePosition.Z;
+
+                // Create a new MapPoint with the same X (longitude), Y (latitude), and Z (altitude)
+                // This is important because MapPoint.Z is read-only, so we create a new point with the correct altitude
+                MapPoint updatedPlanePosition = new MapPoint(
+                    planePosition.X,  // Longitude
+                    planePosition.Y,  // Latitude
+                    planeAltitude,    // Altitude (Z)
+                    planePosition.SpatialReference  // Use the same spatial reference
+                );
+
+                // Create the circle geometry centered on the plane's current position, including its altitude
+                // The Z value of updatedPlanePosition will ensure the circle is at the correct height
+                var circleGeometry = GeometryEngine.BufferGeodetic(
+                    updatedPlanePosition,
+                    safetyDistanceMeters / 2,  // Radius (half the safety distance for diameter)
+                    LinearUnits.Meters,
+                    Double.NaN,
+                    GeodeticCurveType.Geodesic
+                );
+
+                // Create a simple symbol for the safety distance circle (red circle)
+                var circleSymbol = new SimpleFillSymbol(
+                    SimpleFillSymbolStyle.Solid,
+                    Color.FromArgb(100, 255, 0, 0), // Semi-transparent red
+                    new SimpleLineSymbol(SimpleLineSymbolStyle.Solid, Color.Red, 2) // Red outline
+                );
+
+                // Check if we already have a safety distance circle for this plane
+                if (_safetyDistanceGraphics.ContainsKey(callsign))
+                {
+                    // If it exists, update the geometry (move it to the new position)
+                    _safetyDistanceGraphics[callsign].Geometry = circleGeometry;
+                }
+                else
+                {
+                    // If it doesn't exist, create a new graphic for the safety distance circle
+                    var circleGraphic = new Graphic(circleGeometry, circleSymbol);
+
+                    // Add the graphic to the overlay
+                    _graphicsOverlay.Graphics.Add(circleGraphic);
+
+                    // Store the graphic in the dictionary for future updates or removal
+                    _safetyDistanceGraphics[callsign] = circleGraphic;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error adding safety distance circle: {ex.Message}");
+            }
+        }
+
         private void TogglePlaneLabels(bool isVisible)
         {
             _arePlaneLabelsVisible = isVisible;

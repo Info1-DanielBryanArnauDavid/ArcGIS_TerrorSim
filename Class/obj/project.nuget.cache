@@ -1,20 +1,20 @@
 {
   "version": 2,
-  "dgSpecHash": "T3fJ2HbfmlM=",
+  "dgSpecHash": "wPw+LhBhJb0=",
   "success": true,
-  "projectFilePath": "C:\\Users\\BRYAN\\Source\\Repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\Class\\Class.csproj",
+  "projectFilePath": "C:\\Users\\bolty\\source\\repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\Class\\Class.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\BRYAN\\.nuget\\packages\\esri.arcgisruntime\\200.6.0\\esri.arcgisruntime.200.6.0.nupkg.sha512",
-    "C:\\Users\\BRYAN\\.nuget\\packages\\esri.arcgisruntime.runtimes.win\\200.6.0\\esri.arcgisruntime.runtimes.win.200.6.0.nupkg.sha512",
-    "C:\\Users\\BRYAN\\.nuget\\packages\\esri.arcgisruntime.wpf\\200.6.0\\esri.arcgisruntime.wpf.200.6.0.nupkg.sha512",
-    "C:\\Users\\BRYAN\\.nuget\\packages\\microsoft.data.sqlite\\9.0.0\\microsoft.data.sqlite.9.0.0.nupkg.sha512",
-    "C:\\Users\\BRYAN\\.nuget\\packages\\microsoft.data.sqlite.core\\9.0.0\\microsoft.data.sqlite.core.9.0.0.nupkg.sha512",
-    "C:\\Users\\BRYAN\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.10\\sqlitepclraw.bundle_e_sqlite3.2.1.10.nupkg.sha512",
-    "C:\\Users\\BRYAN\\.nuget\\packages\\sqlitepclraw.core\\2.1.10\\sqlitepclraw.core.2.1.10.nupkg.sha512",
-    "C:\\Users\\BRYAN\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.10\\sqlitepclraw.lib.e_sqlite3.2.1.10.nupkg.sha512",
-    "C:\\Users\\BRYAN\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.10\\sqlitepclraw.provider.e_sqlite3.2.1.10.nupkg.sha512",
-    "C:\\Users\\BRYAN\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
-    "C:\\Users\\BRYAN\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.26100.34\\microsoft.windows.sdk.net.ref.10.0.26100.34.nupkg.sha512"
+    "C:\\Users\\bolty\\.nuget\\packages\\esri.arcgisruntime\\200.6.0\\esri.arcgisruntime.200.6.0.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\esri.arcgisruntime.runtimes.win\\200.6.0\\esri.arcgisruntime.runtimes.win.200.6.0.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\esri.arcgisruntime.wpf\\200.6.0\\esri.arcgisruntime.wpf.200.6.0.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\microsoft.data.sqlite\\9.0.0\\microsoft.data.sqlite.9.0.0.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\microsoft.data.sqlite.core\\9.0.0\\microsoft.data.sqlite.core.9.0.0.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.10\\sqlitepclraw.bundle_e_sqlite3.2.1.10.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\sqlitepclraw.core\\2.1.10\\sqlitepclraw.core.2.1.10.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.10\\sqlitepclraw.lib.e_sqlite3.2.1.10.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\sqlitepclraw.provider.e_sqlite3\\2.1.10\\sqlitepclraw.provider.e_sqlite3.2.1.10.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
+    "C:\\Users\\bolty\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.26100.54\\microsoft.windows.sdk.net.ref.10.0.26100.54.nupkg.sha512"
   ],
   "logs": []
 }
