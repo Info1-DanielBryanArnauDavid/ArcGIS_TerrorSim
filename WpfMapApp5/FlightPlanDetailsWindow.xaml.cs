@@ -135,13 +135,13 @@ namespace ArcGIS_App
                 if (flightLevel.StartsWith("FL"))
                 {
                     // Extract the flight level value (e.g., FL340 -> 34000 feet)
-                    int level = int.Parse(flightLevel.Substring(2));
+                    int level = int.Parse(flightLevel.Substring(2),System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture);
                     verticalPosition = level * 100; // Convert FL to feet (e.g., FL350 -> 35000ft)
                 }
                 else if (flightLevel.EndsWith("m"))
                 {
                     // Convert meters to feet for consistency
-                    verticalPosition = double.Parse(flightLevel.Replace("m", ""));
+                    verticalPosition = double.Parse(flightLevel.Replace("m", ""),System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture);
                 }
 
                 // Add the point to the line series (only at waypoints with defined FL)
