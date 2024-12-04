@@ -635,6 +635,7 @@ namespace ArcGIS_App
             {
                 if (_movementTimer != null)
                 {
+
                     _movementTimer.Stop();
                 }
 
@@ -802,7 +803,7 @@ namespace ArcGIS_App
             if (flightLevel.StartsWith("FL", StringComparison.OrdinalIgnoreCase))
             {
                 string levelStr = flightLevel.Substring(2); // Remove "FL"
-                if (double.TryParse(levelStr, out double flightLevelFeet))
+                if (double.TryParse(levelStr, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double flightLevelFeet))
                 {
                     // Convert from FLXX (feet) to meters
                     return flightLevelFeet * 100 * 0.3048; // 1 foot = 0.3048 meters
@@ -817,7 +818,7 @@ namespace ArcGIS_App
             {
                 // Remove the "m" and parse the remaining value
                 string levelStr = flightLevel.Substring(0, flightLevel.Length - 1); // Remove "m"
-                if (double.TryParse(levelStr, out double altitudeMeters))
+                if (double.TryParse(levelStr, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double altitudeMeters))
                 {
                     // If it's already in meters, return as-is
                     return altitudeMeters;
