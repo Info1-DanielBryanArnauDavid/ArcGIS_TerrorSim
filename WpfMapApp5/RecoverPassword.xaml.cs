@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -11,6 +13,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Class;
 
 namespace ArcGIS_App
 {
@@ -45,18 +48,60 @@ namespace ArcGIS_App
                 return;
             }
 
-            // Simulate successful recovery
-            MessageBox.Show("Password recovery link has been sent to your email address.",
-                            "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+            string smtpServer = "smtp.gmail.com";
+            int smtpPort = 587;
+            string senderEmail = "TerrorSim11@gmail.com"; // Correo del remitente autorizado
+            string senderPassword = "ihez zurg ldlr ztzl"; // Contraseña de aplicación de Gmail
 
-            // Close the Recover Password window
-            this.Close();
-        }
+            GestionUsuarios MisUsuarios = new GestionUsuarios();
+            MisUsuarios.Iniciar();
+            string Password = MisUsuarios.ContraseñaUsuario(username);
 
-        private void CancelButton_Click(object sender, RoutedEventArgs e)
-        {
-            // Close the Recover Password window
-            this.Close();
+            if (Password != "No existe")
+            {
+                try
+                {
+                    MailMessage mail = new MailMessage
+                    {
+                        From = new MailAddress(senderEmail), // Usa el correo del remitente autorizado
+                        Subject = "Password Recovery",
+                        Body = $"Hi {username},\n\n" +
+                               $"Your password is: {Password}\n\n" +
+                               "If you did not request this, please secure your account.\n\n" +
+                               "Best regards,\nYour Support Team",
+                        IsBodyHtml = false
+                    };
+                    mail.To.Add(email); // Correo del destinatario
+
+                    using (SmtpClient smtp = new SmtpClient(smtpServer, smtpPort))
+                    {
+                        smtp.Credentials = new NetworkCredential(senderEmail, senderPassword);
+                        smtp.EnableSsl = true;
+                        smtp.Send(mail);
+                    }
+
+                    MessageBox.Show("Password recovery link has been sent to your email address.",
+                                    "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show($"Error sending email: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                }
+                finally
+                {
+                    MisUsuarios.Cerrar();
+                }
+            }
+            else
+            {
+                MessageBox.Show("No existe el usuario mencionado");
+                MisUsuarios.Cerrar();
+            }
         }
+            private void CancelButton_Click(object sender, RoutedEventArgs e)
+            {
+               // Close the Recover Password window
+               this.Close();
+            }
     }
 }

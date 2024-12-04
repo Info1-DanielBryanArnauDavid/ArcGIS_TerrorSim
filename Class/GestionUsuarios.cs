@@ -97,5 +97,21 @@ namespace Class // Define el espacio de nombres de la clase
             SqlCommand command = new SqlCommand(sql, cnx);
             command.ExecuteNonQuery(); // Ejecuta el comando (elimina la tabla)
         }
+
+        public string ContraseñaUsuario(string Usuario)
+        {
+            DataTable dt = new DataTable();
+            string sql = "SELECT Contraseña FROM Usuarios WHERE Usuario = @Usuario"; // SQL para verificar las credenciales
+            SqlCommand command = new SqlCommand(sql, cnx);
+            command.Parameters.AddWithValue("@Usuario", Usuario); // Parametrizamos para evitar inyección SQL
+            var reader = command.ExecuteReader();
+            dt.Load(reader);
+            if (dt.Rows.Count == 1)
+            {
+                string Contraseña = Convert.ToString(dt.Rows[0]["Contraseña"]);
+                return Contraseña;
+            }
+            else { return "No existe"; }
+        }
     }
 }
