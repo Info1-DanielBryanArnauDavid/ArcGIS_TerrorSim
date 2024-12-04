@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Esri.ArcGISRuntime.Geometry;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -123,135 +124,43 @@ namespace Class
 
             return flightPlanList;
         }
-        private static double CalculateTotalDuration(FlightPlanGIS flightPlan)
+        public static double CalculateTotalDuration(FlightPlanGIS flightPlan)
         {
-            double totalDuration = 0;
+            double totalDuration = 0.0;
 
-            // Assume reasonable climb and descent rates (in meters per second)
-            const double climbRate = 5.0;  // meters per second (climbing)
-            const double descentRate = 3.0;  // meters per second (descending)
-
-            // Iterate through each segment of the flight plan
-            for (int i = 1; i < flightPlan.Waypoints.Count; i++)
+            for (int i = 0; i < flightPlan.Waypoints.Count - 1; i++)
             {
-                var start = flightPlan.Waypoints[i - 1];
-                var end = flightPlan.Waypoints[i];
+                var startWaypoint = flightPlan.Waypoints[i];
+                var endWaypoint = flightPlan.Waypoints[i + 1];
 
-                // Calculate the horizontal distance between the waypoints
-                var distance = CalculateDistance(start, end);
+                // Get the distance between two waypoints
+                var startPoint = new MapPoint(startWaypoint.Longitude, startWaypoint.Latitude, SpatialReferences.Wgs84);
+                var endPoint = new MapPoint(endWaypoint.Longitude, endWaypoint.Latitude, SpatialReferences.Wgs84);
 
-                // Try to parse the speed for the segment and check for valid speeds (in knots)
-                if (double.TryParse(flightPlan.Speeds[i - 1], out double speed) && speed > 0)
-                {
-                    // Convert speed from knots to meters per second
-                    speed = speed * 0.514444;  // 1 knot = 0.514444 meters per second
+                GeodeticDistanceResult distanceResult = GeometryEngine.DistanceGeodetic(
+                    startPoint,
+                    endPoint,
+                    LinearUnits.Kilometers,
+                    AngularUnits.Degrees,
+                    GeodeticCurveType.Geodesic
+                );
 
-                    // Calculate the duration for the horizontal travel (in seconds)
-                    double horizontalDuration = distance / speed;
+                double segmentDistance = distanceResult.Distance; // distance in kilometers
 
-                    // Now calculate the climb/descent time
-                    double altitudeChange = Math.Abs(ParseAltitude(flightPlan.FlightLevels[i]) - ParseAltitude(flightPlan.FlightLevels[i - 1]));
+                // Convert speed from knots to meters per second (1 knot = 0.514444 m/s)
+                double segmentSpeed = double.Parse(flightPlan.Speeds[i]); // speed in knots
+                double segmentSpeedMetersPerSecond = segmentSpeed * 0.514444;
 
-                    double verticalDuration = 0;
+                // Calculate the time to travel the segment (time = distance / speed)
+                double segmentTimeInSeconds = (segmentDistance * 1000) / segmentSpeedMetersPerSecond; // segmentTime in seconds
 
-                    if (altitudeChange > 0)
-                    {
-                        // If the plane is climbing
-                        double climbTime = altitudeChange / climbRate;
-                        verticalDuration += climbTime;
-                    }
-                    else if (altitudeChange < 0)
-                    {
-                        // If the plane is descending
-                        double descentTime = altitudeChange / descentRate;
-                        verticalDuration += descentTime;
-                    }
-
-                    // Add the time spent on the horizontal and vertical segments
-                    double segmentDuration = horizontalDuration + verticalDuration;
-                    totalDuration += segmentDuration;
-
-                }
-                else
-                {
-                    // Handle invalid speed (optional: set a default speed or throw an exception)
-                    throw new InvalidOperationException($"Invalid speed for segment {i - 1} -> {i}: {flightPlan.Speeds[i - 1]}");
-                }
+                // Add the segment time to the total duration
+                totalDuration += segmentTimeInSeconds;
             }
 
-            // Return the total duration in seconds
             return totalDuration;
         }
-
-        private static double ParseAltitude(string altitudeStr)
-        {
-            // Check if the altitude string has 'FL' (flight level), 'm' (meters), or 'AGL' (above ground level)
-            if (altitudeStr.StartsWith("FL", StringComparison.OrdinalIgnoreCase))
-            {
-                // Flight level (e.g., FL120) - convert from hundreds of feet to meters
-                string levelStr = altitudeStr.Substring(2); // Remove "FL"
-                if (int.TryParse(levelStr, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out int flightLevel))
-                {
-                    // Convert FL (Flight Level) to meters (1 FL = 100 feet)
-                    return (flightLevel * 100) * 0.3048; // Convert FL to meters (1 FL = 100 feet -> meters)
-                }
-                else
-                {
-                    throw new FormatException($"Invalid flight level format: {altitudeStr}");
-                }
-            }
-            else if (altitudeStr.EndsWith("m", StringComparison.OrdinalIgnoreCase))
-            {
-                // Altitude in meters (e.g., 1200.0m)
-                string metersStr = altitudeStr.Substring(0, altitudeStr.Length - 1); // Remove "m"
-                if (double.TryParse(metersStr, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double altitudeMeters))
-                {
-                    return altitudeMeters; // Return altitude in meters
-                }
-                else
-                {
-                    throw new FormatException($"Invalid altitude in meters format: {altitudeStr}");
-                }
-            }
-            else if (altitudeStr.EndsWith("AGL", StringComparison.OrdinalIgnoreCase))
-            {
-                // Altitude in meters Above Ground Level (AGL)
-                string aglStr = altitudeStr.Substring(0, altitudeStr.Length - 3); // Remove "AGL"
-                if (double.TryParse(aglStr, System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double altitudeAGL))
-                {
-                    return altitudeAGL; // Return AGL altitude (above ground level)
-                }
-                else
-                {
-                    throw new FormatException($"Invalid altitude AGL format: {altitudeStr}");
-                }
-            }
-            else
-            {
-                throw new FormatException($"Unrecognized altitude format: {altitudeStr}");
-            }
-        }
-
-        private static double CalculateDistance(WaypointGIS start, WaypointGIS end)
-        {
-            const double R = 6371000; // Radius of the Earth in meters
-            double lat1 = start.Latitude * Math.PI / 180; // Convert latitude to radians
-            double lon1 = start.Longitude * Math.PI / 180; // Convert longitude to radians
-            double lat2 = end.Latitude * Math.PI / 180;
-            double lon2 = end.Longitude * Math.PI / 180;
-
-            double deltaLat = lat2 - lat1;
-            double deltaLon = lon2 - lon1;
-
-            double a = Math.Sin(deltaLat / 2) * Math.Sin(deltaLat / 2) +
-                       Math.Cos(lat1) * Math.Cos(lat2) *
-                       Math.Sin(deltaLon / 2) * Math.Sin(deltaLon / 2);
-            double c = 2 * Math.Atan2(Math.Sqrt(a), Math.Sqrt(1 - a));
-
-            double distance = R * c; // Distance in meters
-            return distance;
-        }
-
+      
 
 
     }

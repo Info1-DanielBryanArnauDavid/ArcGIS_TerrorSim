@@ -69,7 +69,7 @@ namespace ArcGIS_App
             _flightplans = flightplans;
             _sceneView.ViewpointChanged += SceneView_ViewpointChanged;
 
-            _scene = new Scene(BasemapStyle.ArcGISImagery)
+            _scene = new Scene(BasemapStyle.ArcGISImageryStandard)
             {
                 BaseSurface = new Surface()
             };
@@ -673,55 +673,101 @@ namespace ArcGIS_App
                 {
                     if (_planeGraphics.TryGetValue(flightPlan.Callsign, out Graphic planeGraphic))
                     {
-                        if (IsPlaneFlying(currentSimulationTime, flightPlan))
+                        // Get the total duration for this flight directly from the flightPlan
+                        double totalDuration = flightPlan.TotalDuration;
+
+                        // Check if the current simulation time exceeds the flight's total duration
+                        if (currentSimulationTime <= flightPlan.StartTime.AddSeconds(totalDuration))
                         {
-                            simulationActive = true;
-
-                            // Calculate the position and orientation of the plane
-                            double flightElapsedTime = (currentSimulationTime - flightPlan.StartTime).TotalSeconds;
-
-                            // Get the current position along the path
-                            var currentPosition = GetPositionAlongPath(flightPlan, flightElapsedTime);
-                            var nextPosition = GetPositionAlongPath(flightPlan, flightElapsedTime + 1);
-                            double heading = CalculateHeading(currentPosition, nextPosition);
-                            double pitch = CalculatePitch(currentPosition, nextPosition);
-                            double roll = CalculateRoll(flightPlan, flightElapsedTime, heading);
-
-                            // Update the plane's position and orientation
-                            planeGraphic.Geometry = currentPosition;
-                            UpdatePlaneModel(planeGraphic, _sceneView.Camera, heading, pitch, roll, isSafetyVisible);
-
-                            // Make the plane visible
-                            planeGraphic.IsVisible = true;
-
-                            // Update label position and visibility
-                            if (_planeLabelGraphics.TryGetValue(flightPlan.Callsign, out Graphic labelGraphic))
+                            if (IsPlaneFlying(currentSimulationTime, flightPlan))
                             {
-                                labelGraphic.Geometry = currentPosition;
-                                labelGraphic.IsVisible = _arePlaneLabelsVisible;
-                            }
+                                simulationActive = true;
 
-                            // Update the safety distance circle visibility and position if isSafetyVisible is true
-                            if (isSafetyVisible)
-                            {
-                                // Update or add the safety distance circle at the new position of the plane
-                                AddOrUpdateSafetyDistanceCircle(currentPosition, flightPlan.Callsign);
+                                // Calculate the position and orientation of the plane
+                                double flightElapsedTime = (currentSimulationTime - flightPlan.StartTime).TotalSeconds;
+
+                                // Initialize the shouldDerender flag
+                                bool shouldDerender = false;
+
+                                // Get the current position along the path
+                                var currentPosition = GetPositionAlongPath(flightPlan, flightElapsedTime, out shouldDerender);
+
+                                if (shouldDerender)
+                                {
+                                    // Derender the plane if it has reached its destination
+                                    planeGraphic.IsVisible = false;
+
+                                    // Remove safety distance circle if applicable
+                                    RemoveSafetyDistanceCircle(flightPlan.Callsign);
+
+                                    // Hide labels
+                                    if (_planeLabelGraphics.TryGetValue(flightPlan.Callsign, out Graphic labelGraphic))
+                                    {
+                                        labelGraphic.IsVisible = false;
+                                    }
+                                }
+                                else
+                                {
+                                    // Plane still flying, update position and model
+                                    var nextPosition = GetPositionAlongPath(flightPlan, flightElapsedTime + 1, out _); // _ as we don't need to check for derender here
+                                    double heading = CalculateHeading(currentPosition, nextPosition);
+                                    double pitch = CalculatePitch(currentPosition, nextPosition);
+                                    double roll = CalculateRoll(flightPlan, flightElapsedTime, heading);
+
+                                    // Update the plane's position and orientation
+                                    planeGraphic.Geometry = currentPosition;
+                                    UpdatePlaneModel(planeGraphic, _sceneView.Camera, heading, pitch, roll, isSafetyVisible);
+
+                                    // Make the plane visible
+                                    planeGraphic.IsVisible = true;
+
+                                    // Update label position and visibility
+                                    if (_planeLabelGraphics.TryGetValue(flightPlan.Callsign, out Graphic labelGraphic))
+                                    {
+                                        labelGraphic.Geometry = currentPosition;
+                                        labelGraphic.IsVisible = _arePlaneLabelsVisible;
+                                    }
+
+                                    // Update the safety distance circle visibility and position if isSafetyVisible is true
+                                    if (isSafetyVisible)
+                                    {
+                                        // Update or add the safety distance circle at the new position of the plane
+                                        AddOrUpdateSafetyDistanceCircle(currentPosition, flightPlan.Callsign);
+                                    }
+                                    else
+                                    {
+                                        // Remove the safety distance circle if not visible
+                                        RemoveSafetyDistanceCircle(flightPlan.Callsign);
+                                    }
+                                }
                             }
                             else
                             {
-                                // Remove the safety distance circle if not visible
-                                RemoveSafetyDistanceCircle(flightPlan.Callsign);
+                                // Hide planes and labels when not flying
+                                planeGraphic.IsVisible = false;
+
+                                // Remove or hide the safety distance disk
+                                if (_safetyDistanceGraphics.ContainsKey(flightPlan.Callsign))
+                                {
+                                    _safetyDistanceGraphics[flightPlan.Callsign].IsVisible = false;
+                                }
                             }
                         }
                         else
                         {
-                            // Hide planes and labels when not flying
+                            // The plane has completed its flight; hide its graphics
                             planeGraphic.IsVisible = false;
 
                             // Remove or hide the safety distance disk
                             if (_safetyDistanceGraphics.ContainsKey(flightPlan.Callsign))
                             {
                                 _safetyDistanceGraphics[flightPlan.Callsign].IsVisible = false;
+                            }
+
+                            // Hide labels
+                            if (_planeLabelGraphics.TryGetValue(flightPlan.Callsign, out Graphic labelGraphic))
+                            {
+                                labelGraphic.IsVisible = false;
                             }
                         }
                     }
@@ -742,9 +788,10 @@ namespace ArcGIS_App
             }
         }
 
-
-        private MapPoint GetPositionAlongPath(FlightPlanGIS flightPlan, double elapsedTime)
+        private MapPoint GetPositionAlongPath(FlightPlanGIS flightPlan, double elapsedTime, out bool shouldDerender)
         {
+            shouldDerender = false; // Default to not derendering the plane
+
             if (flightPlan.Waypoints.Count < 2)
             {
                 return null;
@@ -766,7 +813,7 @@ namespace ArcGIS_App
 
                 double segmentDistance = distanceResult.Distance;
                 double segmentSpeed = double.Parse(flightPlan.Speeds[i]);
-                double segmentTime = (segmentDistance / segmentSpeed) * 3600; // Tiempo en segundos
+                double segmentTime = (segmentDistance / segmentSpeed * 0.514444) * 3600; // Time in seconds
 
                 segmentDuration += segmentTime;
 
@@ -788,14 +835,29 @@ namespace ArcGIS_App
                     double endAltitude = ConvertFlightLevelToMeters(flightPlan.FlightLevels[i + 1]);
                     double interpolatedAltitude = startAltitude + segmentFraction * (endAltitude - startAltitude);
 
-                    return new MapPoint(interpolatedPoint.X, interpolatedPoint.Y, interpolatedAltitude, SpatialReferences.Wgs84);
+                    var currentPoint = new MapPoint(interpolatedPoint.X, interpolatedPoint.Y, interpolatedAltitude, SpatialReferences.Wgs84);
+
+                    // Check if the new position is the same as the previous one (i.e., the plane has reached the destination)
+                    if (i == flightPlan.Waypoints.Count - 2 && elapsedTime >= segmentDuration)
+                    {
+                        shouldDerender = true; // Mark the plane for derendering
+                    }
+
+                    return currentPoint;
                 }
             }
 
+            // If we reached the last waypoint, we stop the movement
             var lastWaypoint = flightPlan.Waypoints.Last();
             double lastAltitude = ConvertFlightLevelToMeters(flightPlan.FlightLevels.Last());
-            return new MapPoint(lastWaypoint.Longitude, lastWaypoint.Latitude, lastAltitude, SpatialReferences.Wgs84);
+            var finalPosition = new MapPoint(lastWaypoint.Longitude, lastWaypoint.Latitude, lastAltitude, SpatialReferences.Wgs84);
+
+            // Mark the plane for derendering after reaching the final waypoint
+            shouldDerender = true;
+
+            return finalPosition;
         }
+
 
         private double ConvertFlightLevelToMeters(string flightLevel)
         {
@@ -870,8 +932,8 @@ namespace ArcGIS_App
         {
             // Use the heading difference between two points to calculate roll
             double nextHeading = CalculateHeading(
-                GetPositionAlongPath(flightPlan, elapsedTime),
-                GetPositionAlongPath(flightPlan, elapsedTime + 1)
+                GetPositionAlongPath(flightPlan, elapsedTime, out _),
+                GetPositionAlongPath(flightPlan, elapsedTime + 1, out _)
             );
 
             double deltaHeading = nextHeading - currentHeading;
