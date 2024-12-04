@@ -42,26 +42,32 @@ namespace ArcGIS_App
         }
 
          private void button1_Click(object sender, RoutedEventArgs e)
-    {
-        if (MisUsuarios.ComprovarSiElUsuarioiContraseñaExiste(textBox1.Text, textBox2.Password) == 1)
-        {
-            MainWindow mainWindow = new MainWindow();
-            mainWindow.Closed += (s, args) =>
+         {
+            recoverPasswordLabel.Visibility = Visibility.Visible;
+            if (MisUsuarios.ComprovarSiElUsuarioiContraseñaExiste(textBox1.Text, textBox2.Password) == 1)
             {
-                // When MainWindow closes, we want to ensure we shut down the application.
-                Application.Current.Shutdown(); // Ensure application exits
-            };
+                MisUsuarios.Cerrar();
+                MainWindow mainWindow = new MainWindow();
+                mainWindow.Closed += (s, args) =>
+                {
+                    // When MainWindow closes, we want to ensure we shut down the application.
+                    Application.Current.Shutdown(); // Ensure application exits
+                };
 
-            mainWindow.Show(); // Show the main window
-            this.Close(); // Close the Bonjour window
+                mainWindow.Show(); // Show the main window
+                this.Close(); // Close the Bonjour window
+            }
+            else
+            {
+                MessageBox.Show("Incorrect Username/Password");
+            }
         }
-        else
+
+        private void RecoverPasswordLabel_Click(object sender, RoutedEventArgs e)
         {
-            MessageBox.Show("Incorrect Username/Password");
+            RecoverPassword recover = new RecoverPassword();
+            recover.ShowDialog();
         }
-    }
-
-
         private void button2_Click(object sender, RoutedEventArgs e)
         {
             Registro registro = new Registro();

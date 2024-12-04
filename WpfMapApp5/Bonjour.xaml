@@ -25,6 +25,18 @@
                 Margin="100,270,550,62"
                 Background="#0078D4" Foreground="#FFFFFF"
                 Click="button1_Click"/>
+        <TextBlock x:Name="recoverPasswordLabel"
+           Cursor="Hand"
+           Foreground="Blue"
+           Margin="309,225,380,0"
+           VerticalAlignment="Top"
+           Visibility="Hidden"
+           MouseLeftButtonUp="RecoverPasswordLabel_Click">
+    <Underline>
+        <Run Text="Recover password"/>
+    </Underline>
+        </TextBlock>
+
 
         <Button x:Name="button2" Content="Create Account"
                 Margin="270,270,380,62"
