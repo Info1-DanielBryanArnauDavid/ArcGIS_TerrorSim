@@ -117,8 +117,22 @@ namespace ArcGIS_App
             public string Callsign1 { get; set; }
             public string Callsign2 { get; set; }
             public string CollisionStart { get; set; }
+            public string CollisionEnd { get; set; } // New property for end time
             public string FLcallsign1 { get; set; }
             public string FLcallsign2 { get; set; }
+
+            public static string CalculateMedianFL(List<int> flightLevels)
+            {
+                var sortedFLs = flightLevels.OrderBy(fl => fl).ToList();
+                int count = sortedFLs.Count;
+
+                if (count == 0) return "N/A";
+
+                if (count % 2 == 1)
+                    return $"FL{sortedFLs[count / 2]}";
+                else
+                    return $"FL{(sortedFLs[(count - 1) / 2] + sortedFLs[count / 2]) / 2}";
+            }
         }
         public List<CollisionData> CheckForCollisions(DateTime simulationTime)
         {
@@ -148,8 +162,8 @@ namespace ArcGIS_App
                     int flPlane1 = (int)(plane1Position.Z / 0.3048 / 100); // Altitude from meters to FL
                     int flPlane2 = (int)(plane2Position.Z / 0.3048 / 100);
 
-                    // Skip collision detection if flight levels are different
-                    if (flPlane1 != flPlane2)
+                    // Skip collision detection if the FL difference is greater than 5
+                    if (Math.Abs(flPlane1 - flPlane2) > 5)
                         continue;
 
                     // Calculate the lateral distance between the two planes
@@ -180,6 +194,7 @@ namespace ArcGIS_App
                                 Callsign1 = plane1.Key,
                                 Callsign2 = plane2.Key,
                                 CollisionStart = simulationTime.ToString("HH:mm:ss"), // Use the passed simulation time
+                                CollisionEnd = simulationTime.ToString("HH:mm:ss"),
                                 FLcallsign1 = $"FL{flPlane1}",
                                 FLcallsign2 = $"FL{flPlane2}"
                             });
