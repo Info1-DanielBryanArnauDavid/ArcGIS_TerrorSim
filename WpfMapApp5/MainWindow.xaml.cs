@@ -508,6 +508,8 @@ namespace ArcGIS_App
                 {
                     _viewModel.LoadParameters(safetyDistance);
                     EnableControlButtons(true);
+                    ViewMenuItem.IsEnabled = true;
+                    OptionsMenuItem.IsEnabled = true;
                 }
                 else
                 {
