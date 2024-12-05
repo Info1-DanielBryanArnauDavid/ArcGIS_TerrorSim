@@ -300,7 +300,6 @@ namespace ArcGIS_App
 
             // Visualize the flight plans (this can be handled in a separate method)
             VisualizeFlightPlans();
-            EnableControlButtons(true);
         }
 
 
@@ -511,6 +510,7 @@ namespace ArcGIS_App
                 if (int.TryParse(param1, out int safetyDistance))
                 {
                     _viewModel.LoadParameters(safetyDistance);
+                    EnableControlButtons(true);
                 }
                 else
                 {

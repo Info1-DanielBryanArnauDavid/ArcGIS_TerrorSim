@@ -144,6 +144,14 @@ namespace ArcGIS_App
                     if (plane1Position == null || plane2Position == null)
                         continue;
 
+                    // Calculate flight levels for both planes
+                    int flPlane1 = (int)(plane1Position.Z / 0.3048 / 100); // Altitude from meters to FL
+                    int flPlane2 = (int)(plane2Position.Z / 0.3048 / 100);
+
+                    // Skip collision detection if flight levels are different
+                    if (flPlane1 != flPlane2)
+                        continue;
+
                     // Calculate the lateral distance between the two planes
                     var distance = GeometryEngine.DistanceGeodetic(
                         plane1Position,
@@ -156,10 +164,6 @@ namespace ArcGIS_App
                     // Check if the distance is less than 2 * safety distance
                     if (distance < 2 * safetyDistance * 1852) // Convert safety distance from nautical miles to meters
                     {
-                        // Calculate flight levels for each plane (altitude in feet divided by 100)
-                        int flPlane1 = (int)(plane1Position.Z / 0.3048 / 100); // Altitude from meters to FL
-                        int flPlane2 = (int)(plane2Position.Z / 0.3048 / 100);
-
                         // Sort the callsigns to ensure uniqueness of pairs
                         var callsignPair = string.Compare(plane1.Key, plane2.Key) < 0
                             ? $"{plane1.Key}-{plane2.Key}"
