@@ -7339,19 +7339,24 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\BRYAN\\.nuget\\packages\\": {}
+    "C:\\Users\\bolty\\.nuget\\packages\\": {},
+    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\BRYAN\\Source\\Repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\WpfMapApp5\\ArcGIS_App.csproj",
+      "projectUniqueName": "C:\\Users\\bolty\\source\\repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\WpfMapApp5\\ArcGIS_App.csproj",
       "projectName": "ArcGIS_App",
-      "projectPath": "C:\\Users\\BRYAN\\Source\\Repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\WpfMapApp5\\ArcGIS_App.csproj",
-      "packagesPath": "C:\\Users\\BRYAN\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\BRYAN\\Source\\Repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\WpfMapApp5\\obj\\",
+      "projectPath": "C:\\Users\\bolty\\source\\repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\WpfMapApp5\\ArcGIS_App.csproj",
+      "packagesPath": "C:\\Users\\bolty\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\bolty\\source\\repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\WpfMapApp5\\obj\\",
       "projectStyle": "PackageReference",
+      "fallbackFolders": [
+        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+      ],
       "configFilePaths": [
-        "C:\\Users\\BRYAN\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\bolty\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -7365,8 +7370,8 @@
         "net8.0-windows10.0.26100": {
           "targetAlias": "net8.0-windows10.0.26100.0",
           "projectReferences": {
-            "C:\\Users\\BRYAN\\Source\\Repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\Class\\Class.csproj": {
-              "projectPath": "C:\\Users\\BRYAN\\Source\\Repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\Class\\Class.csproj"
+            "C:\\Users\\bolty\\source\\repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\Class\\Class.csproj": {
+              "projectPath": "C:\\Users\\bolty\\source\\repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\Class\\Class.csproj"
             }
           }
         }
@@ -7379,8 +7384,9 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "direct"
-      }
+        "auditMode": "all"
+      },
+      "SdkAnalysisLevel": "9.0.100"
     },
     "frameworks": {
       "net8.0-windows10.0.26100": {
@@ -7417,57 +7423,57 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.AspNetCore.App.Runtime.win-arm64",
-            "version": "[8.0.8, 8.0.8]"
+            "version": "[8.0.11, 8.0.11]"
           },
           {
             "name": "Microsoft.AspNetCore.App.Runtime.win-x64",
-            "version": "[8.0.8, 8.0.8]"
+            "version": "[8.0.11, 8.0.11]"
           },
           {
             "name": "Microsoft.AspNetCore.App.Runtime.win-x86",
-            "version": "[8.0.8, 8.0.8]"
+            "version": "[8.0.11, 8.0.11]"
           },
           {
             "name": "Microsoft.NETCore.App.Runtime.win-arm64",
-            "version": "[8.0.8, 8.0.8]"
+            "version": "[8.0.11, 8.0.11]"
           },
           {
             "name": "Microsoft.NETCore.App.Runtime.win-x64",
-            "version": "[8.0.8, 8.0.8]"
+            "version": "[8.0.11, 8.0.11]"
           },
           {
             "name": "Microsoft.NETCore.App.Runtime.win-x86",
-            "version": "[8.0.8, 8.0.8]"
+            "version": "[8.0.11, 8.0.11]"
           },
           {
             "name": "Microsoft.Windows.SDK.NET.Ref",
-            "version": "[10.0.26100.34, 10.0.26100.34]"
+            "version": "[10.0.26100.54, 10.0.26100.54]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Runtime.win-arm64",
-            "version": "[8.0.8, 8.0.8]"
+            "version": "[8.0.11, 8.0.11]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Runtime.win-x64",
-            "version": "[8.0.8, 8.0.8]"
+            "version": "[8.0.11, 8.0.11]"
           },
           {
             "name": "Microsoft.WindowsDesktop.App.Runtime.win-x86",
-            "version": "[8.0.8, 8.0.8]"
+            "version": "[8.0.11, 8.0.11]"
           }
         ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           },
-          "Microsoft.Windows.SDK.NET.Ref": {
+          "Microsoft.Windows.SDK.NET.Ref.Windows": {
             "privateAssets": "all"
           },
           "Microsoft.WindowsDesktop.App.WPF": {
             "privateAssets": "none"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {
@@ -7481,5 +7487,82 @@
         "#import": []
       }
     }
-  }
+  },
+  "logs": [
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "El paquete \"System.Data.SqlClient\" 4.8.5 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-98g6-xh36-x2p7",
+      "libraryId": "System.Data.SqlClient",
+      "targetGraphs": [
+        "net8.0-windows10.0.26100",
+        "net8.0-windows10.0.26100/win-arm64",
+        "net8.0-windows10.0.26100/win-x64",
+        "net8.0-windows10.0.26100/win-x86"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "El paquete \"System.Private.Uri\" 4.3.0 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-5f2m-466j-3848",
+      "libraryId": "System.Private.Uri",
+      "targetGraphs": [
+        "net8.0-windows10.0.26100/win-arm64",
+        "net8.0-windows10.0.26100/win-x64",
+        "net8.0-windows10.0.26100/win-x86"
+      ]
+    },
+    {
+      "code": "NU1902",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "El paquete \"System.Private.Uri\" 4.3.0 tiene una vulnerabilidad de gravedad moderada conocida, https://github.com/advisories/GHSA-x5qj-9vmx-7g6g",
+      "libraryId": "System.Private.Uri",
+      "targetGraphs": [
+        "net8.0-windows10.0.26100/win-arm64",
+        "net8.0-windows10.0.26100/win-x64",
+        "net8.0-windows10.0.26100/win-x86"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "El paquete \"System.Private.Uri\" 4.3.0 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-xhfc-gr8f-ffwc",
+      "libraryId": "System.Private.Uri",
+      "targetGraphs": [
+        "net8.0-windows10.0.26100/win-arm64",
+        "net8.0-windows10.0.26100/win-x64",
+        "net8.0-windows10.0.26100/win-x86"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "El paquete \"System.Text.Json\" 7.0.0 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-hh2w-p6rv-4g7w",
+      "libraryId": "System.Text.Json",
+      "targetGraphs": [
+        "net8.0-windows10.0.26100",
+        "net8.0-windows10.0.26100/win-arm64",
+        "net8.0-windows10.0.26100/win-x64",
+        "net8.0-windows10.0.26100/win-x86"
+      ]
+    },
+    {
+      "code": "NU1903",
+      "level": "Warning",
+      "warningLevel": 1,
+      "message": "El paquete \"System.Text.RegularExpressions\" 4.3.0 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-cmhx-cq75-c4mj",
+      "libraryId": "System.Text.RegularExpressions",
+      "targetGraphs": [
+        "net8.0-windows10.0.26100",
+        "net8.0-windows10.0.26100/win-arm64",
+        "net8.0-windows10.0.26100/win-x64",
+        "net8.0-windows10.0.26100/win-x86"
+      ]
+    }
+  ]
 }

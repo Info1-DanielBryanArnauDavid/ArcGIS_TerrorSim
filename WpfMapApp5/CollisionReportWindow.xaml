@@ -25,7 +25,6 @@
                 <DataGridTextColumn Header="Callsign 1" Binding="{Binding Callsign1}" Width="*"/>
                 <DataGridTextColumn Header="Callsign 2" Binding="{Binding Callsign2}" Width="*"/>
                 <DataGridTextColumn Header="Start of Collision" Binding="{Binding CollisionStart}" Width="*"/>
-                <DataGridTextColumn Header="End of Collision" Binding="{Binding CollisionEnd}" Width="*"/>
                 <DataGridTextColumn Header="FL Callsign 1" Binding="{Binding FLcallsign1}" Width="*"/>
                 <DataGridTextColumn Header="FL Callsign 2" Binding="{Binding FLcallsign2}" Width="*"/>
             </DataGrid.Columns>

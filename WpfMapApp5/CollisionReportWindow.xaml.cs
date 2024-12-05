@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Class;
 using System.Windows.Shapes;
+using static ArcGIS_App.MapViewModel;
 namespace ArcGIS_App
 {
     /// <summary>
@@ -22,6 +23,7 @@ namespace ArcGIS_App
         public CollisionReportWindow()
         {
             InitializeComponent();
+            this.Topmost = true; // Ensure the welcome window stays on top of the MainWindow
         }
 
         // Method to update the progress bar
@@ -34,29 +36,30 @@ namespace ArcGIS_App
                 CollisionProgressBar.Value = progress;
             });
         }
-
-        // Method to load the collision data into the DataGrid
-        public void LoadCollisionData(List<CollisionData> collisionData)
+        public void ClearCollisionData()
         {
-            // Use Dispatcher to ensure the DataGrid update happens on the UI thread
+            // Clear the current items from the DataGrid
+            CollisionDataGrid.ItemsSource = null;
+            CollisionDataGrid.Items.Clear();
+        }
+
+        public void AddCollisionData(List<CollisionData> newCollisions)
+        {
+            // Add new collision data to the DataGrid
             Dispatcher.Invoke(() =>
             {
-                CollisionDataGrid.ItemsSource = collisionData;
+                foreach (var collision in newCollisions)
+                {
+                    CollisionDataGrid.Items.Add(collision);
+                }
             });
         }
+
+
 
 
         //metodo de añadir a la datagridview
 
     }
-    public class CollisionData
-    {
-        public string Callsign1 { get; set; }
-        public string Callsign2 { get; set; }
-        public string CollisionStart { get; set; }
-        public string CollisionEnd { get; set; }
-        public string FLcallsign1 { get; set; }
-        public string FLcallsign2 { get; set; }
-        }
-      
-    }
+
+}

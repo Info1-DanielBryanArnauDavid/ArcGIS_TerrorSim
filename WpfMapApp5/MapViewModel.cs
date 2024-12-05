@@ -34,6 +34,7 @@ namespace ArcGIS_App
         private DateTime _simulationEndTime;
         private DispatcherTimer _movementTimer;
         public DateTime _startTime;
+        private CollisionReportWindow _collisionReportWindow;
         private bool _isPlaying = false;
         private Label _timeLabel;
         private Slider _timelineSlider;
@@ -111,117 +112,103 @@ namespace ArcGIS_App
             // Initialize orbiting
             InitializeOrbiting();
         }
+        public class CollisionData
+        {
+            public string Callsign1 { get; set; }
+            public string Callsign2 { get; set; }
+            public string CollisionStart { get; set; }
+            public string FLcallsign1 { get; set; }
+            public string FLcallsign2 { get; set; }
+        }
+        public List<CollisionData> CheckForCollisions(DateTime simulationTime)
+        {
+            var collisions = new HashSet<string>(); // To avoid duplicate collision reports for the same pair of planes
+            var collisionList = new List<CollisionData>();
+
+            // Get all visible planes
+            var visiblePlanes = _planeGraphics.Where(plane => plane.Value.IsVisible).ToList();
+
+            // Iterate through each visible plane and compare it with every other visible plane
+            for (int i = 0; i < visiblePlanes.Count; i++)
+            {
+                for (int j = i + 1; j < visiblePlanes.Count; j++) // Avoid duplicate comparisons
+                {
+                    var plane1 = visiblePlanes[i];
+                    var plane2 = visiblePlanes[j];
+
+                    // Get the positions of the two planes
+                    var plane1Position = plane1.Value.Geometry as MapPoint;
+                    var plane2Position = plane2.Value.Geometry as MapPoint;
+
+                    // Ensure both planes have valid positions
+                    if (plane1Position == null || plane2Position == null)
+                        continue;
+
+                    // Calculate the lateral distance between the two planes
+                    var distance = GeometryEngine.DistanceGeodetic(
+                        plane1Position,
+                        plane2Position,
+                        LinearUnits.Meters,
+                        AngularUnits.Degrees,
+                        GeodeticCurveType.Geodesic
+                    ).Distance;
+
+                    // Check if the distance is less than 2 * safety distance
+                    if (distance < 2 * safetyDistance * 1852) // Convert safety distance from nautical miles to meters
+                    {
+                        // Calculate flight levels for each plane (altitude in feet divided by 100)
+                        int flPlane1 = (int)(plane1Position.Z / 0.3048 / 100); // Altitude from meters to FL
+                        int flPlane2 = (int)(plane2Position.Z / 0.3048 / 100);
+
+                        // Sort the callsigns to ensure uniqueness of pairs
+                        var callsignPair = string.Compare(plane1.Key, plane2.Key) < 0
+                            ? $"{plane1.Key}-{plane2.Key}"
+                            : $"{plane2.Key}-{plane1.Key}";
+
+                        // Add the collision to the list if it's a new pair
+                        if (!collisions.Contains(callsignPair))
+                        {
+                            collisions.Add(callsignPair);
+
+                            // Add a new CollisionData instance to the list
+                            collisionList.Add(new CollisionData
+                            {
+                                Callsign1 = plane1.Key,
+                                Callsign2 = plane2.Key,
+                                CollisionStart = simulationTime.ToString("HH:mm:ss"), // Use the passed simulation time
+                                FLcallsign1 = $"FL{flPlane1}",
+                                FLcallsign2 = $"FL{flPlane2}"
+                            });
+                        }
+                    }
+                }
+            }
+
+            return collisionList; // Return the list of collisions
+        }
 
         public void LoadParameters(int valor)
         {
             safetyDistance=valor;
         }
-        public List<CollisionData> ConvertReportToCollisionData(string report)
-        {
-            List<CollisionData> collisionDataList = new List<CollisionData>();
 
-            // Split the report into lines
-            string[] lines = report.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries);
-
-            // Parse each line and convert it to CollisionData
-            foreach (var line in lines)
-            {
-                // Split each line by the delimiter (assumed to be ' - ')
-                var parts = line.Split(new[] { " - " }, StringSplitOptions.None);
-
-                if (parts.Length == 6)
-                {
-                    // Create a new CollisionData object
-                    var collisionData = new CollisionData
-                    {
-                        Callsign1 = parts[0],
-                        Callsign2 = parts[1],
-                        CollisionStart = parts[2],  // This will be in "HH:mm:ss" format
-                        CollisionEnd = parts[3],    // This will be in "HH:mm:ss" format
-                        FLcallsign1 = parts[4],
-                        FLcallsign2 = parts[5]
-                    };
-
-                    // Add the collision data to the list
-                    collisionDataList.Add(collisionData);
-                }
-            }
-
-            return collisionDataList;
-        }
         public async void GenerateReport()
         {
             try
             {
-                // Create and show the collision report window immediately
-                CollisionReportWindow reportWindow = new CollisionReportWindow();
-                reportWindow.Show();
+                // Open the window only if it isn't already open
+                if (_collisionReportWindow == null || !_collisionReportWindow.IsVisible)
+                {
+                    _collisionReportWindow = new CollisionReportWindow();
+                    _collisionReportWindow.Show();
+                }
 
-                // Run the collision detection in the background
-                await Task.Run(() => GenerateReportInBackground(reportWindow));
+                // Clear any previous data in the DataGrid
+                _collisionReportWindow.ClearCollisionData();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred while generating the report: {ex.Message}");
-            }
-        }
-        private void GenerateReportInBackground(CollisionReportWindow reportWindow)
-        {
-            try
-            {
-                // Initialize the progress variable
-                double totalPairs = (_flightplans.FlightPlans.Count * (_flightplans.FlightPlans.Count - 1)) / 2; // Number of unique pairs
-                double progressIncrement = 100.0 / totalPairs;  // Calculate how much to increment each time
-
-                StringBuilder collisionReport = new StringBuilder();
-                double progress = 0; // Initial progress value
-
-                reportWindow.UpdateProgress(progress);  // Initialize progress bar
-
-                List<CollisionData> collisionDataList = new List<CollisionData>();  // To store collision data
-
-                // Loop through each pair of flight plans
-                for (int i = 0; i < _flightplans.FlightPlans.Count; i++)
-                {
-                    var flightPlan1 = _flightplans.FlightPlans[i];
-
-                    // Check collisions with all subsequent flight plans
-                    for (int j = i + 1; j < _flightplans.FlightPlans.Count; j++)
-                    {
-                        var flightPlan2 = _flightplans.FlightPlans[j];
-
-                        // Detect collisions between the two planes
-                        List<Tuple<string, string, DateTime, DateTime>> collisions = CollisionDetection.DetectCollisionsBetweenPlanes(flightPlan1, flightPlan2, _waypoints, safetyDistance * 1852);
-
-                        // Format the detected collisions and add to collisionDataList
-                        foreach (var collision in collisions)
-                        {
-                            CollisionData collisionData = new CollisionData
-                            {
-                                Callsign1 = flightPlan1.Callsign,
-                                Callsign2 = flightPlan2.Callsign,
-                                CollisionStart = collision.Item3.ToString("HH:mm:ss"),
-                                CollisionEnd = collision.Item4.ToString("HH:mm:ss"),
-                                FLcallsign1 = collision.Item1,
-                                FLcallsign2 = collision.Item2
-                            };
-                            collisionDataList.Add(collisionData);
-                        }
-
-                        // Update progress bar after each pair is processed
-                        progress += progressIncrement;
-                        reportWindow.UpdateProgress(progress);
-                    }
-                }
-
-                // Once all collision detection is done, pass the collected data to the window
-                reportWindow.LoadCollisionData(collisionDataList);
-
-            }
-            catch (Exception ex)
-            {
-                // Handle any errors that occur during the background task
-                MessageBox.Show($"Error generating report: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 
@@ -773,6 +760,14 @@ namespace ArcGIS_App
                     }
                 }
 
+                // Check for collisions at the current simulation time
+                var collisions = CheckForCollisions(currentSimulationTime); // Pass simulation time here
+                if (collisions.Count > 0 && _collisionReportWindow != null && _collisionReportWindow.IsVisible)
+                {
+                    // Add new rows dynamically to the CollisionReportWindow
+                    _collisionReportWindow.AddCollisionData(collisions);
+                }
+
                 // Stop simulation if no planes are active and time is past the end
                 if (!simulationActive && currentSimulationTime > _simulationEndTime)
                 {
@@ -787,6 +782,8 @@ namespace ArcGIS_App
                 MessageBox.Show($"Simulation error: {ex.Message}");
             }
         }
+
+
 
         private MapPoint GetPositionAlongPath(FlightPlanGIS flightPlan, double elapsedTime, out bool shouldDerender)
         {
