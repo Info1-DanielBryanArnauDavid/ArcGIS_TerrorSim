@@ -200,22 +200,57 @@ namespace ArcGIS_App
         {
             try
             {
-                // Open the window only if it isn't already open
+                // Check if the simulation has already started
+                if (_timelineSlider.Value > 0)
+                {
+                    var result = MessageBox.Show("Reset the simulation to generate a new report?", "Reset Simulation", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                    {
+                        ResetSimulation();
+                    }
+                    else
+                    {
+                        return; // Exit if user chooses not to reset
+                    }
+                }
+
+                // Open or focus the CollisionReportWindow
                 if (_collisionReportWindow == null || !_collisionReportWindow.IsVisible)
                 {
                     _collisionReportWindow = new CollisionReportWindow();
                     _collisionReportWindow.Show();
                 }
+                else
+                {
+                    _collisionReportWindow.Activate();
+                }
 
                 // Clear any previous data in the DataGrid
                 _collisionReportWindow.ClearCollisionData();
+
+                // Set speed multiplier
+                _speedMultiplier = 256;
+                UpdateTimerInterval();
+                TogglePlaneLabels(true);
+
+                // Subscribe to timeline slider changes for progress bar updates
+                _timelineSlider.ValueChanged += TimelineSlider_ValueChanged;
+
+                // Start simulation
+                StartSimulation();
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred while generating the report: {ex.Message}");
             }
         }
-
+        private void ResetSimulation()
+        {
+            _timelineSlider.Value = 0;
+            _startTime = DateTime.Now;
+            UpdateTimerInterval();
+            _collisionReportWindow?.ClearCollisionData();
+        }
 
         private void InitializeOrbiting()
         {
@@ -271,28 +306,16 @@ namespace ArcGIS_App
 
         private void OrbitCamera(object sender, EventArgs e)
         {
-            // Increment the angle more smoothly
             _currentAngle += 0.0005; // Adjust this speed for slower/faster orbit
             if (_currentAngle >= 360) _currentAngle = 0;
-
-            // Convert angle to radians
             double angleRad = _currentAngle * Math.PI / 180;
-
-            // Coordinates for the center of the Earth (approximately)
             double earthLat = 41.3;  // Latitude of the Earth's center (Equator)
             double earthLon = 100;  // Longitude of the Earth's center (Prime Meridian)
 
-            // Orbit radius: A very large orbit for a far-away view (e.g., 10,000 km above the surface)
-            double orbitRadius = 10000000; // Orbit radius in meters (10,000 km for a far orbit)
-
-            // Calculate orbital position using trigonometric functions (Circular path around Earth)
+            double orbitRadius = 10000000;
             double orbitLat = earthLat; // Keep latitude fixed for a global view (i.e., equator view)
             double orbitLon = earthLon + orbitRadius * Math.Cos(angleRad); // Longitude changes as we orbit
-
-            // Altitude of the camera (in meters) to simulate being far away in space
             double orbitAltitude = 14000000; // 10,000 km altitude for a high orbit
-
-            // Create the camera at orbital position
             Camera orbitCamera = new Camera(
                 orbitLat,            // Latitude of the camera
                 orbitLon,            // Longitude of the camera
@@ -342,7 +365,11 @@ namespace ArcGIS_App
 
         private void TimelineSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
-
+            if (_collisionReportWindow != null)
+            {
+                double progress = (_timelineSlider.Value / _timelineSlider.Maximum) * 100;
+                _collisionReportWindow.UpdateProgress(progress);
+            }
         }
         private async Task InitializeModelSymbols()
         {
@@ -1212,7 +1239,6 @@ namespace ArcGIS_App
 
         private void TogglePlaneLabels(bool isVisible)
         {
-            _arePlaneLabelsVisible = isVisible;
             _arePlaneLabelsVisible = isVisible;
             foreach (var planeGraphic in _planeGraphics.Values)
             {

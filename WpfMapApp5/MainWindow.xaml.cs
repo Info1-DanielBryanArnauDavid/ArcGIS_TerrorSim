@@ -24,9 +24,6 @@ namespace ArcGIS_App
         private DispatcherTimer _movementTimer;
         private bool _isTrackingPlane = false;
         private FlightPlanGIS _currentFlightPlan;
-        private int _currentWaypointIndex = 0;
-        private DateTime _startTime;
-        private MapPoint _currentPlanePosition;
         private OrbitGeoElementCameraController _orbitCameraController;
         private string _currentCallsign; // To store the callsign of the plane being tracked
         public MainWindow()
@@ -457,7 +454,7 @@ namespace ArcGIS_App
             Random random = new Random();
 
             // Generate a random alpha (transparency) value between 0 (transparent) and 255 (opaque)
-            byte alpha = 160;
+            byte alpha = 200;
 
             // Generate random red, green, and blue color values
             byte red = (byte)random.Next(256);
