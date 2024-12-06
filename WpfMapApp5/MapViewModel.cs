@@ -38,10 +38,10 @@ namespace ArcGIS_App
         private bool _isPlaying = false;
         private Label _timeLabel;
         private Slider _timelineSlider;
-        private bool _areLabelsVisible = false; // Track visibility state
+        private bool _areLabelsVisible = false;
         private bool _arePlaneLabelsVisible = false;
         private bool areFlightPlansVisible = true;
-        private System.Windows.Point? _startPoint; // Nullable Point for WPF
+        private System.Windows.Point? _startPoint;
         public bool IsPlaying => _isPlaying;
         public List<WaypointGIS> _waypoints;
         public FlightPlanListGIS _flightplans;
@@ -55,7 +55,6 @@ namespace ArcGIS_App
         private bool _isOrbiting = true;
         private int safetyDistance;
         private GraphicsOverlay _securityDistanceOverlay;
-        // This dictionary will track the safety distance graphics for each plane by their callsign
         private Dictionary<string, Graphic> _safetyDistanceGraphics = new Dictionary<string, Graphic>();
         private bool isSafetyVisible=false;
 
@@ -134,6 +133,48 @@ namespace ArcGIS_App
                     return $"FL{(sortedFLs[(count - 1) / 2] + sortedFLs[count / 2]) / 2}";
             }
         }
+        public void LoadFlightPlans(List<CollisionData> collisionData)
+        {
+            // Step 1: Update FlightPlanListGIS based on the collision data
+            FlightPlanListGIS flightPlanListGIS = _flightplans;
+            foreach (var collision in collisionData)
+            {
+                // Find the flight plans corresponding to Callsign1 and Callsign2
+                var flightPlan1 = flightPlanListGIS.FlightPlans.FirstOrDefault(fp => fp.Callsign == collision.Callsign1);
+                var flightPlan2 = flightPlanListGIS.FlightPlans.FirstOrDefault(fp => fp.Callsign == collision.Callsign2);
+
+                // Update the flight levels if the flight plans exist
+                if (flightPlan1 != null)
+                {
+                    // Update Flight Level for Callsign1
+                    for (int i = 0; i < flightPlan1.FlightLevels.Count; i++)
+                    {
+                        // Replace the flight level with the corrected value
+                        flightPlan1.FlightLevels[i] = collision.FLcallsign1;
+                    }
+                }
+
+                if (flightPlan2 != null)
+                {
+                    // Update Flight Level for Callsign2
+                    for (int i = 0; i < flightPlan2.FlightLevels.Count; i++)
+                    {
+                        // Replace the flight level with the corrected value
+                        flightPlan2.FlightLevels[i] = collision.FLcallsign2;
+                    }
+                }
+            }
+
+            // Step 2: Reload the flight plans into the map rendering
+            ReloadFlightPlans();
+        }
+
+        // Method to reload flight plans and clear the map
+        private void ReloadFlightPlans()
+        {
+            //update todo
+        }
+
         public List<CollisionData> CheckForCollisions(DateTime simulationTime)
         {
             var collisions = new HashSet<string>(); // To avoid duplicate collision reports for the same pair of planes
@@ -232,7 +273,7 @@ namespace ArcGIS_App
                 // Open or focus the CollisionReportWindow
                 if (_collisionReportWindow == null || !_collisionReportWindow.IsVisible)
                 {
-                    _collisionReportWindow = new CollisionReportWindow();
+                    _collisionReportWindow = new CollisionReportWindow(this);
                     _collisionReportWindow.Show();
                 }
                 else
@@ -688,6 +729,25 @@ namespace ArcGIS_App
             var terrainLayer = new ArcGISTiledElevationSource(new Uri("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/TopoBathy3D/ImageServer"));
             _scene.BaseSurface.ElevationSources.Add(terrainLayer);
         }
+        private MapPoint AdjustFlightLevelBetweenWaypoints(string callsign, int adjustmentFL)
+        {
+            var flightPlan = _flightplans.FlightPlans.FirstOrDefault(fp => fp.Callsign == callsign);
+            if (flightPlan == null) return null;
+
+            // Find the current position along the path
+            double elapsedSeconds = (DateTime.Now - flightPlan.StartTime).TotalSeconds;
+            var currentPosition = GetPositionAlongPath(flightPlan, elapsedSeconds, out _);
+
+            // Adjust the Flight Level by adding the adjustment (FL010)
+            if (currentPosition != null)
+            {
+                double adjustedAltitude = currentPosition.Z + adjustmentFL * 100 * 0.3048; // FL010 = 1000 feet = 304.8 meters
+                return new MapPoint(currentPosition.X, currentPosition.Y, adjustedAltitude, SpatialReferences.Wgs84);
+            }
+
+            return null;
+        }
+
         public void MovePlanesAlongPaths(object sender, EventArgs e)
         {
             try
@@ -724,6 +784,12 @@ namespace ArcGIS_App
 
                                 // Get the current position along the path
                                 var currentPosition = GetPositionAlongPath(flightPlan, flightElapsedTime, out shouldDerender);
+
+                                // Adjust the flight level for collisions if required
+                                if (CheckIfCollisionResolved(flightPlan.Callsign))
+                                {
+                                    currentPosition = AdjustFlightLevelBetweenWaypoints(flightPlan.Callsign, 10); // Add FL010
+                                }
 
                                 if (shouldDerender)
                                 {
@@ -829,7 +895,12 @@ namespace ArcGIS_App
             }
         }
 
-
+        private bool CheckIfCollisionResolved(string callsign)
+        {
+            // Check if the callsign is part of a collision resolution
+            return _collisionReportWindow?.CollisionDataGrid.Items.Cast<CollisionData>()
+                .Any(c => c.Callsign1 == callsign) ?? false;
+        }
 
         private MapPoint GetPositionAlongPath(FlightPlanGIS flightPlan, double elapsedTime, out bool shouldDerender)
         {

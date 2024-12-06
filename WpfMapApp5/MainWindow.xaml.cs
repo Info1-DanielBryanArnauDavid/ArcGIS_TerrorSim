@@ -127,7 +127,10 @@ namespace ArcGIS_App
             MySceneView.MouseLeftButtonDown -= SceneView_MouseLeftButtonDown;
         }
 
+        public void UpdatedFlightPlanList(FlightPlanListGIS flightplanlist)
+        {
 
+        }
 
 
         private void UpdatePlanePosition()

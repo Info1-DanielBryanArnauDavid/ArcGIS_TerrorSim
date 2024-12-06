@@ -26,7 +26,7 @@
                   HorizontalAlignment="Stretch"
                   VerticalAlignment="Stretch"
                   CanUserSortColumns="True" 
-                  Margin="10,40,10,10" 
+                  Margin="10,40,10,50" 
                   IsReadOnly="True">
             <!-- Define Columns in the DataGrid -->
             <DataGrid.Columns>
@@ -37,7 +37,17 @@
                 <DataGridTextColumn Header="FL Callsign 1" Binding="{Binding FLcallsign1}" Width="*"/>
                 <DataGridTextColumn Header="FL Callsign 2" Binding="{Binding FLcallsign2}" Width="*"/>
             </DataGrid.Columns>
-
         </DataGrid>
+
+        <!-- Button for Fix Collisions -->
+        <Button Name="FixCollisionsButton" 
+                Content="Fix Collisions" 
+                HorizontalAlignment="Right" 
+                VerticalAlignment="Bottom" 
+                Width="120" 
+                Height="30" 
+                Margin="10" 
+                Visibility="Collapsed"
+                Click="FixCollisionsButton_Click"/>
     </Grid>
 </Window>

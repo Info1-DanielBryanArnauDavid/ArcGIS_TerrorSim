@@ -16,11 +16,15 @@ using static ArcGIS_App.MapViewModel;
 
 namespace ArcGIS_App
 {
+
     public partial class CollisionReportWindow : Window
     {
-        public CollisionReportWindow()
+        private MapViewModel _mapViewModel;
+
+        public CollisionReportWindow(MapViewModel mapViewModel)
         {
             InitializeComponent();
+            _mapViewModel = mapViewModel;
             this.Topmost = true; // Ensure the welcome window stays on top of the MainWindow
         }
 
@@ -73,7 +77,52 @@ namespace ArcGIS_App
                 }
             }
         }
+        private void FixCollisionsButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // Get the current data from the DataGrid (but do not modify it)
+                var collisionData = CollisionDataGrid.Items.Cast<CollisionData>().ToList();
 
+                // Prepare a list to hold the updated data for MapViewModel
+                var updatedCollisionData = new List<CollisionData>();
+
+                foreach (var collision in collisionData)
+                {
+                    // Clone the collision data (to avoid modifying the original)
+                    var updatedCollision = new CollisionData
+                    {
+                        Callsign1 = collision.Callsign1,
+                        Callsign2 = collision.Callsign2,
+                        FLcallsign1 = collision.FLcallsign1,
+                        FLcallsign2 = collision.FLcallsign2,
+                        CollisionStart = collision.CollisionStart,
+                        CollisionEnd = collision.CollisionEnd
+                    };
+
+                    // Get the current FL of the first callsign
+                    int currentFL = int.Parse(updatedCollision.FLcallsign1.Replace("FL", ""));
+
+                    // Calculate the new FL (adding FL010 to ensure separation)
+                    int newFL = currentFL + 10;
+
+                    // Update the FL for rendering and logic (but not the original data source)
+                    updatedCollision.FLcallsign1 = $"FL{newFL}";
+
+                    // Add the updated collision to the list
+                    updatedCollisionData.Add(updatedCollision);
+                }
+
+                // Update the MapViewModel rendering and logic with the adjusted data
+                _mapViewModel.LoadFlightPlans(updatedCollisionData);
+
+                MessageBox.Show("Flight Levels adjusted for rendering and separation logic!", "Fix Collisions", MessageBoxButton.OK, MessageBoxImage.Information);
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred while fixing collisions: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+            }
+        }
 
 
         // Example of tying progress completion to finalizing the collision report
@@ -86,8 +135,12 @@ namespace ArcGIS_App
 
                 // Optionally, reset the progress bar to 0 (if needed)
                 CollisionProgressBar.Value = 0;
+
+                // Show the "Fix Collisions" button
+                FixCollisionsButton.Visibility = Visibility.Visible;
             });
         }
+
         public List<CollisionData> ProcessCollisionData(List<CollisionData> rawData)
         {
             // Group by unique callsign pairs
