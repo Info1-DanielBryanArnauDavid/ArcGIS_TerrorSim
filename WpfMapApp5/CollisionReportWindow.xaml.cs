@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using Class;
 using System.Windows.Shapes;
 using static ArcGIS_App.MapViewModel;
+using System.Diagnostics;
 
 namespace ArcGIS_App
 {
@@ -124,8 +125,7 @@ namespace ArcGIS_App
             }
         }
 
-
-        // Example of tying progress completion to finalizing the collision report
+      
         public void OnProgressComplete(List<CollisionData> rawData)
         {
             Dispatcher.Invoke(() =>

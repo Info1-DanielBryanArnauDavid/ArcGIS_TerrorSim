@@ -40,7 +40,6 @@
 
     <DockPanel>
         <!-- Menu Bar -->
-        <!-- Menu Bar -->
         <Menu DockPanel.Dock="Top" Name="MainMenu">
             <MenuItem Header="_File">
                 <MenuItem Header="Load _Waypoints" Click="LoadWaypoints_Click" />
@@ -55,7 +54,7 @@
                 <MenuItem Header="View and search for flight plans" Click="ShowFlightPlanDetailsButton_Click" />
             </MenuItem>
             <MenuItem Header="_Options" Name="OptionsMenuItem" IsEnabled="False">
-                <MenuItem Header="Generate Report of colisions" Click="ReportGenerate_Click" />
+                <MenuItem Header="Generate Report of collisions" Click="ReportGenerate_Click" />
             </MenuItem>
             <MenuItem Header="_Github">
                 <MenuItem Header="ArcGIS_TerrorSim" Click="OpenGithubRepo_Click" />
@@ -84,26 +83,33 @@
 
                     <!-- Play/Pause Button and Time Label -->
                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0">
+                        <!-- Reset Button -->
+                        <Button x:Name="ResetButton" Width="35" Height="30" HorizontalAlignment="Center" Click="ResetButton_Click" Margin="5,0" IsEnabled="False">
+                            <Button.Content>
+                                <TextBlock FontSize="18" Text="🔄" />
+                            </Button.Content>
+                        </Button>
+
                         <!-- Speed Multiplier Label -->
                         <Label x:Name="SpeedMultiplierLabel" Content="Speed: 1x" FontSize="14" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="10,0" />
 
                         <!-- Decrease Speed Button -->
                         <Button x:Name="DecreaseSpeedButton" Width="35" Height="30" HorizontalAlignment="Center" Click="DecreaseSpeedButton_Click" Margin="5,0" IsEnabled="False">
                             <Button.Content>
-                                <TextBlock FontSize="18" Text="&lt;&lt;"/>
+                                <TextBlock FontSize="18" FontWeight="Bold" Text="&lt;&lt;"/>
                             </Button.Content>
                         </Button>
 
                         <Button x:Name="PlayPauseButton" Width="35" Height="30" HorizontalAlignment="Center" Click="PlayPauseButton_Click" Margin="5,0" IsEnabled="False">
                             <Button.Content>
-                                <TextBlock x:Name="PlayPauseText" FontSize="18" Text=">" />
+                                <TextBlock x:Name="PlayPauseText" FontSize="18" Text="▶" />
                             </Button.Content>
                         </Button>
 
                         <!-- Increase Speed Button -->
                         <Button x:Name="IncreaseSpeedButton" Width="35" Height="30" HorizontalAlignment="Center" Click="IncreaseSpeedButton_Click" Margin="5,0" IsEnabled="False">
                             <Button.Content>
-                                <TextBlock FontSize="18" Text=">>" />
+                                <TextBlock FontSize="18" FontWeight="Bold" Text=">>" />
                             </Button.Content>
                         </Button>
 

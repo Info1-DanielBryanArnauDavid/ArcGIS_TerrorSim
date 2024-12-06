@@ -164,16 +164,8 @@ namespace ArcGIS_App
                     }
                 }
             }
-
-            // Step 2: Reload the flight plans into the map rendering
-            ReloadFlightPlans();
         }
 
-        // Method to reload flight plans and clear the map
-        private void ReloadFlightPlans()
-        {
-            //update todo
-        }
 
         public List<CollisionData> CheckForCollisions(DateTime simulationTime)
         {
@@ -300,7 +292,7 @@ namespace ArcGIS_App
                 MessageBox.Show($"An error occurred while generating the report: {ex.Message}");
             }
         }
-        private void ResetSimulation()
+        public void ResetSimulation()
         {
             _timelineSlider.Value = 0;
             _startTime = DateTime.Now;

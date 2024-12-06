@@ -188,7 +188,7 @@ namespace ArcGIS_App
             if (_viewModel.IsPlaying)
             {
                 // Switch to Play icon ('>')
-                PlayPauseText.Text = ">";
+                PlayPauseText.Text = "▶";
                 _viewModel.PauseSimulation();
                 _viewModel.ResetMultiplier();
                 UpdateSpeedLabel();
@@ -196,14 +196,24 @@ namespace ArcGIS_App
             else
             {
                 // Switch to Pause icon ('||')
-                PlayPauseText.Text = "||";
+                PlayPauseText.Text = "❚❚";
                 _viewModel.StartSimulation();
             }
+        }
+
+        private void ResetButton_Click(object sender,RoutedEventArgs e)
+        {
+            _viewModel.ResetSimulation();
+            ResetButton.IsEnabled = false;
         }
 
         // TimelineSlider value changed (update plane position and time)
         private void TimelineSlider_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
         {
+            if (TimelineSlider.Value > 0)
+            {
+                ResetButton.IsEnabled = true;
+            }
         }
 
         private void LoadWaypoints_Click(object sender, RoutedEventArgs e)

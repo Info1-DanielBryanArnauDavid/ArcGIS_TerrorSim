@@ -61,7 +61,7 @@ namespace ArcGIS_App
             GoToButton.Visibility = Visibility.Visible;
         }
 
-        private void ShowVerticalProfile(FlightPlanGIS selectedFlightPlan)
+        public void ShowVerticalProfile(FlightPlanGIS selectedFlightPlan)
         {
             // Prepare the plot model for vertical profile
             var plotModel = new PlotModel { Title = "Flight Profile" };
@@ -80,27 +80,16 @@ namespace ArcGIS_App
             var flightLevels = selectedFlightPlan.FlightLevels;
             var waypoints = selectedFlightPlan.Waypoints;
 
-            // Filter unique flight levels (only the defined FLs, removing duplicates)
-            var uniqueFlightLevels = flightLevels
-                .Where(f => f.StartsWith("FL") || f.EndsWith("m")) // Only FL or meters
-                .Distinct()
-                .OrderBy(f => f) // Sort FLs in ascending order
-                .ToList();
-
-            // Define the vertical axis with only the specific flight levels present in the flight plan
+            // Define the vertical axis with fixed divisions (FL000 to FL500, step FL050)
             var verticalAxis = new LinearAxis
             {
                 Position = AxisPosition.Left,
                 Title = "Flight Level (FL)",
-                MajorStep = 5000, // Display every 5000 feet (adjust as needed)
-                Minimum = 0,
-                Maximum = 50000, // Ensure the max height is FL500 (50000 feet)
-                LabelFormatter = value =>  // Format the vertical axis labels as FLXX
-                {
-                    var matchingFL = uniqueFlightLevels.FirstOrDefault(f =>
-                        int.TryParse(f.Substring(2), out int level) && level * 100 == value);
-                    return matchingFL ?? string.Empty;  // Only return FL values that match the defined flight levels
-                }
+                MajorStep = 5000, // Major step for FL050 (5000 feet increments)
+                MinorStep = 1000, // Minor step (optional, 1000 feet increments)
+                Minimum = 0,      // Minimum altitude (FL000 = 0 feet)
+                Maximum = 50000,  // Maximum altitude (FL500 = 50000 feet)
+                LabelFormatter = value => $"FL{value / 100:000}" // Format as FLxxx (e.g., 5000 -> FL050)
             };
 
             // Add vertical axis to the plot model
@@ -135,43 +124,19 @@ namespace ArcGIS_App
                 if (flightLevel.StartsWith("FL"))
                 {
                     // Extract the flight level value (e.g., FL340 -> 34000 feet)
-                    int level = int.Parse(flightLevel.Substring(2),System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture);
+                    int level = int.Parse(flightLevel.Substring(2), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture);
                     verticalPosition = level * 100; // Convert FL to feet (e.g., FL350 -> 35000ft)
                 }
                 else if (flightLevel.EndsWith("m"))
                 {
                     // Convert meters to feet for consistency
-                    verticalPosition = double.Parse(flightLevel.Replace("m", ""),System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture);
+                    verticalPosition = double.Parse(flightLevel.Replace("m", ""), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture);
                 }
 
                 // Add the point to the line series (only at waypoints with defined FL)
                 if (verticalPosition > 0)
                 {
                     series.Points.Add(new DataPoint(i, verticalPosition));
-
-                    // Add a vertical dotted line at each waypoint (using a line series)
-                    var verticalLine = new LineSeries
-                    {
-                        StrokeThickness = 1,
-                        Color = OxyColors.Gray,
-                        MarkerType = MarkerType.None,
-                    };
-
-                    verticalLine.Points.Add(new DataPoint(i, 0)); // Start at the bottom (0)
-                    verticalLine.Points.Add(new DataPoint(i, verticalPosition)); // Go to the FL value
-                    plotModel.Series.Add(verticalLine);  // Add the vertical line for each waypoint
-
-                    // Draw horizontal lines connecting the flight levels to the vertical axis
-                    var horizontalLine = new LineSeries
-                    {
-                        StrokeThickness = 1,
-                        Color = OxyColors.Gray,
-                        MarkerType = MarkerType.None
-                    };
-
-                    horizontalLine.Points.Add(new DataPoint(0, verticalPosition)); // Start at the first waypoint (horizontal axis)
-                    horizontalLine.Points.Add(new DataPoint(i, verticalPosition)); // Connect to the current waypoint
-                    plotModel.Series.Add(horizontalLine); // Add the horizontal line
                 }
             }
 
@@ -181,8 +146,6 @@ namespace ArcGIS_App
             // Assign the plot model to the PlotView (VerticalProfilePlot)
             VerticalProfilePlot.Model = plotModel;
         }
-
-
 
 
         private void GoToButton_Click(object sender, RoutedEventArgs e)
