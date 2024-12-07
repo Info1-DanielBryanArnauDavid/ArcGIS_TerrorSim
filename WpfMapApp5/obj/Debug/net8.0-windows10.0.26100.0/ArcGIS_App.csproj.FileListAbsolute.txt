@@ -2083,3 +2083,5 @@ C:\Users\34647\Source\Repos\Info1-DanielBryanArnauDavid\ArcGIS_TerrorSim\WpfMapA
 C:\Users\34647\Source\Repos\Info1-DanielBryanArnauDavid\ArcGIS_TerrorSim\WpfMapApp5\obj\Debug\net8.0-windows10.0.26100.0\ArcGIS_App.genruntimeconfig.cache
 C:\Users\34647\Source\Repos\Info1-DanielBryanArnauDavid\ArcGIS_TerrorSim\WpfMapApp5\obj\Debug\net8.0-windows10.0.26100.0\ref\ArcGIS_App.dll
 C:\Users\34647\Source\Repos\Info1-DanielBryanArnauDavid\ArcGIS_TerrorSim\WpfMapApp5\bin\Debug\net8.0-windows10.0.26100.0\WpfAnimatedGif.dll
+C:\Users\bolty\source\repos\Info1-DanielBryanArnauDavid\ArcGIS_TerrorSim\WpfMapApp5\bin\Debug\net8.0-windows10.0.26100.0\WpfAnimatedGif.dll
+C:\Users\bolty\source\repos\Info1-DanielBryanArnauDavid\ArcGIS_TerrorSim\WpfMapApp5\bin\Debug\net8.0-windows10.0.26100.0\RecursosChulos\ArcGIS_logo.png

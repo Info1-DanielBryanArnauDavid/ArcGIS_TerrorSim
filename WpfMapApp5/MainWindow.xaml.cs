@@ -232,6 +232,7 @@ namespace ArcGIS_App
         private void ReportGenerate_Click(object sender, RoutedEventArgs e)
         {
             _viewModel.GenerateReport();
+            UpdateSpeedLabel();
         }
         private void OpenGithubRepo_Click(object sender, RoutedEventArgs e)
         {
@@ -397,7 +398,7 @@ namespace ArcGIS_App
             UpdateSpeedLabel();
         }
 
-        private void UpdateSpeedLabel()
+        public void UpdateSpeedLabel()
         {
             SpeedMultiplierLabel.Content = $"Speed: {_viewModel._speedMultiplier}x";
         }

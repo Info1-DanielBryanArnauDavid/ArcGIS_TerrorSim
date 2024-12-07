@@ -123,7 +123,7 @@ namespace ArcGIS_App
                 // Reload the updated flight plans into the map view
                 _mapViewModel.LoadUpdated(listaplanes);
 
-                MessageBox.Show("Colisiones resueltas ajustando los niveles de vuelo.", "Fix Collisions", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("Collisions adjusted.", "Fix Collisions", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {

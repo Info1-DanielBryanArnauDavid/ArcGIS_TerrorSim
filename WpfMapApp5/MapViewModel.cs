@@ -20,6 +20,7 @@ using NetTopologySuite.Index.Quadtree;
 using NetTopologySuite.Operation.Overlay;
 using static ArcGIS_App.CollisionReportWindow;
 using System.Text;
+using System.Windows.Input;
 
 namespace ArcGIS_App
 {
@@ -304,7 +305,8 @@ namespace ArcGIS_App
         public async void LoadUpdated(FlightPlanListGIS nuevoplan)
         {
             _flightplans = nuevoplan;
-             InitializeSimulation();
+            ResetSimulation();
+            //hay que updatear el flightplan correctamente
         }
 
         public async void GenerateReport()

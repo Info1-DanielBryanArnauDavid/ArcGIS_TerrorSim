@@ -23,7 +23,7 @@
             <Setter Property="Margin" Value="5"/>
             <Setter Property="Padding" Value="10"/>
             <Setter Property="FontSize" Value="14"/>
-            <Setter Property="Background" Value="#4CAF50"/>
+            <Setter Property="Background" Value="#61A9FF"/>
             <Setter Property="Foreground" Value="White"/>
             <Setter Property="BorderBrush" Value="#388E3C"/>
             <Setter Property="BorderThickness" Value="1"/>

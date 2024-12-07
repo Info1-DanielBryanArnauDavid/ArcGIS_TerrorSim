@@ -5,26 +5,29 @@
         Title="TerrorSim" Height="400" Width="800" WindowStartupLocation="CenterScreen"
         Icon="\Resources\Beluga.ico">
     <Grid Background="White">
-        <Label Content="Welcome to TerrorSim" FontSize="24" FontWeight="Bold" Foreground="#333333" Margin="62,34,-22,0" VerticalAlignment="Top"/>
-        <Label Content="The interactive real-time collision simulator" FontSize="12" Foreground="#666666" Margin="62,74,-22,0" VerticalAlignment="Top"/>
+        <Label Content="Welcome to TerrorSim" FontSize="24" FontWeight="Bold" Foreground="#333333" Margin="59,34,70,0" VerticalAlignment="Top"/>
+        <Label Content="The interactive real-time collision simulator" FontSize="12" Foreground="#666666" Margin="59,74,70,0" VerticalAlignment="Top"/>
 
-        <Label Content="Username" Margin="40,140,0,0" VerticalAlignment="Top"/>
+        <Label Content="Username" Margin="10,143,119,0" VerticalAlignment="Top"/>
 
-        <Label Content="Password" Margin="40,189,0,0" VerticalAlignment="Top"/>
+        <Label Content="Password" Margin="10,192,119,0" VerticalAlignment="Top"/>
         <TextBox x:Name="textBoxVisible" Height="30" Margin="100,187,380,0" VerticalAlignment="Top"
          Background="#F5F5F5" Visibility="Collapsed"/>
 
-        <CheckBox x:Name="checkBox1" Content="Show password" Margin="95,230,55,0" VerticalAlignment="Top"
+        <CheckBox x:Name="checkBox1" Content="Show password" Margin="89,233,138,0" VerticalAlignment="Top"
                   Foreground="#666666"
                   Checked="checkBox1_CheckedChanged" Unchecked="checkBox1_CheckedChanged"/>
-        <Image gif:ImageBehavior.AnimatedSource="/Resources/hola.gif" Margin="438,66,28,86"/>
 
+        <!-- Image now spans and fills the entire right side -->
+        <Image gif:ImageBehavior.AnimatedSource="/Resources/hola.gif" HorizontalAlignment="Right" VerticalAlignment="Top" 
+               Width="400" Stretch="Fill"/>
 
         <!-- Adjusted margins for buttons to prevent overlap -->
         <Button x:Name="button1" Content="Log In"
-                Margin="100,270,550,62"
+                Margin="82,273,586,59"
                 Background="#0078D4" Foreground="#FFFFFF"
                 Click="button1_Click"/>
+
         <TextBlock x:Name="recoverPasswordLabel"
            Cursor="Hand"
            Foreground="Blue"
@@ -32,21 +35,21 @@
            VerticalAlignment="Top"
            Visibility="Hidden"
            MouseLeftButtonUp="RecoverPasswordLabel_Click">
-    <Underline>
-        <Run Text="Recover password"/>
-    </Underline>
+            <Underline>
+                <Run Text="Recover password"/>
+            </Underline>
         </TextBlock>
 
-
         <Button x:Name="button2" Content="Create Account"
-                Margin="270,270,380,62"
+                Margin="232,273,436,59"
                 Background="#0078D4" Foreground="#FFFFFF"
                 Click="button2_Click"/>
-        <Button Content="jope" Margin="322,81,380,250" Click="Button_Click_1"/>
-        <TextBox x:Name="textBox1" Height="30" Margin="100,140,380,0" VerticalAlignment="Top"
+
+        <Button Content="jope" Margin="0,347,734,0" Click="Button_Click_1"/>
+
+        <TextBox x:Name="textBox1" Height="30" Margin="82,143,436,0" VerticalAlignment="Top"
                  Background="#F5F5F5"/>
-        <PasswordBox x:Name="textBox2" Height="30" Margin="100,187,380,0" VerticalAlignment="Top"
+        <PasswordBox x:Name="textBox2" Height="30" Margin="82,192,436,0" VerticalAlignment="Top"
                      Background="#F5F5F5"/>
     </Grid>
-
 </Window>
