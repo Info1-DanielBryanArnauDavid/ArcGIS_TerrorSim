@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:esri="http://schemas.esri.com/arcgis/runtime/2013"
-        Title="ArcGIS TerrorSim" WindowState="Maximized" WindowStyle="SingleBorderWindow">
+        Title="ArcGIS TerrorSim" WindowState="Maximized" WindowStyle="SingleBorderWindow"
+        Icon="\Resources\Beluga.ico">
 
     <Window.Resources>
         <!-- Style for the Slider -->

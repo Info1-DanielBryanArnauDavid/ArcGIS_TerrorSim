@@ -1110,6 +1110,22 @@
             "rid": "win"
           }
         }
+      },
+      "WpfAnimatedGif/2.0.2": {
+        "type": "package",
+        "compile": {
+          "lib/netcoreapp3.0/WpfAnimatedGif.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "runtime": {
+          "lib/netcoreapp3.0/WpfAnimatedGif.dll": {
+            "related": ".pdb;.xml"
+          }
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WPF"
+        ]
       }
     }
   },
@@ -3620,34 +3636,50 @@
         "system.windows.extensions.nuspec",
         "useSharedDesignerContext.txt"
       ]
+    },
+    "WpfAnimatedGif/2.0.2": {
+      "sha512": "B0j9SqtThyHVTiOPvu6yR+39Te0g3o+7Jjb+qEm7+Iz1HRqbE5/4QV+ntHWOYYBPOUFr9x1mdzGl/EzWP+nKiA==",
+      "type": "package",
+      "path": "wpfanimatedgif/2.0.2",
+      "files": [
+        ".nupkg.metadata",
+        ".signature.p7s",
+        "lib/net35/WpfAnimatedGif.dll",
+        "lib/net35/WpfAnimatedGif.pdb",
+        "lib/net35/WpfAnimatedGif.xml",
+        "lib/net40/WpfAnimatedGif.dll",
+        "lib/net40/WpfAnimatedGif.pdb",
+        "lib/net40/WpfAnimatedGif.xml",
+        "lib/netcoreapp3.0/WpfAnimatedGif.dll",
+        "lib/netcoreapp3.0/WpfAnimatedGif.pdb",
+        "lib/netcoreapp3.0/WpfAnimatedGif.xml",
+        "wpfanimatedgif.2.0.2.nupkg.sha512",
+        "wpfanimatedgif.nuspec"
+      ]
     }
   },
   "projectFileDependencyGroups": {
     "net8.0-windows10.0.26100": [
       "AF.DataAccessor >= 2.0.2",
       "Esri.ArcGISRuntime.WPF >= 200.6.0",
-      "Microsoft.Data.Sqlite >= 9.0.0"
+      "Microsoft.Data.Sqlite >= 9.0.0",
+      "WpfAnimatedGif >= 2.0.2"
     ]
   },
   "packageFolders": {
-    "C:\\Users\\bolty\\.nuget\\packages\\": {},
-    "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages": {}
+    "C:\\Users\\34647\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\bolty\\source\\repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\Class\\Class.csproj",
+      "projectUniqueName": "C:\\Users\\34647\\Source\\Repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\Class\\Class.csproj",
       "projectName": "Class",
-      "projectPath": "C:\\Users\\bolty\\source\\repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\Class\\Class.csproj",
-      "packagesPath": "C:\\Users\\bolty\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\bolty\\source\\repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\Class\\obj\\",
+      "projectPath": "C:\\Users\\34647\\Source\\Repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\Class\\Class.csproj",
+      "packagesPath": "C:\\Users\\34647\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\34647\\Source\\Repos\\Info1-DanielBryanArnauDavid\\ArcGIS_TerrorSim\\Class\\obj\\",
       "projectStyle": "PackageReference",
-      "fallbackFolders": [
-        "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
-      ],
       "configFilePaths": [
-        "C:\\Users\\bolty\\AppData\\Roaming\\NuGet\\NuGet.Config",
-        "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+        "C:\\Users\\34647\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
@@ -3671,9 +3703,8 @@
       "restoreAuditProperties": {
         "enableAudit": "true",
         "auditLevel": "low",
-        "auditMode": "all"
-      },
-      "SdkAnalysisLevel": "9.0.100"
+        "auditMode": "direct"
+      }
     },
     "frameworks": {
       "net8.0-windows10.0.26100": {
@@ -3690,6 +3721,10 @@
           "Microsoft.Data.Sqlite": {
             "target": "Package",
             "version": "[9.0.0, )"
+          },
+          "WpfAnimatedGif": {
+            "target": "Package",
+            "version": "[2.0.2, )"
           }
         },
         "imports": [
@@ -3706,51 +3741,19 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.Windows.SDK.NET.Ref",
-            "version": "[10.0.26100.54, 10.0.26100.54]"
+            "version": "[10.0.26100.34, 10.0.26100.34]"
           }
         ],
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           },
-          "Microsoft.Windows.SDK.NET.Ref.Windows": {
+          "Microsoft.Windows.SDK.NET.Ref": {
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.100/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\8.0.400/PortableRuntimeIdentifierGraph.json"
       }
     }
-  },
-  "logs": [
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "El paquete \"System.Data.SqlClient\" 4.8.5 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-98g6-xh36-x2p7",
-      "libraryId": "System.Data.SqlClient",
-      "targetGraphs": [
-        "net8.0-windows10.0.26100"
-      ]
-    },
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "El paquete \"System.Text.Json\" 7.0.0 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-hh2w-p6rv-4g7w",
-      "libraryId": "System.Text.Json",
-      "targetGraphs": [
-        "net8.0-windows10.0.26100"
-      ]
-    },
-    {
-      "code": "NU1903",
-      "level": "Warning",
-      "warningLevel": 1,
-      "message": "El paquete \"System.Text.RegularExpressions\" 4.3.0 tiene una vulnerabilidad de gravedad alta conocida, https://github.com/advisories/GHSA-cmhx-cq75-c4mj",
-      "libraryId": "System.Text.RegularExpressions",
-      "targetGraphs": [
-        "net8.0-windows10.0.26100"
-      ]
-    }
-  ]
+  }
 }

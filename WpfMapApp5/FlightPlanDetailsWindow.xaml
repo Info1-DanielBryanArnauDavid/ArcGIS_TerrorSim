@@ -2,7 +2,8 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:oxy="http://oxyplot.org/wpf"
-        Title="Flight Plan Details" Height="600" Width="1064" Background="#f4f4f4">
+        Title="Flight Plan Details" Height="600" Width="1064" Background="#f4f4f4"
+        Icon="\Resources\Beluga.ico">
     <Window.Resources>
         <!-- Style for TextBox (SearchBox) -->
         <Style TargetType="TextBox">

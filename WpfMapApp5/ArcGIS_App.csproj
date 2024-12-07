@@ -12,6 +12,10 @@
   <ItemGroup>
     <None Remove="RecursosChulos\A320model.mtl" />
     <None Remove="RecursosChulos\A320model.obj" />
+    <None Remove="Resources\avion.gif" />
+    <None Remove="Resources\Beluga.ico" />
+    <None Remove="Resources\giphy.gif" />
+    <None Remove="Resources\hola.gif" />
   </ItemGroup>
 
   <ItemGroup>
@@ -34,6 +38,13 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Class\Class.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Resources\hola.gif" />
+    <Resource Include="Resources\avion.gif" />
+    <Resource Include="Resources\Beluga.ico" />
+    <Resource Include="Resources\giphy.gif" />
   </ItemGroup>
 
   <ItemGroup>
