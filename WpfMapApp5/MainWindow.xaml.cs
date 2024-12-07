@@ -26,9 +26,11 @@ namespace ArcGIS_App
         private FlightPlanGIS _currentFlightPlan;
         private OrbitGeoElementCameraController _orbitCameraController;
         private string _currentCallsign; // To store the callsign of the plane being tracked
+        public static MainWindow Current { get; private set; }
         public MainWindow()
         {
             InitializeComponent();
+            Current = this;
 
             // Initialize the MapViewModel with an empty list of waypoints
             _viewModel = new MapViewModel(MySceneView, TimeLabel, TimelineSlider, new List<WaypointGIS>(), flightplanlist);
@@ -91,6 +93,7 @@ namespace ArcGIS_App
                 MySceneView.MouseLeftButtonDown += SceneView_MouseLeftButtonDown;
             }
         }
+
         private void SceneView_MouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
         {
             // Check if we're tracking a plane
@@ -126,12 +129,6 @@ namespace ArcGIS_App
             // Unsubscribe from MouseLeftButtonDown to stop further tracking
             MySceneView.MouseLeftButtonDown -= SceneView_MouseLeftButtonDown;
         }
-
-        public void UpdatedFlightPlanList(FlightPlanListGIS flightplanlist)
-        {
-
-        }
-
 
         private void UpdatePlanePosition()
         {
@@ -309,11 +306,14 @@ namespace ArcGIS_App
                 }
             }
 
-            // Visualize the flight plans (this can be handled in a separate method)
             VisualizeFlightPlans();
         }
 
-
+        public void LoadUpdatedAlso(FlightPlanListGIS nuevalista)
+        {
+            flightplanlist = nuevalista;
+            VisualizeFlightPlans();
+        }
 
         private void VisualizeFlightPlans()
         {

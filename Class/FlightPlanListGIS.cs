@@ -54,6 +54,10 @@ namespace Class
             return waypoints;
         }
 
+        public void LoadUpdatedAlso(FlightPlanGIS planes)
+        {
+
+        }
         // Method to load flight plans from a file
         public static FlightPlanListGIS LoadFlightPlansFromFile(string filePath, List<WaypointGIS> waypoints)
         {

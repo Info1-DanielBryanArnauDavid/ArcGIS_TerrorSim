@@ -309,6 +309,7 @@ namespace ArcGIS_App
             //hay que updatear el flightplan correctamente
         }
 
+
         public async void GenerateReport()
         {
             try
@@ -340,6 +341,7 @@ namespace ArcGIS_App
 
                 // Clear any previous data in the DataGrid
                 _collisionReportWindow.ClearCollisionData();
+                StartSimulation();
                 _speedMultiplier = 512;
                 UpdateTimerInterval();
                 TogglePlaneLabels(true);
@@ -347,9 +349,6 @@ namespace ArcGIS_App
 
                 // Subscribe to timeline slider changes for progress bar updates
                 _timelineSlider.ValueChanged += TimelineSlider_ValueChanged;
-
-                // Start simulation
-                StartSimulation();
             }
             catch (Exception ex)
             {
@@ -363,6 +362,7 @@ namespace ArcGIS_App
             _startTime = DateTime.Now;
             UpdateTimerInterval();
             _collisionReportWindow?.ClearCollisionData();
+            TogglePlaneLabels(false);
         }
 
         private void InitializeOrbiting()

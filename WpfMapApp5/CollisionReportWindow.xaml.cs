@@ -121,6 +121,7 @@ namespace ArcGIS_App
 
                 // Reload the updated flight plans into the map view.
                 _mapViewModel.LoadUpdated(listaplanes);
+                MainWindow.Current.LoadUpdatedAlso(listaplanes);
                 this.Close();
             }
             catch (Exception ex)
