@@ -119,6 +119,7 @@ namespace ArcGIS_App
             public string CollisionEnd { get; set; } // New property for end time
             public string FLcallsign1 { get; set; }
             public string FLcallsign2 { get; set; }
+            public string LastWaypoint { get; set; }
 
             public static string CalculateMedianFL(List<int> flightLevels)
             {
@@ -165,8 +166,6 @@ namespace ArcGIS_App
                 }
             }
         }
-
-
         public List<CollisionData> CheckForCollisions(DateTime simulationTime)
         {
             var collisions = new HashSet<string>(); // To avoid duplicate collision reports for the same pair of planes
@@ -191,9 +190,9 @@ namespace ArcGIS_App
                     if (plane1Position == null || plane2Position == null)
                         continue;
 
-                    // Calculate flight levels for both planes
-                    int flPlane1 = (int)(plane1Position.Z / 0.3048 / 100); // Altitude from meters to FL
-                    int flPlane2 = (int)(plane2Position.Z / 0.3048 / 100);
+                    // Calculate flight levels for both planes, handling both FL and meters
+                    int flPlane1 = GetFlightLevel(plane1Position.Z);
+                    int flPlane2 = GetFlightLevel(plane2Position.Z);
 
                     // Skip collision detection if the FL difference is greater than 5
                     if (Math.Abs(flPlane1 - flPlane2) > 5)
@@ -221,6 +220,13 @@ namespace ArcGIS_App
                         {
                             collisions.Add(callsignPair);
 
+                            // Get the flight plans for the two planes
+                            var flightPlan1 = _flightplans.FlightPlans.FirstOrDefault(fp => fp.Callsign == plane1.Key);
+                            var flightPlan2 = _flightplans.FlightPlans.FirstOrDefault(fp => fp.Callsign == plane2.Key);
+
+                            string lastWaypoint1 = GetLastWaypoint(plane1Position, flightPlan1);
+                            string lastWaypoint2 = GetLastWaypoint(plane2Position, flightPlan2);
+
                             // Add a new CollisionData instance to the list
                             collisionList.Add(new CollisionData
                             {
@@ -229,7 +235,8 @@ namespace ArcGIS_App
                                 CollisionStart = simulationTime.ToString("HH:mm:ss"), // Use the passed simulation time
                                 CollisionEnd = simulationTime.ToString("HH:mm:ss"),
                                 FLcallsign1 = $"FL{flPlane1}",
-                                FLcallsign2 = $"FL{flPlane2}"
+                                FLcallsign2 = $"FL{flPlane2}",
+                                LastWaypoint = $"{lastWaypoint1} - {lastWaypoint2}" // Add the last waypoints crossed
                             });
                         }
                     }
@@ -238,10 +245,66 @@ namespace ArcGIS_App
 
             return collisionList; // Return the list of collisions
         }
+        private int GetFlightLevel(double altitude)
+        {
+            // If the altitude is provided in meters (XXm)
+            if (altitude < 10000)
+            {
+                // Convert meters to feet and then to FL (1 meter = 3.28084 feet)
+                return (int)(altitude / 0.3048 / 100);  // 0.3048 is the conversion factor from meters to feet, and we divide by 100 to get FL.
+            }
+            else
+            {
+                // If the altitude is already in FL format (e.g., FL350), we simply divide by 100 to get the FL number
+                return (int)(altitude / 0.3048 / 100);  // Assuming altitude is in feet and divided by 100
+            }
+        }
+
+
+
+        // Method to get the last waypoint crossed by a plane based on its position and flight plan
+        private string GetLastWaypoint(MapPoint planePosition, FlightPlanGIS flightPlan)
+        {
+            if (flightPlan == null || flightPlan.Waypoints.Count == 0)
+                return "Unknown";
+
+            // Logic to find the closest waypoint or the last one based on the plane's current position
+            string lastWaypoint = "Unknown"; // Default value
+
+            double minDistance = double.MaxValue; // Start with the maximum possible distance
+
+            foreach (var waypoint in flightPlan.Waypoints)
+            {
+                // Calculate the distance between the plane and the waypoint
+                var waypointPosition = waypoint.Location; // Using the Location property of the WaypointGIS object
+                var distance = GeometryEngine.DistanceGeodetic(
+                    planePosition,
+                    waypointPosition,
+                    LinearUnits.Meters,
+                    AngularUnits.Degrees,
+                    GeodeticCurveType.Geodesic
+                ).Distance;
+
+                // If the plane is closer to the waypoint, it might be the last waypoint
+                if (distance < minDistance)
+                {
+                    minDistance = distance;
+                    lastWaypoint = waypoint.ID; // Using the ID property of WaypointGIS as the waypoint name
+                }
+            }
+
+            return lastWaypoint;
+        }
 
         public void LoadParameters(int valor)
         {
             safetyDistance=valor;
+        }
+     
+        public async void LoadUpdated(FlightPlanListGIS nuevoplan)
+        {
+            _flightplans = nuevoplan;
+             InitializeSimulation();
         }
 
         public async void GenerateReport()
@@ -265,7 +328,7 @@ namespace ArcGIS_App
                 // Open or focus the CollisionReportWindow
                 if (_collisionReportWindow == null || !_collisionReportWindow.IsVisible)
                 {
-                    _collisionReportWindow = new CollisionReportWindow(this);
+                    _collisionReportWindow = new CollisionReportWindow(this,_flightplans);
                     _collisionReportWindow.Show();
                 }
                 else
@@ -277,6 +340,7 @@ namespace ArcGIS_App
                 _collisionReportWindow.ClearCollisionData();
 
                 // Set speed multiplier
+                await InitializeSimulation();
                 _speedMultiplier = 256;
                 UpdateTimerInterval();
                 TogglePlaneLabels(true);
@@ -721,25 +785,6 @@ namespace ArcGIS_App
             var terrainLayer = new ArcGISTiledElevationSource(new Uri("http://elevation3d.arcgis.com/arcgis/rest/services/WorldElevation3D/TopoBathy3D/ImageServer"));
             _scene.BaseSurface.ElevationSources.Add(terrainLayer);
         }
-        private MapPoint AdjustFlightLevelBetweenWaypoints(string callsign, int adjustmentFL)
-        {
-            var flightPlan = _flightplans.FlightPlans.FirstOrDefault(fp => fp.Callsign == callsign);
-            if (flightPlan == null) return null;
-
-            // Find the current position along the path
-            double elapsedSeconds = (DateTime.Now - flightPlan.StartTime).TotalSeconds;
-            var currentPosition = GetPositionAlongPath(flightPlan, elapsedSeconds, out _);
-
-            // Adjust the Flight Level by adding the adjustment (FL010)
-            if (currentPosition != null)
-            {
-                double adjustedAltitude = currentPosition.Z + adjustmentFL * 100 * 0.3048; // FL010 = 1000 feet = 304.8 meters
-                return new MapPoint(currentPosition.X, currentPosition.Y, adjustedAltitude, SpatialReferences.Wgs84);
-            }
-
-            return null;
-        }
-
         public void MovePlanesAlongPaths(object sender, EventArgs e)
         {
             try
@@ -778,11 +823,6 @@ namespace ArcGIS_App
                                 var currentPosition = GetPositionAlongPath(flightPlan, flightElapsedTime, out shouldDerender);
 
                                 // Adjust the flight level for collisions if required
-                                if (CheckIfCollisionResolved(flightPlan.Callsign))
-                                {
-                                    currentPosition = AdjustFlightLevelBetweenWaypoints(flightPlan.Callsign, 10); // Add FL010
-                                }
-
                                 if (shouldDerender)
                                 {
                                     // Derender the plane if it has reached its destination
@@ -882,17 +922,10 @@ namespace ArcGIS_App
             }
             catch (Exception ex)
             {
-                Debug.WriteLine($"Simulation error: {ex.Message}");
                 MessageBox.Show($"Simulation error: {ex.Message}");
             }
         }
 
-        private bool CheckIfCollisionResolved(string callsign)
-        {
-            // Check if the callsign is part of a collision resolution
-            return _collisionReportWindow?.CollisionDataGrid.Items.Cast<CollisionData>()
-                .Any(c => c.Callsign1 == callsign) ?? false;
-        }
 
         private MapPoint GetPositionAlongPath(FlightPlanGIS flightPlan, double elapsedTime, out bool shouldDerender)
         {

@@ -23,12 +23,11 @@
 
         <!-- DataGrid to display the collision data -->
         <DataGrid Name="CollisionDataGrid"
-                  HorizontalAlignment="Stretch"
-                  VerticalAlignment="Stretch"
-                  CanUserSortColumns="True" 
-                  Margin="10,40,10,50" 
-                  IsReadOnly="True">
-            <!-- Define Columns in the DataGrid -->
+          HorizontalAlignment="Stretch"
+          VerticalAlignment="Stretch"
+          CanUserSortColumns="True" 
+          Margin="10,40,10,50" 
+          IsReadOnly="True">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Callsign 1" Binding="{Binding Callsign1}" Width="*"/>
                 <DataGridTextColumn Header="Callsign 2" Binding="{Binding Callsign2}" Width="*"/>
@@ -36,8 +35,11 @@
                 <DataGridTextColumn Header="End of Collision" Binding="{Binding CollisionEnd}" Width="*"/>
                 <DataGridTextColumn Header="FL Callsign 1" Binding="{Binding FLcallsign1}" Width="*"/>
                 <DataGridTextColumn Header="FL Callsign 2" Binding="{Binding FLcallsign2}" Width="*"/>
+                <DataGridTextColumn Header="Last Waypoints" Binding="{Binding LastWaypoint}" Width="*"/>
+                <!-- Add this column -->
             </DataGrid.Columns>
         </DataGrid>
+
 
         <!-- Button for Fix Collisions -->
         <Button Name="FixCollisionsButton" 
