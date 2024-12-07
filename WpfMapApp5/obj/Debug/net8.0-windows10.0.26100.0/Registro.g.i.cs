@@ -100,7 +100,7 @@ namespace ArcGIS_App {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/ArcGIS_App;V1.0.0.0;component/registro.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/ArcGIS_App;component/registro.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\Registro.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

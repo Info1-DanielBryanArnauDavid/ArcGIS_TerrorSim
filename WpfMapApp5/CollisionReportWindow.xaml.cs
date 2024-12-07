@@ -14,6 +14,7 @@ using Class;
 using System.Windows.Shapes;
 using static ArcGIS_App.MapViewModel;
 using System.Diagnostics;
+using System.Windows.Media.Animation;
 
 namespace ArcGIS_App
 {
@@ -79,116 +80,144 @@ namespace ArcGIS_App
 
                 foreach (var collision in collisionData)
                 {
-                    if (!DateTime.TryParse(collision.CollisionStart, out DateTime collisionStart) ||
-                        !DateTime.TryParse(collision.CollisionEnd, out DateTime collisionEnd))
-                    {
-                        MessageBox.Show($"Fechas inválidas para la colisión entre {collision.Callsign1} y {collision.Callsign2}.",
-                                         "Error de datos", MessageBoxButton.OK, MessageBoxImage.Error);
-                        continue;
-                    }
+                    // Split the LastWaypoint string by the dash to separate both callsigns' waypoints
+                    var lastWaypointForFirstCallsign = collision.LastWaypoint.Split('-')[0];
 
+                    // Check if we have already adjusted this callsign (first callsign only)
                     if (!adjustedCallsigns.Contains(collision.Callsign1))
                     {
-                        AdjustFlightLevels(collision.Callsign1, collisionStart, collisionEnd, updatedFlightPlans);
+                        AdjustFlightLevels(collision.Callsign1, lastWaypointForFirstCallsign, updatedFlightPlans);
                         adjustedCallsigns.Add(collision.Callsign1);
                     }
 
-                    if (!adjustedCallsigns.Contains(collision.Callsign2))
-                    {
-                        AdjustFlightLevels(collision.Callsign2, collisionStart, collisionEnd, updatedFlightPlans);
-                        adjustedCallsigns.Add(collision.Callsign2);
-                    }
+                    // For the second callsign, we don't need to adjust the flight plan (skip it)
                 }
 
-                // Add "(Updated)" to the company name of the updated flight plans
-                foreach (var flightPlan in updatedFlightPlans)
+                // Ensure updated flight plans have valid data
+                if (!updatedFlightPlans.Any())
                 {
-                    flightPlan.CompanyName += " (Updated)";
+                    MessageBox.Show("No flight plans were updated. Please verify your data.", "No Updates", MessageBoxButton.OK, MessageBoxImage.Warning);
+                    return;
                 }
 
-                // Update the original listaplanes with the modified flight plans
+                // Update the original listaplanes with the modified flight plans.
                 foreach (var updatedFlightPlan in updatedFlightPlans)
                 {
-                    // Find the flight plan in the list and update it
                     var existingFlightPlan = listaplanes.FlightPlans.FirstOrDefault(fp => fp.Callsign == updatedFlightPlan.Callsign);
                     if (existingFlightPlan != null)
                     {
-                        existingFlightPlan.CompanyName = updatedFlightPlan.CompanyName;
+                        existingFlightPlan.CompanyName = updatedFlightPlan.CompanyName + " (Updated)";
                         existingFlightPlan.FlightLevels = updatedFlightPlan.FlightLevels;
                         existingFlightPlan.Waypoints = updatedFlightPlan.Waypoints;
-                        existingFlightPlan.StartTime = updatedFlightPlan.StartTime; // Assuming you're also updating start times, if necessary
+                        existingFlightPlan.StartTime = updatedFlightPlan.StartTime;
+
+                        Debug.WriteLine($"[INFO] Updated flight plan for callsign: {updatedFlightPlan.Callsign}");
+                    }
+                    else
+                    {
+                        Debug.WriteLine($"[ERROR] Flight plan for callsign {updatedFlightPlan.Callsign} not found in listaplanes.");
                     }
                 }
 
-                // Reload the updated flight plans into the map view
+                // Reload the updated flight plans into the map view.
                 _mapViewModel.LoadUpdated(listaplanes);
-
-                MessageBox.Show("Collisions adjusted.", "Fix Collisions", MessageBoxButton.OK, MessageBoxImage.Information);
+                this.Close();
             }
             catch (Exception ex)
             {
-                MessageBox.Show($"Ocurrió un error al resolver colisiones: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show($"An error occurred while resolving collisions: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
-
-        private void AdjustFlightLevels(string callsign, DateTime collisionStart, DateTime collisionEnd, List<FlightPlanGIS> updatedFlightPlans)
+        private void AdjustFlightLevels(string callsign, string lastWaypoint, List<FlightPlanGIS> updatedFlightPlans)
         {
+            // Find the flight plan for the given callsign
             var flightPlan = listaplanes.FlightPlans.FirstOrDefault(fp => fp.Callsign == callsign);
 
-            if (flightPlan != null)
+            if (flightPlan == null)
             {
-                bool updated = false;
+                Debug.WriteLine($"[ERROR] No flight plan found for callsign: {callsign}");
+                return;
+            }
 
-                for (int i = 0; i < flightPlan.Waypoints.Count; i++)
-                {
-                    if (IsWaypointInCollisionPeriod(i, collisionStart, collisionEnd, flightPlan))
-                    {
-                        // Adjust the flight level for the waypoint if it's within the collision period
-                        AdjustFlightLevelForWaypoint(i, flightPlan, updatedFlightPlans);
-                        updated = true;
-                    }
-                }
+            Debug.WriteLine($"[INFO] Adjusting flight plan for callsign: {callsign}");
 
-                if (updated)
-                {
-                    updatedFlightPlans.Add(flightPlan);
-                }
+            bool updated = false;
+
+            // Check if the last waypoint is valid and ensure it is not the last waypoint in the list
+            int startIndex = flightPlan.Waypoints.FindIndex(wp => wp.ID == lastWaypoint);
+            if (startIndex == -1 || startIndex == flightPlan.Waypoints.Count - 1)
+            {
+                Debug.WriteLine($"[ERROR] Last waypoint '{lastWaypoint}' not found or already at the end.");
+                return;
+            }
+
+            // If the number of waypoints is greater than 8, adjust flight levels for the last waypoint and the next 3 waypoints
+            int waypointsToAdjust = flightPlan.Waypoints.Count > 8 ? 4 : 0; // Adjust 4 waypoints if more than 8 waypoints exist
+
+            // If fewer than 8 waypoints, just apply a 20-minute delay
+            if (waypointsToAdjust == 0)
+            {
+                Debug.WriteLine($"[INFO] Flight plan has less than 8 waypoints. Applying 20-minute delay.");
+                flightPlan.StartTime = flightPlan.StartTime.AddMinutes(20); // Delay by 20 minutes
+                updated = true;
             }
             else
             {
-                MessageBox.Show($"No se encontró un plan de vuelo para el callsign: {callsign}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                // Adjust the flight levels for the last waypoint and the next 3 waypoints (up to 4 waypoints)
+                int endIndex = Math.Min(startIndex + waypointsToAdjust, flightPlan.Waypoints.Count); // Ensure we don't exceed the number of waypoints
+
+                for (int i = startIndex; i < endIndex; i++)
+                {
+                    // Check if the flight level is a cruising level (e.g., FL320, FL340)
+                    string currentFL = flightPlan.FlightLevels[i];
+                    if (IsCruiseLevel(currentFL))
+                    {
+                        // Add 10 to the current flight level for separation
+                        try
+                        {
+                            int currentFLValue = int.Parse(currentFL.Replace("FL", ""));
+                            flightPlan.FlightLevels[i] = $"FL{currentFLValue + 10}"; // Add 10 for separation
+                            Debug.WriteLine($"[INFO] Adjusted Flight Level at Waypoint {i}: {flightPlan.FlightLevels[i]}");
+                            updated = true;
+                        }
+                        catch (FormatException)
+                        {
+                            Debug.WriteLine($"[ERROR] Failed to parse flight level: {currentFL}");
+                        }
+                    }
+                }
             }
-        }
 
-        private void AdjustFlightLevelForWaypoint(int waypointIndex, FlightPlanGIS flightPlan, List<FlightPlanGIS> updatedFlightPlans)
-        {
-            // Calculate current flight level and add 10 for separation
-            var currentFL = int.Parse(flightPlan.FlightLevels[waypointIndex].Replace("FL", ""));
-            flightPlan.FlightLevels[waypointIndex] = $"FL{currentFL + 10}"; // Add 10 for separation
-
-            // If possible, adjust two waypoints ahead as well
-            if (waypointIndex + 2 < flightPlan.Waypoints.Count)
+            // If the flight plan was updated, add it to the list of updated flight plans
+            if (updated)
             {
-                var nextFL = int.Parse(flightPlan.FlightLevels[waypointIndex + 2].Replace("FL", ""));
-                flightPlan.FlightLevels[waypointIndex + 2] = $"FL{nextFL + 10}"; // Add 10 for separation
+                Debug.WriteLine($"[INFO] Flight plan for callsign: {callsign} was updated.");
+                updatedFlightPlans.Add(flightPlan);
             }
-
-            // If there is no waypoint two ahead, adjust the next one
-            else if (waypointIndex + 1 < flightPlan.Waypoints.Count)
+            else
             {
-                var nextFL = int.Parse(flightPlan.FlightLevels[waypointIndex + 1].Replace("FL", ""));
-                flightPlan.FlightLevels[waypointIndex + 1] = $"FL{nextFL + 10}"; // Add 10 for separation
+                Debug.WriteLine($"[INFO] No updates were made to the flight plan for callsign: {callsign}");
+            }
+        }
+
+        // Helper function to check if a flight level is a cruising level (e.g., FL320, FL340)
+        private bool IsCruiseLevel(string flightLevel)
+        {
+            if (string.IsNullOrEmpty(flightLevel)) return false;
+
+            // Check if the flight level starts with "FL" and then contains a value above FL290 (cruise level)
+            if (flightLevel.StartsWith("FL"))
+            {
+                if (int.TryParse(flightLevel.Replace("FL", ""), out int flValue))
+                {
+                    return flValue >= 290; // Consider anything above FL290 as a cruise level
+                }
             }
 
-            updatedFlightPlans.Add(flightPlan);
+            return false;
         }
 
-        private bool IsWaypointInCollisionPeriod(int waypointIndex, DateTime collisionStart, DateTime collisionEnd, FlightPlanGIS flightPlan)
-        {
-            DateTime waypointTime = flightPlan.StartTime.AddMinutes(waypointIndex * 10); // assuming each waypoint is 10 minutes apart
-            return waypointTime >= collisionStart && waypointTime <= collisionEnd;
-        }
+
 
         public void OnProgressComplete(List<CollisionData> rawData)
         {
@@ -270,7 +299,5 @@ namespace ArcGIS_App
             });
         }
     }
-
-
 
 }

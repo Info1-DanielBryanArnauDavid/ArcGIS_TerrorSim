@@ -237,7 +237,7 @@ namespace ArcGIS_App
                                 CollisionEnd = simulationTime.ToString("HH:mm:ss"),
                                 FLcallsign1 = $"FL{flPlane1}",
                                 FLcallsign2 = $"FL{flPlane2}",
-                                LastWaypoint = $"{lastWaypoint1} - {lastWaypoint2}" // Add the last waypoints crossed
+                                LastWaypoint = $"{lastWaypoint1}-{lastWaypoint2}" // Add the last waypoints crossed
                             });
                         }
                     }
@@ -340,12 +340,10 @@ namespace ArcGIS_App
 
                 // Clear any previous data in the DataGrid
                 _collisionReportWindow.ClearCollisionData();
-
-                // Set speed multiplier
-                await InitializeSimulation();
-                _speedMultiplier = 256;
+                _speedMultiplier = 512;
                 UpdateTimerInterval();
                 TogglePlaneLabels(true);
+                
 
                 // Subscribe to timeline slider changes for progress bar updates
                 _timelineSlider.ValueChanged += TimelineSlider_ValueChanged;
@@ -357,6 +355,7 @@ namespace ArcGIS_App
             {
                 MessageBox.Show($"An error occurred while generating the report: {ex.Message}");
             }
+
         }
         public void ResetSimulation()
         {
@@ -514,7 +513,7 @@ namespace ArcGIS_App
         }
         public void IncreaseSimulationSpeed()
         {
-            _speedMultiplier = Math.Min(_speedMultiplier * 2, 512); // Cap at 32x
+            _speedMultiplier = Math.Min(_speedMultiplier * 2, 512); // Cap
             UpdateTimerInterval();
         }
         public void ResetMultiplier()
@@ -538,7 +537,7 @@ namespace ArcGIS_App
                 _startTime = DateTime.Now.AddSeconds(-_timelineSlider.Value / _speedMultiplier);
             }
         }
-
+   
         private async Task InitializeSimulation()
         {
             if (_flightplans == null || !_flightplans.FlightPlans.Any())

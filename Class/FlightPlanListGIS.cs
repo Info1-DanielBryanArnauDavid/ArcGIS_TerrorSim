@@ -41,7 +41,6 @@ namespace Class
                         double.TryParse(parts[2].Trim(), System.Globalization.NumberStyles.Float, System.Globalization.CultureInfo.InvariantCulture, out double lon))
                         {
                             waypoints.Add(new WaypointGIS(id, lat, lon));
-                            Debug.WriteLine(parts[2]);
                         }
 
                     }
