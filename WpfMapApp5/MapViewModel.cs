@@ -21,6 +21,7 @@ using NetTopologySuite.Operation.Overlay;
 using static ArcGIS_App.CollisionReportWindow;
 using System.Text;
 using System.Windows.Input;
+using Microsoft.Win32;
 
 namespace ArcGIS_App
 {
@@ -365,6 +366,85 @@ namespace ArcGIS_App
             TogglePlaneLabels(false);
         }
 
+        public void SaveWaypoints()
+        {
+            // Open file save dialog
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Text Files (*.txt)|*.txt",
+                Title = "Save Waypoints File"
+            };
+
+            // Show dialog and check if the user selected a path
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string filePath = saveFileDialog.FileName;
+
+                try
+                {
+                    // Write waypoints to the file
+                    using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
+                    {
+                        foreach (var waypoint in _waypoints)
+                        {
+                            // Write each waypoint in the format: ID, Latitude, Longitude
+                            writer.WriteLine($"{waypoint.ID},{waypoint.Latitude.ToString("F6", System.Globalization.CultureInfo.InvariantCulture)},{waypoint.Longitude.ToString("F6", System.Globalization.CultureInfo.InvariantCulture)}");
+                        }
+                    }
+
+                    Console.WriteLine("Waypoints saved successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error saving waypoints: {ex.Message}");
+                }
+            }
+        }
+
+        public void SaveFlightPlans()
+        {
+            // Open file save dialog
+            SaveFileDialog saveFileDialog = new SaveFileDialog
+            {
+                Filter = "Text Files (*.txt)|*.txt",
+                Title = "Save Flight Plans File"
+            };
+
+            // Show dialog and check if the user selected a path
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                string filePath = saveFileDialog.FileName;
+
+                try
+                {
+                    // Write flight plans to the file
+                    using (StreamWriter writer = new StreamWriter(filePath, false, Encoding.UTF8))
+                    {
+                        foreach (var flightPlan in _flightplans.FlightPlans)
+                        {
+                            // Write header: Time, Airline, Callsign, Aircraft
+                            writer.WriteLine($"{flightPlan.StartTime:HH:mm:ss},{flightPlan.CompanyName},{flightPlan.Callsign},{flightPlan.Aircraft}");
+
+                            // Write each waypoint in the format: WaypointID, FlightLevel, Speed
+                            for (int i = 0; i < flightPlan.Waypoints.Count; i++)
+                            {
+                                var waypoint = flightPlan.Waypoints[i];
+                                string flightLevel = flightPlan.FlightLevels[i];
+                                string speed = flightPlan.Speeds[i];
+
+                                writer.WriteLine($"{waypoint.ID},{flightLevel},{speed}");
+                            }
+                        }
+                    }
+
+                    Console.WriteLine("Flight plans saved successfully.");
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error saving flight plans: {ex.Message}");
+                }
+            }
+        }
         private void InitializeOrbiting()
         {
             _orbitTimer = new DispatcherTimer

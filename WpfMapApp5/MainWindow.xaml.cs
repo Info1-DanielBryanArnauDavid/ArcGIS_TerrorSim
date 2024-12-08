@@ -220,6 +220,7 @@ namespace ArcGIS_App
             {
                 _viewModel.UpdateWaypoints(loadedWaypoints);
                 MessageBox.Show($"Loaded {loadedWaypoints.Count} waypoints successfully!", "File Open");
+                WaypointsClick.IsEnabled=true;
             }
         }
         private void ToggleWaypointLabels_Click(object sender, RoutedEventArgs e)
@@ -278,22 +279,7 @@ namespace ArcGIS_App
                     // Load flight plans into the FlightPlanListGIS object
                     flightplanlist = FlightPlanListGIS.LoadFlightPlansFromFile(flightPlansFilePath, loadedWaypoints);
                     _viewModel.LoadFlightPlanFunc(flightplanlist);
-
-                    if (flightplanlist != null && flightplanlist.FlightPlans.Count > 0)
-                    {
-                        // Create a detailed message with all the flight plans' information
-                        StringBuilder detailsMessage = new StringBuilder();
-                        detailsMessage.AppendLine($"Successfully loaded {flightplanlist.FlightPlans.Count} flight plans.");
-                    }
-                    else
-                    {
-                        MessageBox.Show(
-                            "No flight plans could be loaded from the file.",
-                            "No Flight Plans",
-                            MessageBoxButton.OK,
-                            MessageBoxImage.Warning
-                        );
-                    }
+                    FlightPlansClick.IsEnabled = true;
                 }
                 catch (Exception ex)
                 {
@@ -314,7 +300,14 @@ namespace ArcGIS_App
             flightplanlist = nuevalista;
             VisualizeFlightPlans();
         }
-
+        private void SaveFlightPlans_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.SaveFlightPlans();
+        }
+        private void SaveWaypoints_Click(object sender, RoutedEventArgs e)
+        {
+            _viewModel.SaveWaypoints();
+        }
         private void VisualizeFlightPlans()
         {
             if (flightplanlist == null || flightplanlist.FlightPlans.Count == 0)

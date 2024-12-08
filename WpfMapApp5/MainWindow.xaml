@@ -46,6 +46,8 @@
                 <MenuItem Header="Load _Waypoints" Click="LoadWaypoints_Click" />
                 <MenuItem Header="Load _Flight Plans" Click="LoadFlightPlans_Click" />
                 <MenuItem Header="Load _Parameters" Click="LoadParameters_Click" />
+                <MenuItem Header="Save Waypoints" Name="WaypointsClick" Click="SaveWaypoints_Click" IsEnabled="False" />
+                <MenuItem Header="Save Flight Plans" Name="FlightPlansClick" Click="SaveFlightPlans_Click" IsEnabled="False"/>
             </MenuItem>
             <MenuItem Header="_View" Name="ViewMenuItem" IsEnabled="False">
                 <MenuItem Header="Toggle Waypoint Labels" Click="ToggleWaypointLabels_Click" />
