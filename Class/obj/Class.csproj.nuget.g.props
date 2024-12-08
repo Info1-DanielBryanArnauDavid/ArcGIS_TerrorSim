@@ -5,13 +5,12 @@
     <RestoreTool Condition=" '$(RestoreTool)' == '' ">NuGet</RestoreTool>
     <ProjectAssetsFile Condition=" '$(ProjectAssetsFile)' == '' ">$(MSBuildThisFileDirectory)project.assets.json</ProjectAssetsFile>
     <NuGetPackageRoot Condition=" '$(NuGetPackageRoot)' == '' ">$(UserProfile)\.nuget\packages\</NuGetPackageRoot>
-    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\bolty\.nuget\packages\;C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages</NuGetPackageFolders>
+    <NuGetPackageFolders Condition=" '$(NuGetPackageFolders)' == '' ">C:\Users\05agu\.nuget\packages\</NuGetPackageFolders>
     <NuGetProjectStyle Condition=" '$(NuGetProjectStyle)' == '' ">PackageReference</NuGetProjectStyle>
-    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.12.1</NuGetToolVersion>
+    <NuGetToolVersion Condition=" '$(NuGetToolVersion)' == '' ">6.11.0</NuGetToolVersion>
   </PropertyGroup>
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <SourceRoot Include="C:\Users\bolty\.nuget\packages\" />
-    <SourceRoot Include="C:\Program Files (x86)\Microsoft Visual Studio\Shared\NuGetPackages\" />
+    <SourceRoot Include="C:\Users\05agu\.nuget\packages\" />
   </ItemGroup>
   <ItemGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
     <Content Include="$(NuGetPackageRoot)af.dataaccessor\2.0.2\contentFiles\any\net6.0\AFDataAccessor.json" Condition="Exists('$(NuGetPackageRoot)af.dataaccessor\2.0.2\contentFiles\any\net6.0\AFDataAccessor.json')">
@@ -32,6 +31,6 @@
     </Content>
   </ItemGroup>
   <PropertyGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <PkgEsri_ArcGISRuntime_WPF Condition=" '$(PkgEsri_ArcGISRuntime_WPF)' == '' ">C:\Users\bolty\.nuget\packages\esri.arcgisruntime.wpf\200.6.0</PkgEsri_ArcGISRuntime_WPF>
+    <PkgEsri_ArcGISRuntime_WPF Condition=" '$(PkgEsri_ArcGISRuntime_WPF)' == '' ">C:\Users\05agu\.nuget\packages\esri.arcgisruntime.wpf\200.6.0</PkgEsri_ArcGISRuntime_WPF>
   </PropertyGroup>
 </Project>

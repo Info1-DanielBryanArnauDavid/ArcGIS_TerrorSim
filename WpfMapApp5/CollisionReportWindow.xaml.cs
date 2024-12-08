@@ -10,6 +10,7 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
+using System.IO;
 using Class;
 using System.Windows.Shapes;
 using static ArcGIS_App.MapViewModel;
@@ -25,7 +26,10 @@ namespace ArcGIS_App
         private MapViewModel _mapViewModel;
         public FlightPlanListGIS listaplanes;
         public bool Solved = false;
-
+        string fileName = "FlightPlanChangesReport.txt";
+        string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+        string msg = "";
+        GestionAerolineas Aerolineas = new GestionAerolineas();
         public CollisionReportWindow(MapViewModel mapViewModel, FlightPlanListGIS lista)
         {
             InitializeComponent();
@@ -134,6 +138,8 @@ namespace ArcGIS_App
                 // Reload the updated flight plans into the map view
                 _mapViewModel.LoadUpdated(listaplanes);
                 MainWindow.Current.LoadUpdatedAlso(listaplanes);
+                string filePath = System.IO.Path.Combine(desktopPath, fileName);
+                File.WriteAllText(filePath, msg);
                 this.Close();
             }
             catch (Exception ex)
@@ -159,6 +165,7 @@ namespace ArcGIS_App
 
         private bool AdjustFlightLevels(string callsign, string lastWaypoint, List<FlightPlanGIS> updatedFlightPlans)
         {
+            Aerolineas.Iniciar();
             var flightPlan = listaplanes.FlightPlans.FirstOrDefault(fp => fp.Callsign == callsign);
 
             if (flightPlan == null)
@@ -166,9 +173,11 @@ namespace ArcGIS_App
                 Debug.WriteLine($"[ERROR] No flight plan found for callsign: {callsign}");
                 return false;
             }
-
             Debug.WriteLine($"[INFO] Adjusting flight plan for callsign: {callsign}");
-
+            msg += $"Adjunsting Flight {callsign}: \n";
+            string [] contacto = Aerolineas.GetContactInfo(flightPlan.CompanyName);
+            msg += $"{flightPlan.CompanyName} Contact information:\n";
+            msg += $"Telephone Number: {contacto[0]}      Email: {contacto[1]}\n\n";
             // Find the index of the last waypoint
             int lastWaypointIndex = flightPlan.Waypoints.FindIndex(wp => wp.ID == lastWaypoint);
             if (lastWaypointIndex == -1)
@@ -203,18 +212,21 @@ namespace ArcGIS_App
                     int currentFL = int.Parse(flightPlan.FlightLevels[beforeLastIndex].Replace("FL", ""));
                     flightPlan.FlightLevels[beforeLastIndex] = $"FL{currentFL + 20}";
                     Debug.WriteLine($"[INFO] Adjusted Flight Level for Callsign {callsign} at Waypoint {beforeLastIndex}: {flightPlan.FlightLevels[beforeLastIndex]}");
+                    msg+= $"[INFO] Adjusted Flight Level for Callsign {callsign} at Waypoint {beforeLastIndex}: {flightPlan.FlightLevels[beforeLastIndex]}\n";
                 }
 
                 // Adjust LastWaypoint
                 int currentFLLast = int.Parse(flightPlan.FlightLevels[lastWaypointIndex].Replace("FL", ""));
                 flightPlan.FlightLevels[lastWaypointIndex] = $"FL{currentFLLast + 20}";
                 Debug.WriteLine($"[INFO] Adjusted Flight Level for Callsign {callsign} at LastWaypoint {lastWaypointIndex}: {flightPlan.FlightLevels[lastWaypointIndex]}");
+                msg+= $"[INFO] Adjusted Flight Level for Callsign {callsign} at LastWaypoint {lastWaypointIndex}: {flightPlan.FlightLevels[lastWaypointIndex]}\n";
 
                 if (afterLastIndex1 < flightPlan.FlightLevels.Count) // First waypoint after last
                 {
                     int currentFL1 = int.Parse(flightPlan.FlightLevels[afterLastIndex1].Replace("FL", ""));
                     flightPlan.FlightLevels[afterLastIndex1] = $"FL{currentFL1 + 20}";
                     Debug.WriteLine($"[INFO] Adjusted Flight Level for Callsign {callsign} at Waypoint {afterLastIndex1}: {flightPlan.FlightLevels[afterLastIndex1]}");
+                    msg += $"[INFO] Adjusted Flight Level for Callsign {callsign} at Waypoint {afterLastIndex1}: {flightPlan.FlightLevels[afterLastIndex1]}\n";
                 }
 
                 if (afterLastIndex2 < flightPlan.FlightLevels.Count) // Second waypoint after last
@@ -222,6 +234,7 @@ namespace ArcGIS_App
                     int currentFL2 = int.Parse(flightPlan.FlightLevels[afterLastIndex2].Replace("FL", ""));
                     flightPlan.FlightLevels[afterLastIndex2] = $"FL{currentFL2 + 20}";
                     Debug.WriteLine($"[INFO] Adjusted Flight Level for Callsign {callsign} at Waypoint {afterLastIndex2}: {flightPlan.FlightLevels[afterLastIndex2]}");
+                    msg += $"[INFO] Adjusted Flight Level for Callsign {callsign} at Waypoint {afterLastIndex1}: {flightPlan.FlightLevels[afterLastIndex1]}\n";
                 }
 
                 // Add the updated flight plan to the list

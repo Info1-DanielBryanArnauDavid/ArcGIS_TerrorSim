@@ -10,5 +10,6 @@
 
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("recursoschulos/a320model.mtl")]
 [assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("recursoschulos/a320model.obj")]
+[assembly: System.Windows.Resources.AssemblyAssociatedContentFileAttribute("recursoschulos/arcgis_logo.png")]
 
 

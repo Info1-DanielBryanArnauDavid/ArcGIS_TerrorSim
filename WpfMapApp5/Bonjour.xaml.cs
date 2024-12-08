@@ -9,6 +9,7 @@ namespace ArcGIS_App
     public partial class Bonjour : Window
     {
         private GestionUsuarios MisUsuarios = new GestionUsuarios();
+        private GestionAerolineas Aerolineas = new GestionAerolineas();
 
         public Bonjour()
         {
@@ -99,6 +100,7 @@ namespace ArcGIS_App
         }
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
+
             try
             {
                 MainWindow mainWindow = new MainWindow();

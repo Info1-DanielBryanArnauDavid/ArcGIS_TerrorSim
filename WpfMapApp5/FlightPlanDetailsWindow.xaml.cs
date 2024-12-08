@@ -43,8 +43,13 @@ namespace ArcGIS_App
 
         private void ShowFlightInfo(FlightPlanGIS selectedFlightPlan)
         {
+            GestionAerolineas g = new GestionAerolineas();
+            g.Iniciar();
+            string[] ContactInfo = g.GetContactInfo(selectedFlightPlan.CompanyName);
             FlightPlanDetailsText.Visibility = Visibility.Visible;
-            FlightPlanDetailsText.Text = $"Company: {selectedFlightPlan.CompanyName}\n" +
+            FlightPlanDetailsText.Text = $"Company: {selectedFlightPlan.CompanyName}\n\n" +
+                                          "Company Contact Information\n"+
+                                         $"Telephone Number: {ContactInfo[0]}, Email: {ContactInfo[1]}\n"+    
                                          $"Callsign: {selectedFlightPlan.Callsign}\n" +
                                          $"Aircraft: {selectedFlightPlan.Aircraft}\n" +
                                          $"Start Time: {selectedFlightPlan.StartTime.ToString("HH:mm:ss")}\n\n" +
