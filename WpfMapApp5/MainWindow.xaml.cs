@@ -232,9 +232,21 @@ namespace ArcGIS_App
             _viewModel.GenerateReport();
             UpdateSpeedLabel();
         }
+        public void Autosolve_Click(object sender, RoutedEventArgs e)
+        {
+            while (true)
+            {
+                _viewModel.GenerateReport();
+                if (_viewModel.Solved = true)
+                {
+                    break;
+
+                }
+            }
+        }
         private void OpenGithubRepo_Click(object sender, RoutedEventArgs e)
         {
-            string url = "https://github.com/Info1-DanielBryanArnauDavid/ArcGIS_TerrorSim/tree/Fas3.1";
+            string url = "https://github.com/Info1-DanielBryanArnauDavid/ArcGIS_TerrorSim/tree/Fas3.4";
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url) { UseShellExecute = true });
         }
         private void TogglePlaneLabels_Click(object sender, RoutedEventArgs e)
@@ -471,28 +483,37 @@ namespace ArcGIS_App
             // Return a color with random RGBA values, where A (alpha) is the transparency
             return Color.FromArgb(alpha, red, green, blue);
         }
-
         private void LoadParameters_Click(object sender, RoutedEventArgs e)
         {
-            // Create a new Window for the dialog
             Window dialog = new Window
             {
                 Title = "Safety Distance",
                 Width = 300,
-                Height = 150,
+                Height = 160,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
                 Owner = Window.GetWindow(this)
             };
 
-            // Create a StackPanel to hold the input fields
             StackPanel panel = new StackPanel { Margin = new Thickness(10) };
 
-            // Add input fields for parameters
-            TextBox parameterBox1 = new TextBox { Margin = new Thickness(5) };
             panel.Children.Add(new TextBlock { Text = "Safety Distance (NM):" });
-            panel.Children.Add(parameterBox1);
 
-            // Add OK and Cancel buttons
+            ComboBox parameterBox = new ComboBox
+            {
+                Margin = new Thickness(5),
+                IsEditable = true  // Allow manual input
+            };
+
+            parameterBox.Items.Add("1");
+            parameterBox.Items.Add("2");
+            parameterBox.Items.Add("3");
+            parameterBox.Items.Add("4");
+            parameterBox.Items.Add("5");
+            parameterBox.Items.Add("8");
+            parameterBox.Items.Add("10");
+
+            panel.Children.Add(parameterBox);
+
             StackPanel buttonPanel = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = System.Windows.HorizontalAlignment.Right, Margin = new Thickness(0, 10, 0, 0) };
             Button okButton = new Button { Content = "OK", Width = 80, Margin = new Thickness(5) };
             Button cancelButton = new Button { Content = "Cancel", Width = 80, Margin = new Thickness(5) };
@@ -507,11 +528,10 @@ namespace ArcGIS_App
 
             dialog.Content = panel;
 
-            // Show the dialog and handle the result
             if (dialog.ShowDialog() == true)
             {
-                string param1 = parameterBox1.Text;
-                if (int.TryParse(param1, out int safetyDistance))
+                string param1 = parameterBox.Text;
+                if (int.TryParse(param1, out int safetyDistance) && safetyDistance >= 0 && safetyDistance <= 10)
                 {
                     _viewModel.LoadParameters(safetyDistance);
                     EnableControlButtons(true);
@@ -520,7 +540,7 @@ namespace ArcGIS_App
                 }
                 else
                 {
-                    MessageBox.Show("Invalid input. Please enter a valid integer for safety distance.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    MessageBox.Show("Invalid input. Please enter a valid integer between 0 and 10 for safety distance.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Error);
                 }
             }
         }

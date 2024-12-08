@@ -18,35 +18,36 @@
             <!-- Main Window Content -->
             <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,20,0,0" Width="548" Height="311">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="225*"/>
-                    <ColumnDefinition Width="103*"/>
+                    <ColumnDefinition Width="7*"/>
+                    <ColumnDefinition Width="369*"/>
+                    <ColumnDefinition Width="172*"/>
                 </Grid.ColumnDefinitions>
                 <!-- Welcome Message -->
                 <TextBlock FontStyle="Italic" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="24" FontWeight="Bold" Foreground="DarkSlateGray"
-                           FontFamily="Roboto" Margin="134,0,0,0" Grid.ColumnSpan="2">
-                    Welcome to ArcGIS TerrorSim
+                           FontFamily="Roboto" Margin="127,0,0,0" Grid.ColumnSpan="2" Grid.Column="1">
+                    Welcome to ArcGIS TerrorSim!
                 </TextBlock>
 
                 <!-- Instructions -->
                 <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
-                           FontFamily="Roboto" Margin="20,50,0,0" Text="- Load a waypoint file (.txt/.csv)" Grid.ColumnSpan="2"/>
+                           FontFamily="Roboto" Margin="13,50,0,0" Text="- Load a waypoint file (.txt)" Grid.Column="1"/>
                 <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
-                           FontFamily="Roboto" Margin="20,80,0,0" Text="- Load a flight plan file (.txt/.csv)" Grid.ColumnSpan="2"/>
+                           FontFamily="Roboto" Margin="13,80,0,0" Text="- Load a flight plan file (.txt)" Grid.Column="1"/>
                 <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
-                           FontFamily="Roboto" Margin="20,110,0,0" Text="- Add parameters for the simulation" Grid.ColumnSpan="2"/>
+                           FontFamily="Roboto" Margin="13,110,0,0" Text="- Establish a minimum separation" Grid.Column="1"/>
                 <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
-                           FontFamily="Roboto" Margin="20,151,0,0" Text="- Simulate the environment"/>
+                           FontFamily="Roboto" Margin="13,151,0,0" Text="- Simulate the environment" Grid.Column="1"/>
                 <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
-                           FontFamily="Roboto" Margin="20,179,0,0" Text="- Use the map controls to navigate (WASD)"/>
+                           FontFamily="Roboto" Margin="13,179,0,0" Text="- Use the map controls to navigate (WASD)" Grid.Column="1"/>
 
                 <!-- Additional Information -->
 
                 <!-- Close Button -->
-                <Button Content="Close" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="120" Height="40" Margin="223,0,0,10"
-                        Click="CloseButton_Click" Background="#61A9FF" Foreground="White" FontFamily="Roboto"/>
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
-                    FontFamily="Roboto" Margin="0,207,0,0" Width="334"><Run Text="- "/><Run Language="es-es" Text="Generate a Report and fix the collisions"/></TextBlock>
-                <Image Margin="360,60,5,76" Source="RecursosChulos/ArcGIS_logo.png" Stretch="Fill" IsEnabled="True" Grid.ColumnSpan="2"/>
+                <Button Content="Close" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="120" Height="40" Margin="216,0,0,10"
+                        Click="CloseButton_Click" Background="#61A9FF" Foreground="White" FontFamily="Roboto" Grid.Column="1"/>
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
+                    FontFamily="Roboto" Margin="14,207,0,0" Width="334" Grid.Column="1"><Run Text="- "/><Run Language="es-es" Text="Generate a Report and fix the collisions"/></TextBlock>
+                <Image Margin="353,60,5,76" Source="RecursosChulos/ArcGIS_logo.png" Stretch="Fill" IsEnabled="True" Grid.ColumnSpan="2" Grid.Column="1"/>
             </Grid>
         </Grid>
     </Border>

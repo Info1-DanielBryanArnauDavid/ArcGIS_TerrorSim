@@ -27,6 +27,7 @@ namespace ArcGIS_App
 {
     public class MapViewModel : INotifyPropertyChanged
     {
+        public bool Solved=false;
         private Scene _scene;
         private SceneView _sceneView;
         private GraphicsOverlay _graphicsOverlay;
@@ -343,7 +344,7 @@ namespace ArcGIS_App
                 // Clear any previous data in the DataGrid
                 _collisionReportWindow.ClearCollisionData();
                 StartSimulation();
-                _speedMultiplier = 512;
+                _speedMultiplier = 1024;
                 UpdateTimerInterval();
                 TogglePlaneLabels(true);
                 

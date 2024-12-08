@@ -45,7 +45,7 @@
             <MenuItem Header="_File">
                 <MenuItem Header="Load _Waypoints" Click="LoadWaypoints_Click" />
                 <MenuItem Header="Load _Flight Plans" Click="LoadFlightPlans_Click" />
-                <MenuItem Header="Load _Parameters" Click="LoadParameters_Click" />
+                <MenuItem Header="Minimum separation" Click="LoadParameters_Click" />
                 <MenuItem Header="Save Waypoints" Name="WaypointsClick" Click="SaveWaypoints_Click" IsEnabled="False" />
                 <MenuItem Header="Save Flight Plans" Name="FlightPlansClick" Click="SaveFlightPlans_Click" IsEnabled="False"/>
             </MenuItem>
@@ -57,7 +57,8 @@
                 <MenuItem Header="View and search for flight plans" Click="ShowFlightPlanDetailsButton_Click" />
             </MenuItem>
             <MenuItem Header="_Options" Name="OptionsMenuItem" IsEnabled="False">
-                <MenuItem Header="Generate Report of collisions" Click="ReportGenerate_Click" />
+                <MenuItem Header="Manually generate a report of collisions" Click="ReportGenerate_Click" />
+                <MenuItem Header="Autosolve conflicts" Click="Autosolve_Click" />
             </MenuItem>
             <MenuItem Header="_Github">
                 <MenuItem Header="ArcGIS_TerrorSim" Click="OpenGithubRepo_Click" />
