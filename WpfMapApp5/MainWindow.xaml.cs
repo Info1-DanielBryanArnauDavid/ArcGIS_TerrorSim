@@ -325,7 +325,8 @@ namespace ArcGIS_App
         }
         private void GoodLuck_Click(object sender, RoutedEventArgs e)
         {
-
+            var welcome = new WelcomeWindow();
+            welcome.Show();
         }
         private void Safety_Click(object sender, RoutedEventArgs e)
         {
@@ -572,9 +573,10 @@ namespace ArcGIS_App
             ComboBox parameterBox = new ComboBox
             {
                 Margin = new Thickness(5),
-                IsEditable = true  // Allow manual input
+                IsEditable = true // Permitir entrada manual
             };
 
+            // Agregar elementos predefinidos
             parameterBox.Items.Add("1");
             parameterBox.Items.Add("2");
             parameterBox.Items.Add("3");
@@ -583,18 +585,39 @@ namespace ArcGIS_App
             parameterBox.Items.Add("8");
             parameterBox.Items.Add("10");
 
-            panel.Children.Add(parameterBox);
-
-            StackPanel buttonPanel = new StackPanel { Orientation = Orientation.Horizontal, HorizontalAlignment = System.Windows.HorizontalAlignment.Right, Margin = new Thickness(0, 10, 0, 0) };
-            Button okButton = new Button { Content = "OK", Width = 80, Margin = new Thickness(5) };
+            // Crear los botones
+            Button okButton = new Button { Content = "OK", Width = 80, Margin = new Thickness(5), IsEnabled = false };
             Button cancelButton = new Button { Content = "Cancel", Width = 80, Margin = new Thickness(5) };
 
+            // Control de botón OK: habilitar solo con entrada válida
+            parameterBox.Loaded += (s, args) =>
+            {
+                // Obtener el TextBox interno asociado al ComboBox
+                if (parameterBox.Template.FindName("PART_EditableTextBox", parameterBox) is TextBox editableTextBox)
+                {
+                    // Evento para detectar cambios en el texto
+                    editableTextBox.TextChanged += (textSender, textArgs) =>
+                    {
+                        okButton.IsEnabled = IsPositiveTwoDigitInteger(editableTextBox.Text); // Habilitar si válido
+                    };
+                }
+            };
+
+            StackPanel buttonPanel = new StackPanel
+            {
+                Orientation = Orientation.Horizontal,
+                HorizontalAlignment = System.Windows.HorizontalAlignment.Right,
+                Margin = new Thickness(0, 10, 0, 0)
+            };
+
+            // Eventos para los botones
             okButton.Click += (s, args) => { dialog.DialogResult = true; };
             cancelButton.Click += (s, args) => { dialog.DialogResult = false; };
 
             buttonPanel.Children.Add(okButton);
             buttonPanel.Children.Add(cancelButton);
 
+            panel.Children.Add(parameterBox);
             panel.Children.Add(buttonPanel);
 
             dialog.Content = panel;
@@ -602,18 +625,22 @@ namespace ArcGIS_App
             if (dialog.ShowDialog() == true)
             {
                 string param1 = parameterBox.Text;
-                if (int.TryParse(param1, out int safetyDistance) && safetyDistance >= 0 && safetyDistance <= 10)
+                if (int.TryParse(param1, out int safetyDistance) && safetyDistance >= 1 && safetyDistance <= 99)
                 {
                     _viewModel.LoadParameters(safetyDistance);
                     EnableControlButtons(true);
                     ViewMenuItem.IsEnabled = true;
                     OptionsMenuItem.IsEnabled = true;
                 }
-                else
-                {
-                    MessageBox.Show("Invalid input. Please enter a valid integer between 0 and 10 for safety distance.", "Input Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
             }
         }
+
+        // Método auxiliar para validar entrada: entero positivo con máximo 2 dígitos
+        private bool IsPositiveTwoDigitInteger(string text)
+        {
+            return int.TryParse(text, out int number) && number >= 1 && number <= 99;
+        }
+
+
     }
 }

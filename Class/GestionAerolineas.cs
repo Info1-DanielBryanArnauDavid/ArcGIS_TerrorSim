@@ -71,7 +71,7 @@ namespace Class // Define el espacio de nombres de la clase
             SqlCommand command = new SqlCommand(sql,cnx);
             var reader = command.ExecuteReader();
             dt.Load(reader);
-            List<List<string>> datos = new List<List<string>>;
+            List<List<string>> datos = new List<List<string>>();
             if(dt.Rows.Count >= 1)
             {
                 List<string> datosLinea = new List<string>();
@@ -139,5 +139,5 @@ namespace Class // Define el espacio de nombres de la clase
             }
         }
     }
-    }
+    
 }

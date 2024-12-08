@@ -40,7 +40,7 @@
                 <!-- Add this column -->
             </DataGrid.Columns>
         </DataGrid>
-
+        <CheckBox x:Name="SaveToFileCheckBox" Content="Save to File  (Opens dialog)" HorizontalAlignment="Left" VerticalAlignment="Bottom" Margin="10,10,0,10" />
 
         <!-- Button for Fix Collisions -->
         <Button Name="FixCollisionsButton" 

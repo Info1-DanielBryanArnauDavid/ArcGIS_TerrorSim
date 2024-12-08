@@ -3,54 +3,61 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Welcome" Height="342" Width="600"
         Icon="\Resources\Beluga.ico"
-        WindowStartupLocation="CenterScreen" WindowStyle="None" AllowsTransparency="True"
-        Background="#80FFFFFF" MouseDown="Window_MouseDown">
+        WindowStartupLocation="CenterScreen" 
+        WindowStyle="None" 
+        AllowsTransparency="True"
+        Background="Transparent"
+    MouseDown="Window_MouseDown">
 
-    <Window.Resources>
-        <!-- Define a custom font if needed -->
-        <FontFamily x:Key="RobotoFont">Roboto</FontFamily>
-    </Window.Resources>
+    <!-- Outer border with shadow -->
+    <Border CornerRadius="15" Background="#80FFFFFF" BorderBrush="Transparent" BorderThickness="0">
+        <Border.Effect>
+            <!-- DropShadow effect for the window -->
+            <DropShadowEffect ShadowDepth="5" BlurRadius="20" Opacity="0.5" />
+        </Border.Effect>
 
-    <!-- Border with rounded corners -->
-    <Border Background="White" BorderBrush="Transparent" BorderThickness="0" 
-            CornerRadius="15">
-        <Grid VerticalAlignment="Top" Margin="0">
-            <!-- Main Window Content -->
-            <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,20,0,0" Width="548" Height="311">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="7*"/>
-                    <ColumnDefinition Width="369*"/>
-                    <ColumnDefinition Width="172*"/>
-                </Grid.ColumnDefinitions>
-                <!-- Welcome Message -->
-                <TextBlock FontStyle="Italic" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="24" FontWeight="Bold" Foreground="DarkSlateGray"
-                           FontFamily="Roboto" Margin="127,0,0,0" Grid.ColumnSpan="2" Grid.Column="1">
-                    Welcome to ArcGIS TerrorSim!
-                </TextBlock>
+        <!-- Inner border to ensure rounded corners and semitransparency -->
+        <Border CornerRadius="15" Background="#C0FFFFFF" BorderBrush="Transparent" BorderThickness="0" Margin="10">
+            <Grid Margin="0">
+                <!-- Main Window Content -->
+                <Grid VerticalAlignment="Top" HorizontalAlignment="Left" Margin="10,20,0,0" Width="548" Height="311">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="7*"/>
+                        <ColumnDefinition Width="369*"/>
+                        <ColumnDefinition Width="172*"/>
+                    </Grid.ColumnDefinitions>
 
-                <!-- Instructions -->
-                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
-                           FontFamily="Roboto" Margin="13,50,0,0" Text="- Load a waypoint file (.txt)" Grid.Column="1"/>
-                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
-                           FontFamily="Roboto" Margin="13,80,0,0" Text="- Load a flight plan file (.txt)" Grid.Column="1"/>
-                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
-                           FontFamily="Roboto" Margin="13,110,0,0" Text="- Establish a minimum separation" Grid.Column="1"/>
-                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Foreground="Gray"
-                           FontFamily="Roboto" Margin="15,0,0,0" Text="- Simulate the environment" Grid.Column="1"/>
-                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
-                           FontFamily="Roboto" Margin="15,175,0,0" Text="- Use the map controls to navigate (WASD)" Grid.Column="1"/>
+                    <!-- Welcome Message -->
+                    <TextBlock FontStyle="Italic" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="24" FontWeight="Bold" Foreground="DarkSlateGray"
+                               FontFamily="Roboto" Margin="127,0,0,0" Grid.ColumnSpan="2" Grid.Column="1">
+                        Welcome to ArcGIS TerrorSim!
+                    </TextBlock>
 
-                <!-- Additional Information -->
+                    <!-- Instructions -->
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
+                               FontFamily="Roboto" Margin="13,50,0,0" Text="- Load a waypoint file (.txt)" Grid.Column="1"/>
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
+                               FontFamily="Roboto" Margin="13,80,0,0" Text="- Load a flight plan file (.txt)" Grid.Column="1"/>
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
+                               FontFamily="Roboto" Margin="13,110,0,0" Text="- Establish a minimum separation" Grid.Column="1"/>
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Foreground="Gray"
+                               FontFamily="Roboto" Margin="15,0,0,0" Text="- Simulate the environment" Grid.Column="1"/>
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
+                               FontFamily="Roboto" Margin="15,175,0,0" Text="- Use the map controls to navigate (WASD)" Grid.Column="1"/>
 
-                <!-- Close Button -->
-                <Button Content="Close" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="120" Height="40" Margin="216,0,0,10"
-                        Click="CloseButton_Click" Background="#61A9FF" Foreground="White" FontFamily="Roboto" Grid.Column="1"/>
-                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
-                    FontFamily="Roboto" Margin="16,204,0,0" Width="334" Grid.Column="1"><Run Text="- "/><Run Language="es-es" Text="Generate a Report and fix the collisions"/></TextBlock>
-                <Image Margin="353,60,5,76" Source="RecursosChulos/ArcGIS_logo.png" Stretch="Fill" IsEnabled="True" Grid.ColumnSpan="2" Grid.Column="1"/>
-                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
-                    FontFamily="Roboto" Margin="0,232,0,0" Width="334" Grid.Column="1" Text="-Autosolve for procedural fixing"/>
+                    <!-- Close Button -->
+                    <Button Content="Close" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="120" Height="40" Margin="216,0,0,10"
+                            Click="CloseButton_Click" Background="#61A9FF" Foreground="White" FontFamily="Roboto" Grid.Column="1"/>
+                    <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
+                               FontFamily="Roboto" Margin="16,204,0,0" Width="334" Grid.Column="1">
+                        <Run Text="- "/>
+                        <Run Language="es-es" Text="Generate a Report and fix the collisions"/>
+                    </TextBlock>
+                    <Image Margin="353,60,5,76" Source="RecursosChulos/ArcGIS_logo.png" Stretch="Fill" IsEnabled="True" Grid.ColumnSpan="2" Grid.Column="1"/>
+                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
+                               FontFamily="Roboto" Margin="0,232,0,0" Width="334" Grid.Column="1" Text="-Autosolve for procedural fixing"/>
+                </Grid>
             </Grid>
-        </Grid>
+        </Border>
     </Border>
 </Window>

@@ -138,8 +138,29 @@ namespace ArcGIS_App
                 // Reload the updated flight plans into the map view
                 _mapViewModel.LoadUpdated(listaplanes);
                 MainWindow.Current.LoadUpdatedAlso(listaplanes);
-                string filePath = System.IO.Path.Combine(desktopPath, fileName);
-                File.WriteAllText(filePath, msg);
+
+                // Only save to file if the SaveToFileCheckBox is checked
+                if (SaveToFileCheckBox.IsChecked == true)
+                {
+                    var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+                    {
+                        Filter = "Text Files (*.txt)|*.txt|All Files (*.*)|*.*",
+                        Title = "Save Flight Plan Updates",
+                        DefaultExt = ".txt"
+                    };
+
+                    if (saveFileDialog.ShowDialog() == true) // If the user confirms the save action
+                    {
+                        string selectedFilePath = saveFileDialog.FileName;
+                        File.WriteAllText(selectedFilePath, msg);
+                        MessageBox.Show("Flight plan updates have been saved successfully.", "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        MessageBox.Show("Save operation was canceled.", "Save Canceled", MessageBoxButton.OK, MessageBoxImage.Information);
+                    }
+                }
+
                 this.Close();
             }
             catch (Exception ex)
@@ -147,6 +168,8 @@ namespace ArcGIS_App
                 MessageBox.Show($"An error occurred while resolving collisions: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
+
         private void DelayFlightStart(string callsign, List<FlightPlanGIS> updatedFlightPlans, int delayMinutes)
         {
             var flightPlan = listaplanes.FlightPlans.FirstOrDefault(fp => fp.Callsign == callsign);
@@ -174,7 +197,7 @@ namespace ArcGIS_App
                 return false;
             }
             Debug.WriteLine($"[INFO] Adjusting flight plan for callsign: {callsign}");
-            msg += $"Adjunsting Flight {callsign}: \n";
+            msg += $"\nAdjusting Flight {callsign}: \n";
             string [] contacto = Aerolineas.GetContactInfo(flightPlan.CompanyName);
             msg += $"{flightPlan.CompanyName} Contact information:\n";
             msg += $"Telephone Number: {contacto[0]}      Email: {contacto[1]}\n\n";
