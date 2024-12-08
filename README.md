@@ -54,10 +54,9 @@ To run this project locally, you need:
    - [Download waypoints.txt](https://raw.githubusercontent.com/Info1-DanielBryanArnauDavid/ArcGIS_TerrorSim/refs/heads/Fase3.5/datos/Showcase/SpainWaypoints.txt)
    - [Download flightplans.txt](https://raw.githubusercontent.com/Info1-DanielBryanArnauDavid/ArcGIS_TerrorSim/refs/heads/Fase3.5/datos/Showcase/SpainFlightPlans.txt)
 
-6. If you feel more experimental, try these:
+6. If you feel more experimental, try these, which could have some untested problems. For demonstartion purposes, refrain from these. The samples folder also contains the scripts for generating and simulating Flight Plans
    - [Experimental data](https://github.com/Info1-DanielBryanArnauDavid/ArcGIS_TerrorSim/tree/Fase3.5/datos/Samples)
 
-which could have some untested problems. For demonstartion purposes, refrain from these. The samples folder also contains the scripts for generating and simulating Flight Plans
 
 ---
 
