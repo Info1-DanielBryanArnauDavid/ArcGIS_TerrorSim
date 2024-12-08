@@ -1,0 +1,12 @@
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\PruebaLeeExcel\obj\Debug\PruebaLeeExcel.csproj.AssemblyReference.cache
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\PruebaLeeExcel\obj\Debug\PruebaLeeExcel.csproj.CoreCompileInputs.cache
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\PruebaLeeExcel\bin\Debug\PruebaLeeExcel.exe.config
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\PruebaLeeExcel\bin\Debug\PruebaLeeExcel.exe
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\PruebaLeeExcel\bin\Debug\PruebaLeeExcel.pdb
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\PruebaLeeExcel\bin\Debug\ExcelReader.dll
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\PruebaLeeExcel\bin\Debug\ExcelReader.pdb
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\PruebaLeeExcel\obj\Debug\PruebaLe.6E2609D8.Up2Date
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\PruebaLeeExcel\obj\Debug\PruebaLeeExcel.exe
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\PruebaLeeExcel\obj\Debug\PruebaLeeExcel.pdb
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\PruebaLeeExcel\bin\Debug\HTMLReader.dll
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\PruebaLeeExcel\bin\Debug\HTMLReader.pdb

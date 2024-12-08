@@ -1,0 +1,7 @@
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\AirportReader\bin\Debug\AirportReader.exe.config
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\AirportReader\bin\Debug\AirportReader.exe
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\AirportReader\bin\Debug\AirportReader.pdb
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\AirportReader\obj\Debug\AirportReader.csproj.AssemblyReference.cache
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\AirportReader\obj\Debug\AirportReader.csproj.CoreCompileInputs.cache
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\AirportReader\obj\Debug\AirportReader.exe
+C:\Users\05agu\Desktop\Uni\3r Quatri\Info 2\Excel_Reader\AirportReader\obj\Debug\AirportReader.pdb

@@ -1,0 +1,92 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\05agu\\Desktop\\Uni\\3r Quatri\\Info 2\\Excel_Reader\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{5A1C6A5A-3E06-464D-9F32-61572A331EB6}|LeerHTML\\LeerHTML.csproj|C:\\Users\\05agu\\Desktop\\Uni\\3r Quatri\\Info 2\\Excel_Reader\\leerhtml\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A1C6A5A-3E06-464D-9F32-61572A331EB6}|LeerHTML\\LeerHTML.csproj|solutionrelative:leerhtml\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{8449970C-5F87-4141-8AB0-9A0224C85F75}|AirportReader\\AirportReader.csproj|c:\\users\\05agu\\desktop\\uni\\3r quatri\\info 2\\excel_reader\\airportreader\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8449970C-5F87-4141-8AB0-9A0224C85F75}|AirportReader\\AirportReader.csproj|solutionrelative:airportreader\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3431E438-686F-4A91-BFAB-36429C30F973}|ExcelReader\\ExcelReader.csproj|C:\\Users\\05agu\\Desktop\\Uni\\3r Quatri\\Info 2\\Excel_Reader\\excelreader\\leeexcel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3431E438-686F-4A91-BFAB-36429C30F973}|ExcelReader\\ExcelReader.csproj|solutionrelative:excelreader\\leeexcel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 383,
+          "SelectedChildIndex": 5,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:129:0:{1fc202d4-d401-403c-9834-5b218574bb67}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{75188d03-9892-4ae2-abf1-207126247ce5}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "LeeExcel.cs",
+              "DocumentMoniker": "C:\\Users\\05agu\\Desktop\\Uni\\3r Quatri\\Info 2\\Excel_Reader\\ExcelReader\\LeeExcel.cs",
+              "RelativeDocumentMoniker": "ExcelReader\\LeeExcel.cs",
+              "ToolTip": "C:\\Users\\05agu\\Desktop\\Uni\\3r Quatri\\Info 2\\Excel_Reader\\ExcelReader\\LeeExcel.cs",
+              "RelativeToolTip": "ExcelReader\\LeeExcel.cs",
+              "ViewState": "AgIAAEsAAAAAAAAAAAAYwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-08T09:26:05.224Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\05agu\\Desktop\\Uni\\3r Quatri\\Info 2\\Excel_Reader\\AirportReader\\Program.cs",
+              "RelativeDocumentMoniker": "AirportReader\\Program.cs",
+              "ToolTip": "C:\\Users\\05agu\\Desktop\\Uni\\3r Quatri\\Info 2\\Excel_Reader\\AirportReader\\Program.cs",
+              "RelativeToolTip": "AirportReader\\Program.cs",
+              "ViewState": "AgIAAAcAAAAAAAAAAAAqwBEAAAB7AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-05T21:06:46.279Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\05agu\\Desktop\\Uni\\3r Quatri\\Info 2\\Excel_Reader\\LeerHTML\\Program.cs",
+              "RelativeDocumentMoniker": "LeerHTML\\Program.cs",
+              "ToolTip": "C:\\Users\\05agu\\Desktop\\Uni\\3r Quatri\\Info 2\\Excel_Reader\\LeerHTML\\Program.cs",
+              "RelativeToolTip": "LeerHTML\\Program.cs",
+              "ViewState": "AgIAABQAAAAAAAAAAAAiwJsAAAA8AAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-04T21:27:01.277Z",
+              "EditorCaption": ""
+            }
+          ]
+        },
+        {
+          "DockedHeight": 17,
+          "SelectedChildIndex": -1,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{d78612c7-9962-4b83-95d9-268046dad23a}"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\bolty\\Downloads\\Generador FP-20241208T201655Z-001\\Generador FP\\LeeWaypointsZIP\\Excel_Reader\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{8449970C-5F87-4141-8AB0-9A0224C85F75}|AirportReader\\AirportReader.csproj|C:\\Users\\bolty\\Downloads\\Generador FP-20241208T201655Z-001\\Generador FP\\LeeWaypointsZIP\\Excel_Reader\\airportreader\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{8449970C-5F87-4141-8AB0-9A0224C85F75}|AirportReader\\AirportReader.csproj|solutionrelative:airportreader\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{3431E438-686F-4A91-BFAB-36429C30F973}|ExcelReader\\ExcelReader.csproj|C:\\Users\\bolty\\Downloads\\Generador FP-20241208T201655Z-001\\Generador FP\\LeeWaypointsZIP\\Excel_Reader\\excelreader\\leeexcel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{3431E438-686F-4A91-BFAB-36429C30F973}|ExcelReader\\ExcelReader.csproj|solutionrelative:excelreader\\leeexcel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{5A1C6A5A-3E06-464D-9F32-61572A331EB6}|LeerHTML\\LeerHTML.csproj|c:\\users\\bolty\\downloads\\generador fp-20241208t201655z-001\\generador fp\\leewaypointszip\\excel_reader\\leerhtml\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{5A1C6A5A-3E06-464D-9F32-61572A331EB6}|LeerHTML\\LeerHTML.csproj|solutionrelative:leerhtml\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 1,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedHeight": 383,
+          "SelectedChildIndex": 3,
+          "Children": [
+            {
+              "$type": "Bookmark",
+              "Name": "ST:128:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
+            },
+            {
+              "$type": "Bookmark",
+              "Name": "ST:0:0:{e5c86464-96be-4d7c-9a8b-abcb3bbf5f92}"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "LeeExcel.cs",
+              "DocumentMoniker": "C:\\Users\\bolty\\Downloads\\Generador FP-20241208T201655Z-001\\Generador FP\\LeeWaypointsZIP\\Excel_Reader\\ExcelReader\\LeeExcel.cs",
+              "RelativeDocumentMoniker": "ExcelReader\\LeeExcel.cs",
+              "ToolTip": "C:\\Users\\bolty\\Downloads\\Generador FP-20241208T201655Z-001\\Generador FP\\LeeWaypointsZIP\\Excel_Reader\\ExcelReader\\LeeExcel.cs",
+              "RelativeToolTip": "ExcelReader\\LeeExcel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-08T09:26:05.224Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\bolty\\Downloads\\Generador FP-20241208T201655Z-001\\Generador FP\\LeeWaypointsZIP\\Excel_Reader\\AirportReader\\Program.cs",
+              "RelativeDocumentMoniker": "AirportReader\\Program.cs",
+              "ToolTip": "C:\\Users\\bolty\\Downloads\\Generador FP-20241208T201655Z-001\\Generador FP\\LeeWaypointsZIP\\Excel_Reader\\AirportReader\\Program.cs",
+              "RelativeToolTip": "AirportReader\\Program.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABMAAAAZAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-05T21:06:46.279Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\bolty\\Downloads\\Generador FP-20241208T201655Z-001\\Generador FP\\LeeWaypointsZIP\\Excel_Reader\\LeerHTML\\Program.cs",
+              "RelativeDocumentMoniker": "LeerHTML\\Program.cs",
+              "ToolTip": "C:\\Users\\bolty\\Downloads\\Generador FP-20241208T201655Z-001\\Generador FP\\LeeWaypointsZIP\\Excel_Reader\\LeerHTML\\Program.cs",
+              "RelativeToolTip": "LeerHTML\\Program.cs",
+              "ViewState": "AgIAABkAAAAAAAAAAAAAACwAAAAqAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-12-04T21:27:01.277Z",
+              "EditorCaption": ""
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
