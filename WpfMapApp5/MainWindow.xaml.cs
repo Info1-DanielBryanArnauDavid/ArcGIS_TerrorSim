@@ -316,7 +316,7 @@ namespace ArcGIS_App
 
         private void OpenGithubRepo_Click(object sender, RoutedEventArgs e)
         {
-            string url = "https://github.com/Info1-DanielBryanArnauDavid/ArcGIS_TerrorSim/tree/Fas3.4";
+            string url = "https://github.com/Info1-DanielBryanArnauDavid/ArcGIS_TerrorSim/tree/Final";
             System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo(url) { UseShellExecute = true });
         }
         private void TogglePlaneLabels_Click(object sender, RoutedEventArgs e)
