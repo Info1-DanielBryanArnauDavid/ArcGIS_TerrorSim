@@ -44,13 +44,16 @@
 
         <!-- Button for Fix Collisions -->
         <Button Name="FixCollisionsButton" 
-                Content="Fix Collisions" 
-                HorizontalAlignment="Right" 
-                VerticalAlignment="Bottom" 
-                Width="120" 
-                Height="30" 
-                Margin="10" 
-                Visibility="Collapsed"
-                Click="FixCollisionsButton_Click"/>
+        Content="Fix Collisions" 
+        HorizontalAlignment="Right" 
+        VerticalAlignment="Bottom" 
+        Width="120" 
+        Height="30" 
+        Margin="10" 
+        Visibility="Collapsed"
+        Background="Blue" 
+        Foreground="White" 
+        Click="FixCollisionsButton_Click"/>
+
     </Grid>
 </Window>
