@@ -116,3 +116,7 @@ SVQ,35m,120
 ### 3. Flight Plan Generation
 
 We use an adapted Djikstra algorithm for the generation of procedural flightplans, by taking the Waypoints file and defining a radius of connection, we can simulate a decent graph for the algorithm to solve. By also adding a threshold for margins, we observe decently realistic flightplans as they vary in a couple of waypoints. By generating a random pair of airports, we can find the path and create realistic FLs and speeds per each stage of the flight. 
+
+### 4. Waypoint extraction
+
+We used diverse references for the extraction of the waypoints and airports with their corresponding altitudes and data. We have defined three differetn spaces, Spain, Europe and Global, with a comprehensive list each with the corresponding ENR or enroute waypoints, we have not taken into account the STARs or SIDs for each procedure, something to keep in mind for the realism of the flight plans.
