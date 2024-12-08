@@ -52,7 +52,7 @@ To run this project locally, you need:
 
 5. For the sample showcase, and what we have tested decently, use these waypoints and flightplans (insertar link relativo)
 
-6. If you feel more experimental try these (link), which could have some untested problems.
+6. If you feel more experimental try these (insertar link relativo), which could have some untested problems.
 
 ---
 
