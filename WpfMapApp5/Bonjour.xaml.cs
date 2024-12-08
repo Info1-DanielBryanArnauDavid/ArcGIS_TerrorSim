@@ -75,29 +75,25 @@ namespace ArcGIS_App
             registro.SetGestionUsuarios(MisUsuarios); // Pass user management to registration form
             registro.ShowDialog(); // Show registration dialog
         }
-
         private void checkBox1_CheckedChanged(object sender, RoutedEventArgs e)
         {
             if (checkBox1.IsChecked == true)
             {
-                // Mostrar contraseña
-                textBoxVisible.Text = textBox2.Password; // Sincronizar texto
-                textBoxVisible.Visibility = Visibility.Visible;
-                textBox2.Visibility = Visibility.Collapsed;
+                // Show password
+                textBoxVisible.Text = textBox2.Password; // Sync password text
+                textBoxVisible.Visibility = Visibility.Visible; // Show TextBox
+                textBox2.Visibility = Visibility.Collapsed; // Hide PasswordBox
             }
             else
             {
-                // Ocultar contraseña
-                textBox2.Password = textBoxVisible.Text; // Sincronizar contraseña
-                textBoxVisible.Visibility = Visibility.Collapsed;
-                textBox2.Visibility = Visibility.Visible;
+                // Hide password
+                textBox2.Password = textBoxVisible.Text; // Sync TextBox to PasswordBox
+                textBoxVisible.Visibility = Visibility.Collapsed; // Hide TextBox
+                textBox2.Visibility = Visibility.Visible; // Show PasswordBox
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
 
-        }
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
 

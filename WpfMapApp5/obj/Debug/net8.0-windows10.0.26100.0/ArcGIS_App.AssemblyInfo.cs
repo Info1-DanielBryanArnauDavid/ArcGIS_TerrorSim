@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ArcGIS_App")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+06560995a5a018f096177b9a0214a7101274b920")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d577ee3d33bf998955b3214ebd137c0a507aee15")]
 [assembly: System.Reflection.AssemblyProductAttribute("ArcGIS_App")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ArcGIS_App")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

@@ -11,8 +11,10 @@
         <Label Content="Username" Margin="10,143,119,0" VerticalAlignment="Top"/>
 
         <Label Content="Password" Margin="10,192,119,0" VerticalAlignment="Top"/>
-        <TextBox x:Name="textBoxVisible" Height="30" Margin="100,187,380,0" VerticalAlignment="Top"
-         Background="#F5F5F5" Visibility="Collapsed"/>
+
+        <!-- Invisible TextBox to show password -->
+        <TextBox x:Name="textBoxVisible" Height="30" Margin="82,192,436,0" VerticalAlignment="Top"
+                 Background="#F5F5F5" Visibility="Collapsed"/>
 
         <CheckBox x:Name="checkBox1" Content="Show password" Margin="89,233,138,0" VerticalAlignment="Top"
                   Foreground="#666666"
@@ -31,9 +33,9 @@
         <TextBlock x:Name="recoverPasswordLabel"
            Cursor="Hand"
            Foreground="Blue"
-           Margin="309,225,380,0"
+           Margin="253,227,436,0"
            VerticalAlignment="Top"
-           Visibility="Hidden"
+                              Visibility="Hidden"
            MouseLeftButtonUp="RecoverPasswordLabel_Click">
             <Underline>
                 <Run Text="Recover password"/>
@@ -44,8 +46,6 @@
                 Margin="232,273,436,59"
                 Background="#0078D4" Foreground="#FFFFFF"
                 Click="button2_Click"/>
-
-        <Button Content="jope" Margin="0,347,734,0" Click="Button_Click_1"/>
 
         <TextBox x:Name="textBox1" Height="30" Margin="82,143,436,0" VerticalAlignment="Top"
                  Background="#F5F5F5"/>

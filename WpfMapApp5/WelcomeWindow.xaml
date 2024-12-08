@@ -28,8 +28,8 @@
                     </Grid.ColumnDefinitions>
 
                     <!-- Welcome Message -->
-                    <TextBlock FontStyle="Italic" HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="24" FontWeight="Bold" Foreground="DarkSlateGray"
-                               FontFamily="Roboto" Margin="127,0,0,0" Grid.ColumnSpan="2" Grid.Column="1">
+                    <TextBlock VerticalAlignment="Top" FontSize="24" FontWeight="Bold" Foreground="DarkSlateGray"
+                               FontFamily="Roboto" Margin="102,0,25,0" Grid.ColumnSpan="2" Grid.Column="1">
                         Welcome to ArcGIS TerrorSim!
                     </TextBlock>
 
