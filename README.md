@@ -50,9 +50,13 @@ To run this project locally, you need:
 
 4. Build and run the project in Visual Studio.
 
-5. For the sample showcase, and what we have tested decently, use these waypoints and flightplans (insertar link relativo)
+5. For the sample showcase, and what we have tested decently, use these waypoints and flightplans:
+   - [Download waypoints.txt](https://raw.githubusercontent.com/Info1-DanielBryanArnauDavid/ArcGIS_TerrorSim/refs/heads/Final/datos/Showcase/SpainWaypoints.txt)
+   - [Download flightplans.txt](https://raw.githubusercontent.com/Info1-DanielBryanArnauDavid/ArcGIS_TerrorSim/refs/heads/Final/datos/Showcase/SpainFlightPlans.txt)
 
-6. If you feel more experimental try these (insertar link relativo), which could have some untested problems.
+6. If you feel more experimental, try these, which could have some untested problems. For demonstartion purposes, refrain from these. The samples folder also contains the scripts for generating and simulating Flight Plans
+   - [Experimental data](https://github.com/Info1-DanielBryanArnauDavid/ArcGIS_TerrorSim/tree/Final/datos/Samples)
+
 
 ---
 
