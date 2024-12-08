@@ -113,4 +113,6 @@ GENIL,FL50,283
 ROTEX,FL50,201
 SVQ,35m,120
 ```
+### 3. Flight Plan Generation
 
+We use an adapted Djikstra algorithm for the generation of procedural flightplans, by taking the Waypoints file and defining a radius of connection, we can simulate a decent graph for the algorithm to solve. By also adding a threshold for margins, we observe decently realistic flightplans as they vary in a couple of waypoints. By generating a random pair of airports, we can find the path and create realistic FLs and speeds per each stage of the flight. 
