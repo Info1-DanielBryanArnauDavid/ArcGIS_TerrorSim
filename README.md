@@ -2,7 +2,7 @@
 
 ## Overview
 
-**ArcGIS TerroSim** is a simulation tool designed to load, manage, and visualize flight plans and waypoints. It integrates data from `.txt` files and uses ArcGIS for geographic visualization. The project includes classes for flight plan management, waypoints, and support for multiple flight plans. The aim is to create a simulation environment where users can explore flight paths, flight levels, and speeds based on a set of waypoints.
+**ArcGIS TerrorSim** is a simulation tool designed to load, manage, and visualize flight plans and waypoints. It integrates data from `.txt` files and uses ArcGIS for geographic visualization. The project includes classes for flight plan management, waypoints, and support for multiple flight plans. The aim is to create a simulation environment where users can explore flight paths, flight levels, and speeds based on a set of waypoints.
 
 ![ArcGIS TerroSim Logo](https://i.ibb.co/hKq6fzq/logo.jpg)
 
@@ -21,6 +21,10 @@
 ## References
 
 -https://aip.enaire.es/AIP/contenido_AIP/ENR/LE_ENR_4_4_es.html
+
+-https://www.eurocontrol.int/publication/free-route-airspace-fra-points-list-ecac-area
+
+-https://opennav.com/
 
 ---
 
@@ -45,6 +49,10 @@ To run this project locally, you need:
     - Download and install ArcGIS Runtime SDK from [ArcGIS for Developers](https://developers.arcgis.com/net/).
 
 4. Build and run the project in Visual Studio.
+
+5. For the sample showcase, and what we have tested decently, use these waypoints and flightplans (insertar link relativo)
+
+6. If you feel more experimental try these (insertar link relativo), which could have some untested problems.
 
 ---
 
@@ -116,3 +124,7 @@ SVQ,35m,120
 ### 3. Flight Plan Generation
 
 We use an adapted Djikstra algorithm for the generation of procedural flightplans, by taking the Waypoints file and defining a radius of connection, we can simulate a decent graph for the algorithm to solve. By also adding a threshold for margins, we observe decently realistic flightplans as they vary in a couple of waypoints. By generating a random pair of airports, we can find the path and create realistic FLs and speeds per each stage of the flight. 
+
+### 4. Waypoint extraction
+
+We used diverse references for the extraction of the waypoints and airports with their corresponding altitudes and data. We have defined three differetn spaces, Spain, Europe and Global, with a comprehensive list each with the corresponding ENR or enroute waypoints, we have not taken into account the STARs or SIDs for each procedure, something to keep in mind for the realism of the flight plans.
