@@ -21,6 +21,8 @@
 ## References
 
 -https://aip.enaire.es/AIP/contenido_AIP/ENR/LE_ENR_4_4_es.html
+-https://www.eurocontrol.int/publication/free-route-airspace-fra-points-list-ecac-area
+-https://opennav.com/
 
 ---
 
@@ -45,6 +47,10 @@ To run this project locally, you need:
     - Download and install ArcGIS Runtime SDK from [ArcGIS for Developers](https://developers.arcgis.com/net/).
 
 4. Build and run the project in Visual Studio.
+
+5. For the sample showcase, and what we have tested decently, use these waypoints and flightplans (insertar link relativo)
+
+6. If you feel more experimental try these (link), which could have some untested problems.
 
 ---
 
