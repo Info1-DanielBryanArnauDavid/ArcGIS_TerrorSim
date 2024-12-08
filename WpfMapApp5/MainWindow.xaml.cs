@@ -14,6 +14,7 @@ using System.Linq;
 using System.Text;
 using Esri.ArcGISRuntime.Mapping;
 using System.Diagnostics;
+using System.Threading.Tasks;
 
 namespace ArcGIS_App
 {
@@ -229,21 +230,90 @@ namespace ArcGIS_App
         }
         private void ReportGenerate_Click(object sender, RoutedEventArgs e)
         {
-            _viewModel.GenerateReport();
+            _viewModel.GenerateReportAsync();
             UpdateSpeedLabel();
         }
-        public void Autosolve_Click(object sender, RoutedEventArgs e)
+        private async void Autosolve_Click(object sender, RoutedEventArgs e)
         {
-            while (true)
+            try
             {
-                _viewModel.GenerateReport();
-                if (_viewModel.Solved = true)
-                {
-                    break;
+                int maxAttempts = 10;
+                int attempts = 0;
+                bool messageBoxShown = false; // Flag to track if message box is shown
 
+                while (attempts < maxAttempts || _viewModel.Solved!=true)
+                {
+                    attempts++;
+
+                    // Trigger GenerateReport to detect collisions
+                    Debug.WriteLine($"[INFO] Attempt {attempts}: Running GenerateReport...");
+                    await _viewModel.GenerateReportAsync(); // Wait for the report to finish
+
+                    // Wait for CollisionReportWindow to appear and for ProgressBar to reach max
+                    CollisionReportWindow collisionWindow = null;
+                    while (true)
+                    {
+                        // Check if CollisionReportWindow is present
+                        collisionWindow = Application.Current.Windows.OfType<CollisionReportWindow>().FirstOrDefault();
+                        if (collisionWindow != null && collisionWindow.IsLoaded)
+                        {
+                            // Check if ProgressBar has reached maximum
+                            if (collisionWindow.CollisionProgressBar.Value == collisionWindow.CollisionProgressBar.Maximum)
+                            {
+                                Debug.WriteLine("[INFO] CollisionReportWindow progress complete. Automatically resolving collisions...");
+                                await Task.Delay(300); // Wait 300ms after progress bar reaches max to ensure everything settles
+
+                                // Trigger the collision resolution logic programmatically
+                                collisionWindow.FixCollisionsButton_Click(sender, e); // Automatically resolve collisions
+                                break; // Break from the loop once collision resolution is triggered
+                            }
+                        }
+                        await Task.Delay(200); // Poll every 200ms to check the progress bar
+                    }
+
+                    // Wait briefly for the fixes to apply and give time for processing
+                    await Task.Delay(1000); // Allow time for collision resolution (adjust as needed)
+
+                    // Check if collisions have been resolved
+                    if (_viewModel.Solved || collisionWindow.Solved)
+                    {
+                        Debug.WriteLine("[INFO] All collisions resolved.");
+                        break; // Exit the loop if all collisions are resolved
+                    }
+                    else
+                    {
+                        Debug.WriteLine("[INFO] Collisions still present. Continuing...");
+                        // Continue the process for another attempt
+                    }
+
+                    // If no collisions and no message box has been shown
+                    if (!messageBoxShown && collisionWindow.CollisionProgressBar.Value == collisionWindow.CollisionProgressBar.Maximum)
+                    {
+                        // Show message box for safe to publish
+                        MessageBox.Show("No collision data, safe to publish.", "No Collisions", MessageBoxButton.OK, MessageBoxImage.Information);
+                        messageBoxShown = true; // Set the flag to prevent further message boxes
+                        break; // Exit the loop after showing the message box
+                    }
+                }
+
+                // Notify the user when all collisions are resolved
+                if (_viewModel.Solved)
+                {
+                    MessageBox.Show("All collisions have been resolved.", "Autosolve Complete", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+                else
+                {
+                    MessageBox.Show("Autosolve reached the maximum number of attempts (10). Some collisions may still be unresolved.", "Autosolve Incomplete", MessageBoxButton.OK, MessageBoxImage.Warning);
                 }
             }
+            catch (Exception ex)
+            {
+                // Log error if an exception occurs during the process
+                Debug.WriteLine($"[ERROR] {ex.Message}");
+            }
         }
+
+
         private void OpenGithubRepo_Click(object sender, RoutedEventArgs e)
         {
             string url = "https://github.com/Info1-DanielBryanArnauDavid/ArcGIS_TerrorSim/tree/Fas3.4";
@@ -292,6 +362,7 @@ namespace ArcGIS_App
                     flightplanlist = FlightPlanListGIS.LoadFlightPlansFromFile(flightPlansFilePath, loadedWaypoints);
                     _viewModel.LoadFlightPlanFunc(flightplanlist);
                     FlightPlansClick.IsEnabled = true;
+                    MessageBox.Show("We encourage the user to check for collisions by generating a manual report");
                 }
                 catch (Exception ex)
                 {

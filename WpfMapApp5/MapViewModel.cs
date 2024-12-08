@@ -303,7 +303,7 @@ namespace ArcGIS_App
         {
             safetyDistance=valor;
         }
-     
+        
         public async void LoadUpdated(FlightPlanListGIS nuevoplan)
         {
             _flightplans = nuevoplan;
@@ -311,12 +311,11 @@ namespace ArcGIS_App
             //hay que updatear el flightplan correctamente
         }
 
-
-        public async void GenerateReport()
+        public async Task GenerateReportAsync()
         {
             try
             {
-                // Check if the simulation has already started
+                // Reset the simulation if needed
                 if (_timelineSlider.Value > 0)
                 {
                     var result = MessageBox.Show("Reset the simulation to generate a new report?", "Reset Simulation", MessageBoxButton.YesNo);
@@ -333,7 +332,7 @@ namespace ArcGIS_App
                 // Open or focus the CollisionReportWindow
                 if (_collisionReportWindow == null || !_collisionReportWindow.IsVisible)
                 {
-                    _collisionReportWindow = new CollisionReportWindow(this,_flightplans);
+                    _collisionReportWindow = new CollisionReportWindow(this, _flightplans);
                     _collisionReportWindow.Show();
                 }
                 else
@@ -341,23 +340,61 @@ namespace ArcGIS_App
                     _collisionReportWindow.Activate();
                 }
 
-                // Clear any previous data in the DataGrid
+                // Clear previous data and reset
                 _collisionReportWindow.ClearCollisionData();
                 StartSimulation();
                 _speedMultiplier = 1024;
                 UpdateTimerInterval();
                 TogglePlaneLabels(true);
-                
 
-                // Subscribe to timeline slider changes for progress bar updates
-                _timelineSlider.ValueChanged += TimelineSlider_ValueChanged;
+                // Wait until the report processing is completed (ProgressBar reaches maximum)
+                Debug.WriteLine("[INFO] Waiting for progress bar to reach maximum...");
+                await WaitForReportCompletion();
+                Debug.WriteLine("[INFO] Report generation complete.");
             }
             catch (Exception ex)
             {
                 MessageBox.Show($"An error occurred while generating the report: {ex.Message}");
             }
-
         }
+
+
+        // New method to handle waiting for the report to complete
+        public async Task WaitForReportCompletion()
+        {
+            // Wait for the CollisionReportWindow to be loaded and for the progress bar to reach maximum
+            CollisionReportWindow collisionWindow = Application.Current.Windows.OfType<CollisionReportWindow>().FirstOrDefault();
+
+            if (collisionWindow == null)
+            {
+                // If no collision window found, throw an exception or handle it accordingly
+                Debug.WriteLine("[ERROR] No CollisionReportWindow found.");
+                return;
+            }
+
+            // Wait until the progress bar reaches the maximum value
+            while (collisionWindow.CollisionProgressBar.Value < collisionWindow.CollisionProgressBar.Maximum)
+            {
+                // Check if the window is still active
+                if (!collisionWindow.IsLoaded)
+                {
+                    // If the window was closed, we exit the method early
+                    Debug.WriteLine("[ERROR] CollisionReportWindow was closed unexpectedly.");
+                    return;
+                }
+
+                // Debugging: Log progress bar value
+                Debug.WriteLine($"[INFO] Progress: {collisionWindow.CollisionProgressBar.Value}/{collisionWindow.CollisionProgressBar.Maximum}");
+
+                // Wait a short period before checking the progress bar again
+                await Task.Delay(200);
+            }
+
+            Debug.WriteLine("[INFO] Collision report processing completed.");
+        }
+
+
+
         public void ResetSimulation()
         {
             _timelineSlider.Value = 0;
@@ -999,7 +1036,6 @@ namespace ArcGIS_App
                 {
                     _movementTimer.Stop();
                     _isPlaying = false;
-                    MessageBox.Show("Simulation Completed");
                 }
             }
             catch (Exception ex)

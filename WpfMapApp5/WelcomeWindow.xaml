@@ -35,10 +35,10 @@
                            FontFamily="Roboto" Margin="13,80,0,0" Text="- Load a flight plan file (.txt)" Grid.Column="1"/>
                 <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
                            FontFamily="Roboto" Margin="13,110,0,0" Text="- Establish a minimum separation" Grid.Column="1"/>
+                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" FontSize="16" Foreground="Gray"
+                           FontFamily="Roboto" Margin="15,0,0,0" Text="- Simulate the environment" Grid.Column="1"/>
                 <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
-                           FontFamily="Roboto" Margin="13,151,0,0" Text="- Simulate the environment" Grid.Column="1"/>
-                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
-                           FontFamily="Roboto" Margin="13,179,0,0" Text="- Use the map controls to navigate (WASD)" Grid.Column="1"/>
+                           FontFamily="Roboto" Margin="15,175,0,0" Text="- Use the map controls to navigate (WASD)" Grid.Column="1"/>
 
                 <!-- Additional Information -->
 
@@ -46,8 +46,10 @@
                 <Button Content="Close" HorizontalAlignment="Left" VerticalAlignment="Bottom" Width="120" Height="40" Margin="216,0,0,10"
                         Click="CloseButton_Click" Background="#61A9FF" Foreground="White" FontFamily="Roboto" Grid.Column="1"/>
                 <TextBlock HorizontalAlignment="Left" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
-                    FontFamily="Roboto" Margin="14,207,0,0" Width="334" Grid.Column="1"><Run Text="- "/><Run Language="es-es" Text="Generate a Report and fix the collisions"/></TextBlock>
+                    FontFamily="Roboto" Margin="16,204,0,0" Width="334" Grid.Column="1"><Run Text="- "/><Run Language="es-es" Text="Generate a Report and fix the collisions"/></TextBlock>
                 <Image Margin="353,60,5,76" Source="RecursosChulos/ArcGIS_logo.png" Stretch="Fill" IsEnabled="True" Grid.ColumnSpan="2" Grid.Column="1"/>
+                <TextBlock HorizontalAlignment="Center" VerticalAlignment="Top" FontSize="16" Foreground="Gray"
+                    FontFamily="Roboto" Margin="0,232,0,0" Width="334" Grid.Column="1" Text="-Autosolve for procedural fixing"/>
             </Grid>
         </Grid>
     </Border>

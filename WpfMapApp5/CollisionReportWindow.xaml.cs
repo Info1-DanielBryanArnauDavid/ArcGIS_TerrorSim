@@ -15,6 +15,7 @@ using System.Windows.Shapes;
 using static ArcGIS_App.MapViewModel;
 using System.Diagnostics;
 using System.Windows.Media.Animation;
+using System.Security.Cryptography.X509Certificates;
 
 namespace ArcGIS_App
 {
@@ -23,6 +24,7 @@ namespace ArcGIS_App
     {
         private MapViewModel _mapViewModel;
         public FlightPlanListGIS listaplanes;
+        public bool Solved = false;
 
         public CollisionReportWindow(MapViewModel mapViewModel, FlightPlanListGIS lista)
         {
@@ -66,12 +68,13 @@ namespace ArcGIS_App
                 }
                 else
                 {
-                    MessageBox.Show("No collision data, flightplans are safe to publish.");
                     _mapViewModel.Solved = true;
+                    Solved = true;
+                    MessageBox.Show("No collision data, flightplans are safe to publish.");
                 }
             }
         }
-        private void FixCollisionsButton_Click(object sender, RoutedEventArgs e)
+        public void FixCollisionsButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -131,8 +134,6 @@ namespace ArcGIS_App
                 // Reload the updated flight plans into the map view
                 _mapViewModel.LoadUpdated(listaplanes);
                 MainWindow.Current.LoadUpdatedAlso(listaplanes);
-
-                MessageBox.Show("Affected Flight Plans were updated.");
                 this.Close();
             }
             catch (Exception ex)
@@ -152,7 +153,6 @@ namespace ArcGIS_App
 
             // Apply a delay to the StartTime
             flightPlan.StartTime = flightPlan.StartTime.AddMinutes(delayMinutes);
-            Debug.WriteLine($"[INFO] Delayed StartTime for Callsign {callsign} by {delayMinutes} minutes: {flightPlan.StartTime}");
 
             updatedFlightPlans.Add(flightPlan);
         }
@@ -174,7 +174,13 @@ namespace ArcGIS_App
             if (lastWaypointIndex == -1)
             {
                 Debug.WriteLine($"[ERROR] Last waypoint '{lastWaypoint}' not found in flight plan for callsign: {callsign}");
-                return false;
+                // Additional logging to inspect the waypoints in the flight plan
+                Debug.WriteLine("[INFO] Waypoints in flight plan:");
+                foreach (var wp in flightPlan.Waypoints)
+                {
+                    Debug.WriteLine($"[INFO] Waypoint ID: {wp.ID}");
+                }
+                return false; // Return false to indicate that the waypoint was not found
             }
 
             // Determine which waypoints to adjust
@@ -229,12 +235,12 @@ namespace ArcGIS_App
             }
         }
 
+
         public void OnProgressComplete(List<CollisionData> rawData)
         {
             Dispatcher.Invoke(() =>
             {
                 FinalizeCollisionReport(rawData);
-                CollisionProgressBar.Value = 0;
                 FixCollisionsButton.Visibility = Visibility.Visible;
             });
         }
