@@ -40,10 +40,10 @@ To run this project locally, you need:
 
 1. Clone the repository:
     ```bash
-    git clone https://github.com/yourusername/ArcGIS_TerroSim.git
+    git clone https://github.com/yourusername/ArcGIS_TerrorSim.git
     ```
 
-2. Open the solution file (`ArcGIS_TerroSim.sln`) in **Visual Studio**.
+2. Open the solution file (`ArcGIS_TerrorSim.sln`) in **Visual Studio**.
 
 3. Ensure the **ArcGIS Runtime SDK for .NET** is installed:
     - Download and install ArcGIS Runtime SDK from [ArcGIS for Developers](https://developers.arcgis.com/net/).
